@@ -1,5 +1,4 @@
 ﻿using CoreMap;
-using GameHost.Configuration;
 using GameHost.Core;
 using GameHost.Features.Lifecycle;
 using GameHost.Features.LinuxGameServer;
@@ -28,12 +27,10 @@ namespace GameHost;
 public class PluginEntry : PluginBase
 {
     private IConfiguration _configuration = default!;
-    private RepositoryConfiguration _repositoryConfig = default!;
 
     protected override void LoadConfiguration(IConfiguration configuration)
     {
         _configuration = configuration;
-        _repositoryConfig = _configuration.GetSection("Repositories")?.Get<RepositoryConfiguration>() ?? new();
 
     }
     private IServiceCollection? _statePulseStatesRedirectionSingleton;
@@ -47,7 +44,6 @@ public class PluginEntry : PluginBase
         services.AddScoped<IHomeViewModel, HomeViewModel>();
         services.AddScoped<IWidgetMainPageMenuLinkViewModel, WidgetMainPageMenuLinkViewModel>();
         services.AddKernelServices();
-        services.AddSingleton((sp) => _repositoryConfig);
         //services.AddScoped(sp => new PluginConfiguration(sp.GetRequiredService<IPluginConfiguration>(), sp.GetRequiredService<ICrazyReport>()));
 
         services.AddLogging();

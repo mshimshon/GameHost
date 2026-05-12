@@ -4,11 +4,11 @@ using GameHost.Core.Features;
 using GameHost.Features.Lifecycle.Application.Pulses.Actions;
 using GameHost.Features.Lifecycle.Application.Pulses.States;
 using GameHost.Features.Lifecycle.Domain.Entites;
-using GameHost.Features.Lifecycle.Domain.Enums;
 using GameHost.Features.Lifecycle.Web.Components.ViewModels;
 using GameHost.Features.SystemInfo.Application.Pulses.States;
 using LunaticPanel.Core.Utils.Abstraction.Logging;
 using StatePulse.Net;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.ServerInfo.Enums;
 
 namespace GameHost.Features.Lifecycle.Web.Components;
 
@@ -60,11 +60,11 @@ internal class ServerControlViewModel : WidgetViewModelBase, IServerControlViewM
         IsLoading = false;
     }
     protected override bool GetStateLoadingStatus() => IsWaiting();
-    public bool IsRunning() => ServerState.ServerInfo != default && ServerState.ServerInfo.Status == Status.Running;
-    public bool IsStopped() => ServerState.ServerInfo != default && ServerState.ServerInfo.Status == Status.Stopped;
-    public bool IsRestarting() => ServerState.ServerInfo != default && ServerState.ServerInfo.Status == Status.Running;
-    public bool IsFailed() => ServerState.ServerInfo != default && ServerState.ServerInfo.Status == Status.Failed;
-    public bool IsWaiting() => ServerState.ServerInfo == default || ServerState.ServerInfo.Status == Status.Unknown;
+    public bool IsRunning() => ServerState.ServerInfo != default && ServerState.ServerInfo.Status == ServerStatus.Running;
+    public bool IsStopped() => ServerState.ServerInfo != default && ServerState.ServerInfo.Status == ServerStatus.Stopped;
+    public bool IsRestarting() => ServerState.ServerInfo != default && ServerState.ServerInfo.Status == ServerStatus.Running;
+    public bool IsFailed() => ServerState.ServerInfo != default && ServerState.ServerInfo.Status == ServerStatus.Failed;
+    public bool IsWaiting() => ServerState.ServerInfo == default || ServerState.ServerInfo.Status == ServerStatus.Unknown;
     public Guid GetPanelId() => _panelControl.Id;
     public async Task StartCaringAboutTransitionAsync()
     {

@@ -38,7 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <Folder Include="Features\Lifecycle\Application\Bash\" />
 	  <Folder Include="Features\LinuxGameServer\Application\Config\" />
 	  <Folder Include="Features\LinuxGameServer\Application\Contracts\Requests\" />
 	  <Folder Include="Features\LinuxGameServer\Application\Mediator\Notifications\Handlers\" />
@@ -67,15 +66,6 @@
 		<Content Include="Features\SystemInfo\Application\Bash\**\*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Link>$([System.String]::Copy('bash\systeminfo\%(RecursiveDir)%(Filename)%(Extension)').ToLower())</Link>
-		</Content>
-	</ItemGroup>
-
-
-	<ItemGroup>
-		<None Include="Features\Lifecycle\Application\Bash\**\*" />
-		<Content Include="Features\Lifecycle\Application\Bash\**\*">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>$([System.String]::Copy('bash\lifecycle\%(RecursiveDir)%(Filename)%(Extension)').ToLower())</Link>
 		</Content>
 	</ItemGroup>
 

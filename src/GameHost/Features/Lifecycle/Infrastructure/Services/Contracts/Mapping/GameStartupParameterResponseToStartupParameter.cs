@@ -1,5 +1,5 @@
 ﻿using CoreMap;
-using GameHost.Features.Lifecycle.Domain.Enums;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig.Enums;
 using GameHost.Features.Lifecycle.Domain.ValueObjects;
 
 namespace GameHost.Features.Lifecycle.Infrastructure.Services.Contracts.Mapping;

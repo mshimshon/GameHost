@@ -1,4 +1,5 @@
 ﻿using CoreMap;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.ServerInfo.Enums;
 using GameHost.Features.Lifecycle.Domain.Entites;
 using GameHost.Features.Lifecycle.Domain.ValueObjects;
 
@@ -9,13 +10,13 @@ public class StatusResponseToServerInfoEntity : ICoreMapHandler<StatusResponse, 
     public ServerInfoEntity Handler(StatusResponse data, ICoreMap alsoMap)
     {
         if (data.ConnectionInfo == default)
-            return new ServerInfoEntity(Domain.Enums.Status.Unknown);
+            return new ServerInfoEntity(ServerStatus.Unknown);
 
-        var currentStatus = Domain.Enums.Status.Unknown;
+        var currentStatus = ServerStatus.Unknown;
         if (data.Status == Enums.ServerStatus.Started)
-            currentStatus = Domain.Enums.Status.Running;
+            currentStatus = ServerStatus.Running;
         else if (data.Status == Enums.ServerStatus.Stopped)
-            currentStatus = Domain.Enums.Status.Stopped;
+            currentStatus = ServerStatus.Stopped;
 
 
         var convertedPorts = alsoMap.MapEach(data.ConnectionInfo.PortInfoResponses).To<ConnectionPort>();

@@ -1,5 +1,4 @@
-﻿using GameHost.Configuration;
-using GameHost.Core.Features;
+﻿using GameHost.Core.Features;
 using GameHost.Features.LinuxGameServer.Application.Contracts.Responses;
 using GameHost.Features.LinuxGameServer.Application.Pulses.Actions;
 using GameHost.Features.LinuxGameServer.Application.Pulses.States;
@@ -16,7 +15,6 @@ public class SetupProcessViewModel : WidgetViewModelBase, ISetupProcessViewModel
     public GameManifestResponse KeyGame { get; set; } = default!;
 
     public InstallationState InstallState => _statePulse.StateOf<InstallationState>(() => this, UpdateState);
-    public string RepositoryTarget { get; }
     public DateTime LastUpdate { get; private set; } = DateTime.UtcNow;
     private bool _isInstallCompleted;
     public async Task UpdateState()
@@ -34,11 +32,10 @@ public class SetupProcessViewModel : WidgetViewModelBase, ISetupProcessViewModel
         //await Task.Delay(10000);
         //await UpdateChanges();
     }
-    public SetupProcessViewModel(IStatePulse statePulse, RepositoryConfiguration repositoryConfiguration, ICrazyReport<SetupProcessViewModel> crazyReport)
+    public SetupProcessViewModel(IStatePulse statePulse, ICrazyReport<SetupProcessViewModel> crazyReport)
     {
         _statePulse = statePulse;
         _dispatcher = statePulse.Dispatcher;
-        RepositoryTarget = repositoryConfiguration.GitGameServerScriptRepository;
         crazyReport.SetModule(LinuxGameServerKeys.MODULE_NAME);
         crazyReport.ReportInfo("Loaded Widget {0} and Found {1} Games Available.", nameof(SetupProcessViewModel), InstallState.AvailableGameServers?.Count ?? 0);
         if (InstallState.AvailableGameServers != default && InstallState.AvailableGameServers.Count > 0)

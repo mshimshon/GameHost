@@ -1,4 +1,4 @@
-﻿namespace GameHost.Features.Lifecycle.Domain.Enums;
+﻿namespace GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig.Enums;
 
 public enum ConfigParameterType
 {

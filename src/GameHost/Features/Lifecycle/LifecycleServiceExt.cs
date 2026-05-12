@@ -3,7 +3,7 @@ using GameHost.Features.Lifecycle.Application.Mediator.Commands;
 using GameHost.Features.Lifecycle.Application.Mediator.Commands.Handlers;
 using GameHost.Features.Lifecycle.Application.Mediator.Queries;
 using GameHost.Features.Lifecycle.Application.Mediator.Queries.Handlers;
-using GameHost.Features.Lifecycle.Application.Payloads.Mapping;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.Events.Mapping;
 using GameHost.Features.Lifecycle.Application.Pulses.Actions;
 using GameHost.Features.Lifecycle.Application.Pulses.Effects;
 using GameHost.Features.Lifecycle.Application.Pulses.Reducers;
@@ -97,7 +97,7 @@ public static class LifecycleServiceExt
         services.AddCoreMapHandler<StatusResponseToServerInfoEntity>();
         services.AddCoreMapHandler<PortInfoResponseToConnectionPort>();
 
-        services.AddCoreMapHandler<ServerStateToServerStateTransitionPayload>();
+        services.AddCoreMapHandler<ServerStateToServerStateTransitionResponse>();
 
         if (isMaster)
         {

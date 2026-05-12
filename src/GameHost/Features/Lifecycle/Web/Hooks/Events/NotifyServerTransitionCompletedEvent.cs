@@ -2,12 +2,12 @@
 using LunaticPanel.Core.Abstraction.Plugin;
 using LunaticPanel.Core.Utils.Abstraction.Logging;
 using GameHost.Core.Features;
-using GameHost.Features.Lifecycle.Application.Payloads;
 using GameHost.Features.Lifecycle.Application.Pulses.Actions;
 using GameHost.Features.Lifecycle.Application.Pulses.States;
 using GameHost.Kernel.Abstractions.Services.Notification.Enums;
 using GameHost.Kernel.Abstractions.Services.Notification.Services;
 using StatePulse.Net;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.Events;
 
 namespace GameHost.Features.Lifecycle.Web.Hooks.Events;
 
@@ -34,7 +34,7 @@ internal class NotifyServerTransitionCompletedEvent : IEventBusHandler
     public async Task HandleAsync(IEventBusMessage evt)
     {
         if (_pluginContext.IsMasterCircuit) return;
-        var data = evt.GetData()!.GetDataAs<ServerStateTransitionPayload>()!;
+        var data = evt.GetData()!.GetDataAs<ServerStateTransitionResponse>()!;
         var transitionState = _serverTransitionStateAccess.State;
         if (transitionState.AmInstigator)
             await _dispatcher.Prepare<TransitionInstigatorUnSetMeAction>().DispatchAsync();

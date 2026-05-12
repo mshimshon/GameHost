@@ -8,7 +8,6 @@ public interface ISetupProcessViewModel : IWidgetViewModel
 {
     public InstallationState InstallState { get; }
     public GameManifestResponse KeyGame { get; set; }
-    public string RepositoryTarget { get; }
     DateTime LastUpdate { get; }
     Task InstallAsync();
 }
