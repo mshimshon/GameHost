@@ -7,15 +7,15 @@
   </Folder>
   <Folder Name="/Games/" />
   <Folder Name="/Games/Library/">
-    <Project Path="../../MaksimShimshon.GameManagePanel.Games/src/Library/Installation/Installation.csproj" />
-    <Project Path="../../MaksimShimshon.GameManagePanel.Games/src/Library/LinuxGameServerManager.Extension/LinuxGameServerManager.Extension.csproj" />
-    <Project Path="../../MaksimShimshon.GameManagePanel.Games/src/Library/LinuxGameServerManager/LinuxGameServerManager.csproj" />
-    <Project Path="../../MaksimShimshon.GameManagePanel.Games/src/Library/Steam/Steam.csproj" />
+    <Project Path="../../GameHost.Games/src/Library/Installation/Installation.csproj" />
+    <Project Path="../../GameHost.Games/src/Library/LinuxGameServerManager.Extension/LinuxGameServerManager.Extension.csproj" />
+    <Project Path="../../GameHost.Games/src/Library/LinuxGameServerManager/LinuxGameServerManager.csproj" />
+    <Project Path="../../GameHost.Games/src/Library/Steam/Steam.csproj" />
   </Folder>
   <Folder Name="/Games/Setup/" />
   <Folder Name="/Games/Setup/Arma3/" />
   <Folder Name="/Games/Setup/Project Zomboid/">
-    <Project Path="../../MaksimShimshon.GameManagePanel.Games/src/Setup/ProjectZomboid/ProjectZomboid.csproj" />
+    <Project Path="../../GameHost.Games/src/Setup/ProjectZomboid/ProjectZomboid.csproj" />
   </Folder>
   <Folder Name="/Plugin/">
     <Project Path="GameHost.Core/GameHost.Core.csproj" />
