@@ -1,0 +1,77 @@
+@inherits WidgetComponentBase<PluginEntry>
+
+@if(FormFactor == Enums.InfoPanelFormFactor.Normal)
+{
+    <MudItem xs=12 Class="d-inline-flex justify-space-evenly">
+        <MudProgressCircular Style="height: 80px; width: 80px" Color="Color.Primary" Value=@CurrentProcessor Size="Size.Large">
+            <ChildContent>
+                <MudStack Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                    <MudText Typo="Typo.subtitle2">CPU</MudText>
+                    <MudText Typo="Typo.subtitle2">@($"{MathF.Round(CurrentProcessor, 0)}%")</MudText>
+                </MudStack>
+            </ChildContent>
+        </MudProgressCircular>
+        <MudProgressCircular Style="height: 80px; width: 80px" Color="Color.Primary" Value=@CurrentRam Size="Size.Large">
+            <ChildContent>
+                <MudStack Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                    <MudText Typo="Typo.subtitle2">RAM</MudText>
+                    <MudText Typo="Typo.subtitle2">@($"{CurrentRam}%")</MudText>
+                </MudStack>
+            </ChildContent>
+        </MudProgressCircular>
+        <MudProgressCircular Style="height: 80px; width: 80px" Color="Color.Primary" Value=@CurrentDisk Size="Size.Large">
+            <ChildContent>
+                <MudStack Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                    <MudText Typo="Typo.subtitle2">DISK</MudText>
+                    <MudText Typo="Typo.subtitle2">@($"{CurrentDisk}%")</MudText>
+                </MudStack>
+            </ChildContent>
+        </MudProgressCircular>
+    </MudItem>
+}
+else if (FormFactor == Enums.InfoPanelFormFactor.Compact)
+{
+    <MudItem xs=12 Class="d-inline-flex justify-space-evenly">
+        <MudProgressCircular Style="height: 40px; width: 40px" Color="Color.Primary" Value=@CurrentProcessor Size="Size.Small">
+            <ChildContent>
+                <MudStack Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                    <MudText Typo="Typo.subtitle2">CPU</MudText>
+                    <MudText Typo="Typo.subtitle2">@($"{MathF.Round(CurrentProcessor, 0)}%")</MudText>
+                </MudStack>
+            </ChildContent>
+        </MudProgressCircular>
+        <MudProgressCircular Style="height: 40px; width: 40px" Color="Color.Primary" Value=@CurrentRam Size="Size.Small">
+            <ChildContent>
+                <MudStack Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                    <MudText Typo="Typo.subtitle2">RAM</MudText>
+                    <MudText Typo="Typo.subtitle2">@($"{CurrentRam}%")</MudText>
+                </MudStack>
+            </ChildContent>
+        </MudProgressCircular>
+        <MudProgressCircular Style="height: 40px; width: 40px" Color="Color.Primary" Value=@CurrentDisk Size="Size.Small">
+            <ChildContent>
+                <MudStack Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                    <MudText Typo="Typo.subtitle2">DISK</MudText>
+                    <MudText Typo="Typo.subtitle2">@($"{CurrentDisk}%")</MudText>
+                </MudStack>
+            </ChildContent>
+        </MudProgressCircular>
+    </MudItem>
+}
+else
+{
+    <MudItem xs=12 Class="d-inline-flex justify-space-evenly">
+        <MudStack Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center">
+            <MudText Typo="Typo.subtitle2">CPU</MudText>
+            <MudText Typo="Typo.subtitle2">@($"{MathF.Round(CurrentProcessor, 0)}%")</MudText>
+        </MudStack>
+        <MudStack Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center">
+            <MudText Typo="Typo.subtitle2">RAM</MudText>
+            <MudText Typo="Typo.subtitle2">@($"{CurrentRam}%")</MudText>
+        </MudStack>
+        <MudStack Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center">
+            <MudText Typo="Typo.subtitle2">DISK</MudText>
+            <MudText Typo="Typo.subtitle2">@($"{CurrentDisk}%")</MudText>
+        </MudStack>
+    </MudItem>
+}

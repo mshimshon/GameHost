@@ -1,0 +1,38 @@
+@using GameHost.Features.Mods.Domain.ValueObjects
+@using GameHost.Features.Mods.Web.Components.ViewModels
+@inherits WidgetComponentBase<PluginEntry, IModListExplorerViewModel>
+
+<MudGrid>
+    <MudItem>
+        <p>@ViewModel.ModListState.SchematicParts.Count</p>
+</MudItem>
+    @if (ViewModel.IsLoading)
+    {
+        <MudItem>
+            <p>loading...</p>
+        </MudItem>
+    }
+    else
+    {
+        <MudItem>
+            <MudButton OnClick=CreateAsync>Create</MudButton>
+            @if (ViewModel.ModListState.Available.Count() > 0)
+            {
+                <MudNavMenu>
+                    @foreach (var modlist in ViewModel.ModListState.Available)
+                    {
+                        <MudNavLink OnClick=@(() => OpenModList(modlist.Id))>
+                            @modlist.Name
+                        </MudNavLink>
+
+                    }
+                </MudNavMenu>
+            }
+            else
+            {
+                <p>No Modlist Currently Exist.</p>
+                
+            }
+        </MudItem>
+    }
+</MudGrid>

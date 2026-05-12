@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Title>$(AssemblyName)</Title>
+		<Version>$(GlobalVersion)</Version>
+		<Company>$(GlobalCompany)</Company>
+		<Copyright>$(GlobalCopyright)</Copyright>
+		<Authors>$(GlobalAuthors)</Authors>
+		<AssemblyName>GameHost.Kernel</AssemblyName>
+		<RootNamespace>GameHost.Kernel</RootNamespace>
+	</PropertyGroup>
+	
+	
+	<ItemGroup>
+		<None Include="Bash\**\*" />
+		<Content Include="Bash\**\*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>$([System.String]::Copy('bash\kernel\%(RecursiveDir)%(Filename)%(Extension)').ToLower())</Link>
+		</Content>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="LunaticPanel.Core.Utils.Abstraction" />
+		<PackageReference Include="LunaticPanel.Engine.Keys" PrivateAssets="false" />
+		<PackageReference Include="LunaticPanel.Core.Extensions" PrivateAssets="false" />
+		<PackageReference Include="Microsoft.Extensions.Logging" />
+		<PackageReference Include="CoreMap" GeneratePathProperty="true" />
+		<PackageReference Include="StatePulse.Net" />
+		<PackageReference Include="Medihater" />
+
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Kernel.Abstractions\Kernel.Abstractions.csproj" />
+	  <ProjectReference Include="..\GameHost.Core\GameHost.Core.csproj" />
+	</ItemGroup>
+</Project>

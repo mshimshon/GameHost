@@ -1,0 +1,11 @@
+@using GameHost.Features.SystemInfo.Web.Components
+@using GameHost.Features.SystemInfo.Web.Hooks.UI.Components.ViewModels
+@using GameHost.Kernel
+@inherits WidgetComponentBase<PluginEntry, IWidgetSystemInfoViewModel>
+<MudGrid>
+    <MudItem xs=12>
+        <MudPaper Class="justify-space-around mud-width-full py-6 px-6">
+            <SystemResourcesStatus />
+        </MudPaper>
+    </MudItem>
+</MudGrid>

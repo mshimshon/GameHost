@@ -1,0 +1,59 @@
+﻿@using GameHost.Features.SystemInfo.Web.Components.ViewModels
+
+@inherits WidgetComponentBase<PluginEntry, ISystemResourcesStatusViewModel>
+
+@if (ViewModel!.IsLoading || ViewModel.SystemInfo == default)
+{
+    @if (FormFactor == Enums.InfoPanelFormFactor.Normal)
+    {
+        <MudGrid>
+            <MudItem xs=12>
+                <MudAlert Severity=@Severity.Info ContentAlignment=@HorizontalAlignment.Center NoIcon=true>
+                    <MudProgressLinear Color="Color.Info" Indeterminate="true" Class="my-1" />
+                    <MudText Align=Align.Center>Awaiting System Info...</MudText>
+                </MudAlert>
+            </MudItem>
+        </MudGrid>
+    }
+}
+else {
+    <MudGrid>
+        @if (FormFactor == Enums.InfoPanelFormFactor.Normal)
+        {
+            <MudItem xs=12>
+                <MudText Typo=@Typo.h6>@("System Information")</MudText>
+                <MudText Typo=@Typo.caption>@ViewModel.LastUpdate.ToString()</MudText>
+                
+                <MudDivider Class="my-2" />
+            </MudItem>
+        }
+
+        <SystemResourceInfoGauges CurrentRam=@MathF.Round((ViewModel.SystemInfo.Memory.Percentage) * 100, 0)
+                                  CurrentDisk=@MathF.Round((ViewModel.SystemInfo.Disk.Percentage ) * 100, 0)
+                                  CurrentProcessor=@MathF.Round((ViewModel.SystemInfo.Processor.Current) * 100, 0)
+                                  FormFactor=@FormFactor
+                                  />
+
+        @if (FormFactor == Enums.InfoPanelFormFactor.Normal)
+        {
+            <MudItem xs=12>
+                <MudDivider />
+            </MudItem>
+            <MudItem xs=6>
+                <MudText Typo=@Typo.subtitle1>@($"CPU")</MudText>
+                <MudText Typo=@Typo.caption>@($"{ViewModel.SystemInfo.Processor.Cores} Cores")</MudText><br />
+                <MudText Typo=@Typo.caption>@($"{ViewModel.SystemInfo.Processor.Model}")</MudText>
+            </MudItem>
+            <MudItem xs=6>
+                <MudText Typo=@Typo.subtitle1>@($"RAM")</MudText>
+                <MudText Typo=@Typo.caption>@FormatMegabytes(ViewModel.SystemInfo.Memory.Total)</MudText>
+            </MudItem>
+            <MudItem xs=6>
+                <MudText Typo=@Typo.subtitle1>@($"DISK")</MudText>
+                <MudText Typo=@Typo.caption>@FormatMegabytes(ViewModel.SystemInfo.Disk.Total)</MudText>
+            </MudItem>
+        }
+
+
+    </MudGrid>
+}

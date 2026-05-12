@@ -1,0 +1,91 @@
+@using GameHost.Features.Mods.Domain.Entities
+@using GameHost.Features.Mods.Web.Components.ViewModels
+@inherits WidgetComponentBase<PluginEntry, IModListEditorViewModel>
+<MudGrid>
+    <MudItem>
+        <MudText>@ViewModel.ModListName</MudText>
+    </MudItem>
+    @if (ViewModel.IsLoading)
+    {
+        <MudItem>
+            <p>Loading...</p>
+        </MudItem>
+    }
+    else if (ViewModel.Information == default)
+    {
+        <MudItem>
+            <MudAlert Severity=Severity.Warning>
+                @WARNING_FILE_CLOSED
+            </MudAlert>
+            <MudButton Color=Color.Error OnClick=@ViewModel.CloseAsync>
+                @BTN_FORCE_CLOSE
+            </MudButton>
+        </MudItem>
+    }
+    else if (ViewModel.ModListState.SchematicParts.Count <= 0)
+    {
+        <MudItem>
+            <MudAlert Severity=Severity.Error>
+                @ERROR_SCHEMATIC_PARTS
+            </MudAlert>
+        </MudItem>
+    }
+    else if (ViewModel.Information != default)
+    {
+        <MudItem xs="12">
+            <MudGrid>
+                <MudItem xs=12>
+                    <MudText Typo="Typo.h6" Class="mb-4">@ViewModel.ModListName</MudText>
+                </MudItem>
+                <MudItem xs=12>
+                    <MudButtonGroup>
+                        <MudButton Color=Color.Success OnClick=@ViewModel.SaveAsync>@BTN_SAVE</MudButton>
+                        <MudButton Color=Color.Warning OnClick=@ViewModel.CloseAsync>@BTN_CLOSE</MudButton>
+                        <MudButton Color=Color.Error OnClick=@ViewModel.DeleteAsync>@BTN_DELETE</MudButton>
+                    </MudButtonGroup>
+
+
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        @foreach (var schematicPart in ViewModel.ModListState.SchematicParts)
+        {
+            <MudItem xs=12 xl=6>
+                <MudDropContainer T=ModEntity Items=@ViewModel.Information[schematicPart.Id]
+                                  ItemsSelector=@((item, dropzone) => true)
+                                  ItemDropped=ItemUpdated >
+                    <ChildContent>
+           
+                        <MudDropZone T=ModEntity
+                                     Identifier=schematicPart.Id.Id
+                                     AllowReorder
+                                     Class="rounded mud-background-gray pa-6 flex-grow-1">
+                            <MudStack>
+                                <MudText Typo=Typo.subtitle1>
+                                    @schematicPart.Name.Name
+                                </MudText>
+                                <MudButtonGroup>
+                                    <MudButton Color=Color.Success OnClick=@(() => AddInto(schematicPart.Id))>Create</MudButton>
+                                </MudButtonGroup>
+                            </MudStack>
+                        </MudDropZone>
+                    </ChildContent>
+                    <ItemRenderer>
+                        <MudPaper Elevation="25" Class="d-flex justify-center align-center pa-4 my-4">
+                            <MudGrid>
+                                <MudItem xs=2 Class="d-flex align-center">
+                                    <DeleteButtonIcon TEntity=ModEntity Item=context
+                                                      OnClick=@((p, ct) => DeleteEntity(schematicPart.Id, p, ct)) />
+                                </MudItem>
+                                <MudItem xs=10 Class="d-flex align-center">
+                                    @ViewModel.GetModName(context)
+                                </MudItem>
+                            </MudGrid>
+                        </MudPaper>
+                    </ItemRenderer>
+                </MudDropContainer>
+            </MudItem>
+        }
+        
+    }
+</MudGrid>

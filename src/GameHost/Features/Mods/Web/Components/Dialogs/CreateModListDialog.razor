@@ -1,0 +1,55 @@
+@using GameHost.Features.Mods.Web.Components.Dialogs.ViewModels
+@inherits WidgetComponentBase<PluginEntry, ICreateModListDialogViewModel>
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+            Create new modlist.
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudGrid>
+            @if (ViewModel.ModListLocalState.IsCreationLoading)
+            {
+                <MudItem>
+                    <MudProgressLinear Color=Color.Warning
+                                       Indeterminate
+                                       Class="my-7" />
+                </MudItem>
+
+            }
+            else
+            {
+                <MudItem xs=12>
+                    <MudTextField Value=@ViewModel.Id.ToString() Label="ModList Id" ReadOnly="true" />
+
+                </MudItem>
+                <MudItem xs=12>
+                    <MudFocusTrap DefaultFocus=DefaultFocus.FirstChild>
+                        <MudTextField @bind-Value=ViewModel.Name @ref=_nameRef
+                                      Label="ModList Name"
+                                      Validation=_nameValidator
+                                      Placeholder="Any name will be okay"
+                                      Immediate
+                                      MaxLength="256"
+                                      ReadOnly=ViewModel.IsAllowedComplete
+                                      Disabled=ViewModel.IsBusy() 
+                                      Required />
+                    </MudFocusTrap>
+                </MudItem>
+
+            }
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        @if (ViewModel.IsAllowedComplete)
+        {
+            <MudButton Color="Color.Error" OnClick=CompleteAsync>Finish</MudButton>
+        }
+        else
+        {
+            <MudButton OnClick=CancelAsync Disabled=ViewModel.IsBusy()>Cancel</MudButton>
+            <MudButton Color=Color.Primary OnClick=ViewModel.CreateAsync Disabled=@(ViewModel.IsBusy() || !ViewModel.IsFormValid())>Create</MudButton>
+        }
+    </DialogActions>
+</MudDialog>

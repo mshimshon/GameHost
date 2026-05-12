@@ -1,0 +1,36 @@
+@using GameHost.Features.Mods.Web.Components.Dialogs.ViewModels
+@inherits WidgetComponentBase<PluginEntry, IModListEditorCreateModDialogViewModel>
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+            Create new modlist.
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudFocusTrap DefaultFocus=DefaultFocus.FirstChild>
+            <MudGrid>
+                <MudItem xs=12>
+                    <MudTextField @bind-Value=ViewModel.Id
+                                  Label="Mod ID"
+                                  Validation=_idValidator
+                                  Placeholder="Example: 10298309824"
+                                  Immediate
+                                  Required />
+
+                </MudItem>
+                <MudItem xs=12>
+                    <MudTextField @bind-Value=ViewModel.Name
+                                  Label="Mod Name (Friendly Display Name)"
+                                  Validation=_nameValidator
+                                  Placeholder="ACE 3"
+                                  MaxLength="256" />
+                </MudItem>
+            </MudGrid>
+        </MudFocusTrap>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick=CancelAsync >Cancel</MudButton>
+        <MudButton Color=Color.Primary OnClick=CompleteAsync Disabled=@(!ViewModel.IsFormValid())>Create</MudButton>
+    </DialogActions>
+</MudDialog>

@@ -1,0 +1,41 @@
+@page "/GameHost"
+@page "/GameHost/lifecycle"
+@using GameHost.Features.LinuxGameServer.Web.Components
+@using GameHost.Features.Mods.Web.Hooks.UI.Components
+@inherits WidgetComponentBase<PluginEntry, IHomeViewModel>
+
+<MudGrid Justify=@Justify.FlexStart>
+
+    <MudItem xs=12 sm=12 md=4>
+        <MudGrid Justify=@Justify.FlexStart>
+            <MudItem xs=12>
+                @if (ViewModel.IsGameInfoAvailable)
+                {
+                    <WidgetServerControl />
+                    
+                }
+                else if (!ViewModel.IsServerInstalled)
+                {
+                    <SetupProcess />
+                }
+            </MudItem>
+            <MudItem xs=12>
+                <WidgetSystemInfo />
+            </MudItem>
+            @if (ViewModel.IsGameInfoAvailable && ViewModel.IsModSupported)
+            {
+                <MudItem xs=12>
+                    <WidgetModListWorkspace />
+                </MudItem>
+            }
+        </MudGrid>
+    </MudItem>
+    @if (ViewModel.IsGameInfoAvailable)
+    {
+        <MudItem xs=12 sm=12 md=8>
+            <WidgetStartupParameters />
+        </MudItem>
+    }
+
+
+</MudGrid>

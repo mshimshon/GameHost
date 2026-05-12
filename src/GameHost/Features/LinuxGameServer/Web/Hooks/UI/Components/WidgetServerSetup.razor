@@ -1,0 +1,8 @@
+@using GameHost.Features.LinuxGameServer.Web.Components
+@using GameHost.Features.LinuxGameServer.Web.Hooks.UI.Components.ViewModels
+@inherits WidgetComponentBase<PluginEntry, IWidgetServerSetupViewModel>
+<MudItem xs=12 sm=12 md=6 lg=4>
+    <MudPaper Class="justify-space-around mud-width-full py-6 px-6">
+        <SetupProcess OnParentStateHasChanged=@OnParentStateHasChanged />
+    </MudPaper>
+</MudItem>

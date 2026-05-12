@@ -1,0 +1,20 @@
+@using GameHost.Web.Pages.Hooks.UI.Components.ViewModels
+@using Microsoft.AspNetCore.Components.Routing
+@inherits WidgetComponentBase<PluginEntry, IWidgetMainPageMenuLinkViewModel>
+<MudNavMenu Dense="true" Rounded="true" Margin="Margin.Dense" Color="Color.Secondary" Class="mud-width-full pa-2">
+
+    <MudNavLink Href="GameHost/lifecycle" Icon="@Icons.Material.Filled.Dashboard">GameHost</MudNavLink>
+    @if (ViewModel.IsGameInfoAvailable)
+    {
+        <MudNavGroup Title="Advanced Lifecycle" Expanded="true">
+            <MudNavLink Href="GameHost/lifecycle/startup-parameters" Icon="@Icons.Material.Filled.LocalPlay">Startup Parameters</MudNavLink>
+            <MudNavLink Href="GameHost/lifecycle/settings" Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
+        </MudNavGroup>
+        @if (ViewModel.DoesSupportMods && !ViewModel.RequiresManualModUpload)
+        {
+            <MudNavLink Href="GameHost/modlist" Icon="@Icons.Material.Filled.List">ModList</MudNavLink>
+        }
+    }
+
+
+</MudNavMenu>

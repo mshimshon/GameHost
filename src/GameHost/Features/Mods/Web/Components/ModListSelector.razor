@@ -1,0 +1,54 @@
+@using GameHost.Features.Mods.Web.Components.ViewModels
+@inherits WidgetComponentBase<PluginEntry, IModListSelectorViewModel>
+<MudGrid>
+    @if (IsAvailableModListEmpty)
+    {
+        <MudItem xs="12">
+            <MudAlert Severity=Severity.Info>
+                @NO_MODLIST_AVAILABLE_MSG
+            </MudAlert>
+        </MudItem>
+    }
+    else if (ViewModel.ModListState.IsLoadingAvailable)
+    {
+        <MudItem xs="12">
+            <MudAlert Severity=@Severity.Warning ContentAlignment=@HorizontalAlignment.Center NoIcon=true>
+                <MudProgressLinear Color="Color.Warning" Indeterminate="true" Class="my-1" />
+                <MudText Align=Align.Center>@AWAITING_FOR_AVAILABLE_MODLIST</MudText>
+            </MudAlert>
+        </MudItem>
+    }
+    else if (ViewModel.ModListState.IsActiveLoading)
+    {
+        <MudItem xs="12">
+            <MudAlert Severity=@Severity.Warning ContentAlignment=@HorizontalAlignment.Center NoIcon=true>
+                <MudProgressLinear Color="Color.Warning" Indeterminate="true" Class="my-1" />
+                <MudText Align=Align.Center>@AWAITING_FOR_CURRENT_MODLIST</MudText>
+            </MudAlert>
+        </MudItem>
+    }
+    else
+    {
+        <MudItem xs="12" Class="d-flex flex-grow-1 flex-row gap-2">
+            <MudSelect T=Guid? Value=GetValue()
+                       ValueChanged=OnValueChanged
+                       Label="Active ModList"
+                       Placeholder=@("No ModList Selected")
+                       HelperText=@("Modlist to be loaded at the next startup.")
+                       Clearable>
+                @foreach (var modlist in ViewModel.ModListState.Available)
+                {
+                    <MudSelectItem Value=@((Guid?)modlist.Id)>@modlist.Name</MudSelectItem>
+                }
+            </MudSelect>
+            
+            <MudFab Size=Size.Small
+                    IconSize=Size.Small
+                    Color="Color.Primary"
+                    StartIcon=@Icons.Material.Outlined.Save
+                    OnClick=ViewModel.SaveAsync />
+
+        </MudItem>
+    }
+
+</MudGrid>

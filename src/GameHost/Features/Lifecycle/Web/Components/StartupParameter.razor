@@ -1,0 +1,67 @@
+﻿@using GameHost.Features.Lifecycle.Web.Components.ViewModels
+@inherits WidgetComponentBase<PluginEntry, IStartupParameterViewModel>
+@if (ViewModel.IsLoading)
+{
+    <MudGrid>
+        <MudItem xs=12>
+            <MudText Typo=@Typo.h6>@("Startup Parameters")</MudText>
+            <MudDivider Class="my-2" />
+            <MudAlert Severity=@Severity.Info ContentAlignment=@HorizontalAlignment.Center NoIcon=true>
+                <MudProgressLinear Color="Color.Info" Indeterminate="true" Class="my-1" />
+                <MudText Align=Align.Center>Awaiting Loading Parameters...</MudText>
+            </MudAlert>
+        </MudItem>
+    </MudGrid>
+
+}
+else if (ViewModel.GameInfo == default)
+{
+    <MudGrid>
+        <MudItem xs=12>
+            <MudAlert Severity="Severity.Error">
+                @SERVER_NOT_INSTALLED
+            </MudAlert>
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+    <MudGrid>
+        <MudItem xs=12>
+            <MudText Typo=@Typo.h6>@("Startup Parameters")</MudText>
+            <MudDivider Class="my-2" />
+            <MudText Typo=@Typo.caption>@ViewModel.ServerState.ServerInfoLastUpdate.ToString()</MudText>
+        </MudItem>
+        <MudItem xs=12 Class="d-flex flex-row  flex-wrap justify-space-evenly">
+            @if (!ViewModel.SavedParametersLoaded)
+            {
+                <MudAlert Severity=@Severity.Info ContentAlignment=@HorizontalAlignment.Center NoIcon=true>
+                    <MudProgressLinear Color="Color.Info" Indeterminate="true" Class="my-1" />
+                    <MudText Align=Align.Center>Loading Parameters...</MudText>
+                </MudAlert>
+            }
+            else
+            {
+                @foreach (var group in ViewModel.Parameters)
+                {
+                    <MudDivider Class="my-2" Style="visibility:hidden;" />
+                    <MudText Typo=@Typo.h6>@(group.Key)</MudText>
+                    <MudDivider Class="my-2" />
+                     <MudGrid>
+                    @foreach (var parameter in group.Value)
+                    {
+                       
+                        <StartupParameterField GameStartupParameter=@parameter
+                                                            InitialValue=@ViewModel.GetInitialValue(parameter) />
+                            
+                        
+
+                    }
+
+                    </MudGrid>
+                }
+            }
+
+        </MudItem>
+    </MudGrid>
+}

@@ -1,0 +1,68 @@
+﻿@using GameHost.Features.Lifecycle.Web.Components.ViewModels
+@inherits WidgetComponentBase<PluginEntry, IStartupParameterFieldViewModel>
+
+<MudItem xs=12 md=6 Class="d-flex flex-column gap-2">
+    @if (ViewModel.IsList)
+    {
+        <MudSelect @ref=MudSelectRef @bind-Value=ViewModel.Value Label=@ViewModel.GetLabel()
+               HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
+               Required=@(ViewModel.Parameter.Required)
+               ReadOnly=@(!ViewModel.Parameter.Editable)>
+        @foreach (var item in ViewModel.Parameter.Validation!.AllowedValues!)
+        {
+            <MudSelectItem Value=@item.Value>@item.Label</MudSelectItem>
+        }
+    </MudSelect>
+    }
+    else if (ViewModel.Parameter.Key.ConfigParameterType== Domain.Enums.ConfigParameterType.String)
+    {
+        <MudTextField @ref=MudTextFieldRef @bind-Value=ViewModel.Value Label=@ViewModel.GetLabel()
+                        HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
+                        MaxLength=@GetMaxLength() Pattern=@(ViewModel.Parameter.Validation?.PatternValidation ?? default)
+                        Required=@(ViewModel.Parameter.Required)
+                        ReadOnly=@(!ViewModel.Parameter.Editable) />
+    }
+    else if (ViewModel.Parameter.Key.ConfigParameterType == Domain.Enums.ConfigParameterType.Bool)
+    {
+        <MudSwitch @ref=MudSwitchRef @bind-Value=ValueBool Color="Color.Success" UncheckedColor="Color.Error"
+                   Label=@ViewModel.GetLabel() />
+        <MudText Typo=@Typo.caption>@ViewModel.Parameter.Description</MudText>
+    }
+    else if (ViewModel.IsInt)
+    {
+        <MudNumericField @ref=MudNumericFieldIntRef @bind-Value=ValueInt Label=@ViewModel.GetLabel()
+                            HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
+                            Min=@(ViewModel.Parameter.Validation?.Min ?? int.MinValue)
+                            Max=@(ViewModel.Parameter.Validation?.Max ?? int.MaxValue)
+                            Step=@(1)
+                            Pattern=@(ViewModel.Parameter.Validation?.PatternValidation ?? default)
+                            Required=@(ViewModel.Parameter.Required)
+                            ReadOnly=@(!ViewModel.Parameter.Editable) />
+    }
+    else if (ViewModel.IsDecimal)
+    {
+        <MudNumericField @ref=MudNumericFieldDecimalRef @bind-Value=ValueDecimal Label=@ViewModel.GetLabel()
+                            HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
+                            Min=@(ViewModel.Parameter.Validation?.Min ?? int.MinValue)
+                            Max=@(ViewModel.Parameter.Validation?.Max ?? int.MaxValue)
+                            Step=@(0.01)
+                            Pattern=@(ViewModel.Parameter.Validation?.PatternValidation ?? default)
+                            Required=@(ViewModel.Parameter.Required)
+                            ReadOnly=@(!ViewModel.Parameter.Editable) />
+    }
+    
+    @if (ViewModel.Parameter.Editable)
+    {
+        <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled">
+            <MudButton OnClick=@ViewModel.Save Disabled=@(!ViewModel.IsTouched)>Save</MudButton>
+            <MudButton OnClick=@ViewModel.Reset Disabled=@(!ViewModel.IsTouched)>Reset</MudButton>
+        </MudButtonGroup>
+    }
+    else
+    {
+        <MudText Typo=@Typo.caption >@("This value cannot be changed, contact support for more information.")</MudText>
+    }
+
+    <MudDivider Class="my-2" Style="visibility:hidden;" />
+</MudItem>
+

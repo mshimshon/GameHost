@@ -1,0 +1,11 @@
+@using GameHost.Features.Mods.Web.Components
+@using GameHost.Features.Mods.Web.Hooks.UI.Components.ViewModels
+@inherits WidgetComponentBase<PluginEntry, IWidgetModlistSelectorViewModel>
+
+<MudGrid>
+    <MudItem xs=12>
+        <MudPaper Class="justify-space-around mud-width-full py-6 px-6">
+            <ModListSelector OnParentStateHasChanged=@InvokeParentStateChanged />
+        </MudPaper>
+    </MudItem>
+</MudGrid>

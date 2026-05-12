@@ -1,0 +1,58 @@
+@using GameHost.Features.Lifecycle.Web.Components.ViewModels
+@inherits WidgetComponentBase<PluginEntry, IServerControlViewModel>
+
+<MudCard>
+    <MudCardMedia Image=@($"/_plugins/{BaseInfo.AssemblyName}/game_banner.png") Height="300" Style="background-position: top;background-repeat: no-repeat;" />
+    <MudCardContent Class="justify-space-around mud-width-full py-6 px-6">
+        @if (ViewModel.ServerState.ServerInfo != default)
+        {
+            <MudText Typo=Typo.caption>@ViewModel.ServerState.ServerInfoLastUpdate.ToString()</MudText><br/>
+            <MudText Typo=Typo.caption>@ViewModel.SystemInfoState.LastUpdate.ToString()</MudText>
+            <MudButton OnClick=@ViewModel.UpdateState>Test</MudButton>
+        }
+        @if (ViewModel.ServerState.ServerInfo == default || ViewModel.IsLoading)
+        {
+            <MudAlert Severity=@Severity.Warning ContentAlignment=@HorizontalAlignment.Center NoIcon=true>
+                <MudProgressLinear Color="Color.Warning" Indeterminate="true" Class="my-1" />
+                <MudText Align=Align.Center>Awaiting for Server Info...</MudText>
+            </MudAlert>
+        }
+        else
+        {
+            @if (ViewModel.GameInfo != default)
+            {
+                @* <MudText Typo=@Typo.h6>@(ViewModel.GameInfo?.Name?? "Crash")</MudText> *@
+                <MudDivider Class="my-1" Style="visibility: hidden;" />
+                <MudDivider Class="my-2" />
+                @if (ViewModel.ServerState.Transition == ServerTransition.Starting)
+                {
+                    <MudAlert Severity=@Severity.Success ContentAlignment=@HorizontalAlignment.Center NoIcon=true>
+                        <MudProgressLinear Color="Color.Success" Indeterminate="true" Class="my-1" />
+                        <MudText Align=Align.Center>Starting...</MudText>
+                    </MudAlert>
+                }
+                else if (ViewModel.ServerState.Transition == ServerTransition.Stopping)
+                {
+                    <MudAlert Severity=@Severity.Error ContentAlignment=@HorizontalAlignment.Center NoIcon=true>
+                        <MudProgressLinear Color="Color.Error" Indeterminate="true" Class="my-1" />
+                        <MudText Align=Align.Center>Stopping...</MudText>
+                    </MudAlert>
+                }
+                else
+                {
+                    <MudFab Color="Color.Error"
+                            StartIcon="@Icons.Material.Filled.Stop"
+                            DropShadow="false" Size=@Size.Small
+                            OnClick=@(() => ViewModel.Stop())
+                            Disabled=@(ViewModel.IsStopped() || ViewModel.IsWaiting() || ViewModel.IsLoading) />
+
+                    <MudFab Color="Color.Success"
+                            StartIcon="@Icons.Material.Filled.PlayArrow"
+                            DropShadow="false" OnClick=@(() => ViewModel.Start())
+                            Disabled=@(ViewModel.IsRunning() || ViewModel.IsWaiting() || ViewModel.IsLoading) />
+                }
+            }
+        }
+    </MudCardContent>
+
+</MudCard>

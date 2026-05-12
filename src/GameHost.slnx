@@ -1,0 +1,30 @@
+<Solution>
+  <Folder Name="/Cloud/">
+    <Project Path="Cloud/GameHostCloud.Application/GameHostCloud.Application.csproj" Id="5ef1f1d0-a48c-4378-9de7-92bdcf1c15e1" />
+    <Project Path="Cloud/GameHostCloud.Domain/GameHostCloud.Domain.csproj" Id="c97a6f45-e321-4e90-a6c8-d367a985d2ed" />
+    <Project Path="Cloud/GameHostCloud.Infrastructure/GameHostCloud.Infrastructure.csproj" />
+    <Project Path="Cloud/GameHostCloud.Web/GameHostCloud.Web.csproj" Id="388783dc-91d6-499c-bf6b-134debc8cfef" />
+  </Folder>
+  <Folder Name="/Games/" />
+  <Folder Name="/Games/Library/">
+    <Project Path="../../MaksimShimshon.GameManagePanel.Games/src/Library/Installation/Installation.csproj" />
+    <Project Path="../../MaksimShimshon.GameManagePanel.Games/src/Library/LinuxGameServerManager.Extension/LinuxGameServerManager.Extension.csproj" />
+    <Project Path="../../MaksimShimshon.GameManagePanel.Games/src/Library/LinuxGameServerManager/LinuxGameServerManager.csproj" />
+    <Project Path="../../MaksimShimshon.GameManagePanel.Games/src/Library/Steam/Steam.csproj" />
+  </Folder>
+  <Folder Name="/Games/Setup/" />
+  <Folder Name="/Games/Setup/Arma3/" />
+  <Folder Name="/Games/Setup/Project Zomboid/">
+    <Project Path="../../MaksimShimshon.GameManagePanel.Games/src/Setup/ProjectZomboid/ProjectZomboid.csproj" />
+  </Folder>
+  <Folder Name="/Plugin/">
+    <Project Path="GameHost.Core/GameHost.Core.csproj" />
+    <Project Path="GameHost/GameHost.csproj" />
+    <Project Path="Kernel.Abstractions/Kernel.Abstractions.csproj" />
+    <Project Path="Kernel/Kernel.csproj" Id="7f4a6335-3f49-44ec-8d7e-c8758d8aec24" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+</Solution>

@@ -1,0 +1,33 @@
+@using GameHost.Features.Mods.Web.Components
+@using GameHost.Features.Mods.Web.Hooks.UI.Components.ViewModels
+@inherits WidgetComponentBase<PluginEntry, IWidgetModListWorkspaceViewModel>
+
+<MudGrid>
+    <MudItem xs=12>
+        @if (ViewModel.IsGameInfoCrashed)
+        {
+            <MudAlert Severity="Severity.Error">
+                @SERVER_NOT_INSTALLED
+            </MudAlert>
+        }else if (ViewModel.IsLoading)
+        {
+            <MudAlert Severity=@Severity.Warning ContentAlignment=@HorizontalAlignment.Center NoIcon=true>
+                <MudProgressLinear Color="Color.Warning" Indeterminate="true" Class="my-1" />
+                <MudText Align=Align.Center>Loading...</MudText>
+            </MudAlert>
+        }
+        else
+        {
+            @if (ViewModel.ModListLocalState.Current == default)
+            {
+                <ModListExplorer LinkBaseNoTrailing=@LinkBaseNoTrailing 
+                    AutoRedirect=AutoRedirect 
+                    OnParentStateHasChanged=OnParentStateHasChanged />
+            }
+            else
+            {
+                <ModListEditor OnParentStateHasChanged=OnParentStateHasChanged />
+            }
+        }
+    </MudItem>
+</MudGrid>

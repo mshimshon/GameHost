@@ -1,0 +1,8 @@
+@page "/GameHost/modlist/"
+@page "/GameHost/modlist/{id:guid?}"
+@using GameHost.Features.Mods.Web.Hooks.UI.Components
+@using GameHost.Features.Mods.Web.Pages.ViewModels
+@inherits WidgetComponentBase<PluginEntry, IModListHomeViewModel>
+<WidgetModListWorkspace AutoRedirect
+                        LinkBaseNoTrailing=@BASE_LINK
+                        OnParentStateHasChanged=InvokeParentStateChanged />

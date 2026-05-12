@@ -1,0 +1,121 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<Title>$(AssemblyName)</Title>
+	<Version>$(GlobalVersion)</Version>
+	<Company>$(GlobalCompany)</Company>
+	<Copyright>$(GlobalCopyright)</Copyright>
+	<Authors>$(GlobalAuthors)</Authors>
+	<Description>Core Package for Lunatic Panel's PLugin</Description>
+	<PackageProjectUrl>https://github.com/mshimshon/LunaticPanel</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/mshimshon/LunaticPanel</RepositoryUrl>
+	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="LunaticPanel.Core" PrivateAssets="false" />
+	<PackageReference Include="LunaticPanel.Core.Abstraction" PrivateAssets="false" />
+    <PackageReference Include="LunaticPanel.Core.Extensions" PrivateAssets="false" />
+    <PackageReference Include="LunaticPanel.Core.Utils" />
+    <PackageReference Include="LunaticPanel.Engine.Keys" PrivateAssets="false" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" />
+	<PackageReference Include="Microsoft.Extensions.Logging" />
+	<PackageReference Include="MudBlazor" PrivateAssets="false" />
+	<PackageReference Include="Newtonsoft.Json" />
+	<PackageReference Include="CoreMap" GeneratePathProperty="true" />
+	<PackageReference Include="MediHater" GeneratePathProperty="true" />
+	<PackageReference Include="StatePulse.Net" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameHost.Core\GameHost.Core.csproj" />
+    <ProjectReference Include="..\Kernel.Abstractions\Kernel.Abstractions.csproj" />
+    <ProjectReference Include="..\Kernel\Kernel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <Folder Include="Features\Lifecycle\Application\Bash\" />
+	  <Folder Include="Features\LinuxGameServer\Application\Config\" />
+	  <Folder Include="Features\LinuxGameServer\Application\Contracts\Requests\" />
+	  <Folder Include="Features\LinuxGameServer\Application\Mediator\Notifications\Handlers\" />
+	  <Folder Include="Features\LinuxGameServer\Web\Hooks\Events\" />
+	  <Folder Include="Features\Mods\Application\Bash\" />
+	  <Folder Include="Features\Mods\Application\Hooks\" />
+	  <Folder Include="Features\Mods\Web\Hooks\Queries\" />
+	  <Folder Include="Features\Mods\Web\Hooks\Events\Scheduled\" />
+	  <Folder Include="Features\SystemInfo\Application\CQRS\Commands\" />
+	  <Folder Include="Features\SystemInfo\Web\Hooks\Queries\" />
+	  <Folder Include="Web\Pages\Hooks\Events\" />
+	  <Folder Include="Web\Pages\Hooks\Queries\" />
+  </ItemGroup>
+
+
+	<ItemGroup>
+		<None Include="Features\LinuxGameServer\Application\Bash\**\*" />
+		<Content Include="Features\LinuxGameServer\Application\Bash\**\*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>$([System.String]::Copy('bash\linuxgameserver\%(RecursiveDir)%(Filename)%(Extension)').ToLower())</Link>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Features\SystemInfo\Application\Bash\**\*" />
+		<Content Include="Features\SystemInfo\Application\Bash\**\*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>$([System.String]::Copy('bash\systeminfo\%(RecursiveDir)%(Filename)%(Extension)').ToLower())</Link>
+		</Content>
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<None Include="Features\Lifecycle\Application\Bash\**\*" />
+		<Content Include="Features\Lifecycle\Application\Bash\**\*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>$([System.String]::Copy('bash\lifecycle\%(RecursiveDir)%(Filename)%(Extension)').ToLower())</Link>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Features\Mods\Application\Bash\**\*" />
+		<Content Include="Features\Mods\Application\Bash\**\*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>$([System.String]::Copy('bash\modlist\%(RecursiveDir)%(Filename)%(Extension)').ToLower())</Link>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="Features\Lifecycle\Web\Hooks\UI\Components\WidgetTest.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Features\Lifecycle\Web\Components\WidgetTest.razor" />
+	</ItemGroup>
+
+
+  <ItemGroup>
+    <Content Update="Features\LinuxGameServer\Application\Bash\check_git_install.sh" Link="bash\linuxgameserver\check_git_install.sh" />
+    <Content Update="Features\LinuxGameServer\Application\Bash\git_clone.sh" Link="bash\linuxgameserver\git_clone.sh" />
+    <Content Update="Features\LinuxGameServer\Application\Bash\install_game_server.sh" Link="bash\linuxgameserver\install_game_server.sh" />
+    <Content Update="Features\LinuxGameServer\Application\Bash\is_user_exist.sh" Link="bash\linuxgameserver\is_user_exist.sh" />
+    <Content Update="Features\LinuxGameServer\Application\Bash\set_local_culture.sh" Link="bash\linuxgameserver\set_local_culture.sh" />
+    <Content Update="Features\SystemInfo\Application\Bash\get_ram_info.sh" Link="bash\systeminfo\get_ram_info.sh" />
+    <Content Update="Features\SystemInfo\Application\Bash\get_disk_info.sh" Link="bash\systeminfo\get_disk_info.sh" />
+    <Content Update="Features\SystemInfo\Application\Bash\get_cpu_info.sh" Link="bash\systeminfo\get_cpu_info.sh" />
+    <Content Update="wwwroot\game_banner.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+	<Target Name="RemoveHostOwnedAssembliesAfterBuild" AfterTargets="Build" Condition="'$(IsPublish)' != 'true'">
+
+		<ItemGroup>
+			<_DeleteDlls Include="&#xD;&#xA;				$(OutputPath)**\Microsoft.*.dll;&#xD;&#xA;				$(OutputPath)**\LunaticPanel.*.dll;&#xD;&#xA;				$(OutputPath)**\LunaticPanel.*.*.dll;&#xD;&#xA;				$(OutputPath)MudBlazor.dll&#xD;&#xA;			" />
+		</ItemGroup>
+
+		<Delete Files="@(_DeleteDlls)" />
+	</Target>
+</Project>
