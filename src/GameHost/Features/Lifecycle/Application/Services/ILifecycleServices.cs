@@ -1,6 +1,4 @@
-﻿using GameHost.Features.Lifecycle.Domain.Entites;
-
-namespace GameHost.Features.Lifecycle.Application.Services;
+﻿namespace GameHost.Features.Lifecycle.Application.Services;
 
 public interface ILifecycleServices
 {

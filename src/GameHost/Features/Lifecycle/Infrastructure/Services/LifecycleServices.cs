@@ -2,8 +2,8 @@
 using GameHost.Core.Features;
 using GameHost.Features.Lifecycle.Application.Services;
 using GameHost.Features.Lifecycle.Domain.Entites;
-using GameHost.Features.Lifecycle.Infrastructure.Services.Contracts;
-using GameHost.Features.Lifecycle.Infrastructure.Services.Contracts.Status;
+using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads;
+using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Status;
 using GameHost.Features.Lifecycle.Infrastructure.Services.Exceptions;
 using GameHost.Kernel.Abstractions.Dto;
 using GameHost.Kernel.Abstractions.Exceptions;

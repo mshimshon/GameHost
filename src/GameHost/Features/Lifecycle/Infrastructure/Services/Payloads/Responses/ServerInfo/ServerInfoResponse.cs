@@ -1,6 +1,7 @@
-﻿using GameHost.Features.Lifecycle.Application.Payloads.Responses.ServerInfo.Enums;
+﻿
+using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.ServerInfo.Enums;
 
-namespace GameHost.Features.Lifecycle.Application.Payloads.Responses.ServerInfo;
+namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.ServerInfo;
 
 public sealed record ServerInfoResponse
 {

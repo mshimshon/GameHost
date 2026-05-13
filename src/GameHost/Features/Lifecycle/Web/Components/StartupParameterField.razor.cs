@@ -1,5 +1,4 @@
-﻿using GameHost.Features.Lifecycle.Domain.Entites;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
 namespace GameHost.Features.Lifecycle.Web.Components;

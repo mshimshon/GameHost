@@ -1,5 +1,4 @@
-﻿using GameHost.Features.Lifecycle.Domain.Entites;
-using MedihatR;
+﻿using MedihatR;
 
 namespace GameHost.Features.Lifecycle.Application.Mediator.Queries;
 

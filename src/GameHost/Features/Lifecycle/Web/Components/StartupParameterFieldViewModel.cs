@@ -1,6 +1,4 @@
-﻿using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig.Enums;
-using GameHost.Features.Lifecycle.Application.Pulses.Actions;
-using GameHost.Features.Lifecycle.Domain.Entites;
+﻿using GameHost.Features.Lifecycle.Application.Pulses.Actions;
 using GameHost.Features.Lifecycle.Web.Components.ViewModels;
 using LunaticPanel.Core.Abstraction.Widgets;
 using StatePulse.Net;

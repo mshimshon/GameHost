@@ -1,7 +1,8 @@
-﻿namespace GameHost.Features.Lifecycle.Infrastructure.Services.Contracts.Status;
+﻿namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.ServerInfo;
 
-public record PortInfoResponse
+public sealed record ServerInfoConnectionResponse
 {
+
     public string Name { get; set; } = default!;
     public string Port { get; set; } = default!;
     public string Protocol { get; set; } = default!;

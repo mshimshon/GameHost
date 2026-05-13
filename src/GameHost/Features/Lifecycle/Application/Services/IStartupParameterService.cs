@@ -1,4 +1,4 @@
-﻿using GameHost.Features.Lifecycle.Infrastructure.Services.Contracts;
+﻿using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads;
 
 namespace GameHost.Features.Lifecycle.Application.Services;
 

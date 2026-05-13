@@ -1,6 +1,5 @@
-﻿using LunaticPanel.Core.Abstraction.Widgets;
-using GameHost.Features.Lifecycle.Application.Pulses.States;
-using GameHost.Features.Lifecycle.Domain.Entites;
+﻿using GameHost.Features.Lifecycle.Application.Pulses.States;
+using LunaticPanel.Core.Abstraction.Widgets;
 
 namespace GameHost.Features.Lifecycle.Web.Components.ViewModels;
 

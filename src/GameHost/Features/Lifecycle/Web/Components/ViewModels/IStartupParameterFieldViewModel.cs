@@ -1,5 +1,4 @@
-﻿using GameHost.Features.Lifecycle.Domain.Entites;
-using LunaticPanel.Core.Abstraction.Widgets;
+﻿using LunaticPanel.Core.Abstraction.Widgets;
 
 namespace GameHost.Features.Lifecycle.Web.Components.ViewModels;
 
