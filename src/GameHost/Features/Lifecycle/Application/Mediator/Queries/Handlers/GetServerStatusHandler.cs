@@ -1,4 +1,5 @@
 ﻿using GameHost.Core.Features;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.ServerInfo;
 using GameHost.Features.Lifecycle.Application.Services;
 using GameHost.Kernel.Abstractions.Mediator;
 using GameHost.Kernel.Abstractions.Services.Notification.Services;
@@ -7,7 +8,7 @@ using MedihatR;
 
 namespace GameHost.Features.Lifecycle.Application.Mediator.Queries.Handlers;
 
-public class GetServerStatusHandler : HandlerBase, IRequestHandler<GetServerStatusQuery, ServerInfoEntity?>
+public class GetServerStatusHandler : HandlerBase, IRequestHandler<GetServerStatusQuery, ServerInfoResponse?>
 {
     private readonly ILifecycleServices _lifecycleServices;
 
@@ -16,7 +17,7 @@ public class GetServerStatusHandler : HandlerBase, IRequestHandler<GetServerStat
         _lifecycleServices = lifecycleServices;
         logger.SetModule(LifecycleKeys.MODULE_NAME);
     }
-    public async Task<ServerInfoEntity?> Handle(GetServerStatusQuery request, CancellationToken cancellationToken)
+    public async Task<ServerInfoResponse?> Handle(GetServerStatusQuery request, CancellationToken cancellationToken)
     {
         return
             await ExecAndHandleExceptions(

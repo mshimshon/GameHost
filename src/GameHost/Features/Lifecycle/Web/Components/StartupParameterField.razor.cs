@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig;
+using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
 namespace GameHost.Features.Lifecycle.Web.Components;
@@ -6,7 +7,7 @@ namespace GameHost.Features.Lifecycle.Web.Components;
 public partial class StartupParameterField
 {
     [Parameter]
-    public GameConfigParamaterEntity GameStartupParameter { get; set; } = default!;
+    public GameConfigParameterResponse GameStartupParameter { get; set; } = default!;
 
     [Parameter]
     public string InitialValue { get; set; } = default!;
@@ -26,7 +27,7 @@ public partial class StartupParameterField
             ViewModel.Value = InitialValue;
     }
 
-    private int GetMaxLength() => ViewModel.Parameter.Validation?.MaxLength ?? 524288;
+
 
 
     private int ValueInt

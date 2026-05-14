@@ -4,6 +4,8 @@ using GameHost.Features.Lifecycle.Application.Mediator.Commands.Handlers;
 using GameHost.Features.Lifecycle.Application.Mediator.Queries;
 using GameHost.Features.Lifecycle.Application.Mediator.Queries.Handlers;
 using GameHost.Features.Lifecycle.Application.Payloads.Responses.Events.Mapping;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameInfo;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.ServerInfo;
 using GameHost.Features.Lifecycle.Application.Pulses.Actions;
 using GameHost.Features.Lifecycle.Application.Pulses.Effects;
 using GameHost.Features.Lifecycle.Application.Pulses.Reducers;
@@ -76,23 +78,14 @@ public static class LifecycleServiceExt
         services.AddStatePulseService<ServerStatusUpdateAction>();
         services.AddStatePulseService<ServerStatusUpdateEffect>();
 
-        services.AddMedihaterRequestHandler<GetServerStatusQuery, GetServerStatusHandler, ServerInfoEntity?>();
+        services.AddMedihaterRequestHandler<GetServerStatusQuery, GetServerStatusHandler, ServerInfoResponse?>();
         services.AddMedihaterRequestHandler<GetStartupParametersQuery, GetStartupParametersHandler, Dictionary<string, string>>();
         services.AddMedihaterRequestHandler<ExecRestartServerCommand, ExecRestartServerHandler>();
         services.AddMedihaterRequestHandler<ExecStartServerCommand, ExecStartServerHandler>();
         services.AddMedihaterRequestHandler<ExecStopServerCommand, ExecStopServerHandler>();
         services.AddMedihaterRequestHandler<ExecUpdateStartupParameterCommand, ExecUpdateStartupParameterHandler>();
-        services.AddMedihaterRequestHandler<GetGameInfoQuery, GetGameInfoHandler, GameInfoEntity?>();
+        services.AddMedihaterRequestHandler<GetGameInfoQuery, GetGameInfoHandler, GameInfoResponse?>();
         services.AddMedihaterRequestHandler<GetRawGameInfoQuery, GetRawGameInfoHandler, string?>();
-
-        services.AddCoreMapHandler<AllowedValueResponseToAllowedValueEntity>();
-        services.AddCoreMapHandler<GameStartupParameterResponseToStartupParameter>();
-        services.AddCoreMapHandler<GameStartupParamRespToGameStartupParamEntity>();
-        services.AddCoreMapHandler<RelatedToResponseToConstraintTypeEntity>();
-        services.AddCoreMapHandler<ValidationResponseToValidationEntity>();
-        services.AddCoreMapHandler<GameInfoResponseToGameInfoEntity>();
-        services.AddCoreMapHandler<StatusResponseToServerInfoEntity>();
-        services.AddCoreMapHandler<PortInfoResponseToConnectionPort>();
 
         services.AddCoreMapHandler<ServerStateToServerStateTransitionResponse>();
 

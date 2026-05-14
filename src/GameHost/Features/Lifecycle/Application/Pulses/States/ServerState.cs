@@ -1,12 +1,12 @@
-﻿using GameHost.Features.Lifecycle.Application.Pulses.States.Enums;
-using GameHost.Features.Lifecycle.Domain.Entites;
+﻿using GameHost.Features.Lifecycle.Application.Payloads.Responses.ServerInfo;
+using GameHost.Features.Lifecycle.Application.Pulses.States.Enums;
 using StatePulse.Net;
 
 namespace GameHost.Features.Lifecycle.Application.Pulses.States;
 
 public record ServerState : IStateFeatureSingleton
 {
-    public ServerInfoEntity? ServerInfo { get; init; }
+    public ServerInfoResponse? ServerInfo { get; init; }
     public ServerTransition Transition { get; init; } = ServerTransition.Idle;
     public DateTime TransitionStartedAt { get; init; }
 

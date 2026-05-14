@@ -44,7 +44,7 @@
             {
                 <MudText Typo=@Typo.h6>@ViewModel.GameInfo.Name</MudText>
                 <MudDivider Class="my-1" Style="visibility: hidden;" />
-                @if (ViewModel.GameInfo.SteamInfo != default)
+                @* @if (ViewModel.GameInfo.SteamInfo != default)
                 {
                     <MudChip T="string" Variant="Variant.Text" Color="Color.Info">@($"Steam: {ViewModel.GameInfo.SteamInfo.Steamid}")</MudChip>
                 }
@@ -68,7 +68,7 @@
                         <MudChip T="string" Icon=@Icons.Material.Filled.Check Variant="Variant.Text" Color="Color.Success">@($"Automatic Mod Download")</MudChip>
                     }
                     <MudChip T="string" Icon=@Icons.Material.Filled.Info Variant="Variant.Text" Color="Color.Success">@ViewModel.TransitionState.HowManyCares</MudChip>
-                }
+                } *@
 
                 <MudDivider Class="my-2" />
                 @if (ViewModel.ServerState.Transition == ServerTransition.Starting)

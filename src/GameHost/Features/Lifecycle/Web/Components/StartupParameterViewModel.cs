@@ -1,4 +1,6 @@
 ﻿using GameHost.Core.Features;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameInfo;
 using GameHost.Features.Lifecycle.Application.Pulses.States;
 using GameHost.Features.Lifecycle.Web.Components.ViewModels;
 using LunaticPanel.Core.Abstraction.Widgets;
@@ -24,9 +26,9 @@ public class StartupParameterViewModel : WidgetViewModelBase, IStartupParameterV
     public ServerState ServerState => _statePulse.StateOf<ServerState>(() => this, UpdateChanges);
 
     public GameInfoState GameInfoState => _statePulse.StateOf<GameInfoState>(() => this, OnUpdate);
-    public Dictionary<string, List<GameConfigParamaterEntity>> Parameters { get; private set; } = new();
+    public Dictionary<string, List<GameConfigParameterResponse>> Parameters { get; private set; } = new();
 
-    public GameInfoEntity? GameInfo => GameInfoState.GameInfo;
+    public GameInfoResponse? GameInfo => GameInfoState.GameInfo;
 
     public Dictionary<string, string> StartupParameters => GameInfoState.StartupParameters;
 
@@ -42,7 +44,7 @@ public class StartupParameterViewModel : WidgetViewModelBase, IStartupParameterV
         {
             foreach (var param in item)
             {
-                _crazyReport.ReportInfo("Loaded Parameter {0} = {1}", param.Key.Key, GetInitialValue(param));
+                _crazyReport.ReportInfo("Loaded Parameter {0} = {1}", param.Key, GetInitialValue(param));
 
             }
         }
@@ -65,9 +67,10 @@ public class StartupParameterViewModel : WidgetViewModelBase, IStartupParameterV
         return Task.CompletedTask;
     }
 
-    public string GetInitialValue(GameConfigParamaterEntity parameter) =>
-        StartupParameters.ContainsKey(parameter.Key.Key) ?
-        StartupParameters[parameter.Key.Key] :
+    public string GetInitialValue(GameConfigParameterResponse parameter) =>
+        StartupParameters.ContainsKey(parameter.Key) ?
+        StartupParameters[parameter.Key] :
         parameter.DefaultValue ?? string.Empty;
+
 
 }

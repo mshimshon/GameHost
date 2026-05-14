@@ -1,11 +1,12 @@
-﻿using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig.Validators;
+﻿using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig.Enums;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig.Validators;
 
 namespace GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig;
 
 public sealed record GameConfigParameterResponse
 {
     public string Key { get; set; } = default!;
-    public string Type { get; set; } = default!;
+    public ConfigParameterType Type { get; set; } = default!;
     public string Label { get; set; } = default!;
     public string Description { get; set; } = default!;
     public bool Required { get; set; }

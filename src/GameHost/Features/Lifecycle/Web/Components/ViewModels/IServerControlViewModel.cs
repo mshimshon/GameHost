@@ -1,4 +1,5 @@
-﻿using GameHost.Features.Lifecycle.Application.Pulses.States;
+﻿using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameInfo;
+using GameHost.Features.Lifecycle.Application.Pulses.States;
 using GameHost.Features.SystemInfo.Application.Pulses.States;
 using LunaticPanel.Core.Abstraction.Widgets;
 
@@ -8,7 +9,7 @@ public interface IServerControlViewModel : IWidgetViewModel
 {
     ServerState ServerState { get; }
     GameInfoState GameInfoState { get; }
-    GameInfoEntity? GameInfo { get; }
+    GameInfoResponse? GameInfo { get; }
     SystemInfoState SystemInfoState { get; }
     ServerTransitionState TransitionState { get; }
     Task Start();

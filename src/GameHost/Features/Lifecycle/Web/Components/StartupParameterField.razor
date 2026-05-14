@@ -8,21 +8,21 @@
                HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
                Required=@(ViewModel.Parameter.Required)
                ReadOnly=@(!ViewModel.Parameter.Editable)>
-        @foreach (var item in ViewModel.Parameter.Validation!.AllowedValues!)
+        @foreach (var item in ViewModel.AllowedValues)
         {
-            <MudSelectItem Value=@item.Value>@item.Label</MudSelectItem>
+            <MudSelectItem Value=@item.Key>@item.Value</MudSelectItem>
         }
     </MudSelect>
     }
-    else if (ViewModel.Parameter.Key.ConfigParameterType== Domain.Enums.ConfigParameterType.String)
+    else if (ViewModel.IsString)
     {
         <MudTextField @ref=MudTextFieldRef @bind-Value=ViewModel.Value Label=@ViewModel.GetLabel()
                         HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
-                        MaxLength=@GetMaxLength() Pattern=@(ViewModel.Parameter.Validation?.PatternValidation ?? default)
+                        MaxLength=ViewModel.MaxLength
                         Required=@(ViewModel.Parameter.Required)
                         ReadOnly=@(!ViewModel.Parameter.Editable) />
     }
-    else if (ViewModel.Parameter.Key.ConfigParameterType == Domain.Enums.ConfigParameterType.Bool)
+    else if (ViewModel.IsBool)
     {
         <MudSwitch @ref=MudSwitchRef @bind-Value=ValueBool Color="Color.Success" UncheckedColor="Color.Error"
                    Label=@ViewModel.GetLabel() />
@@ -32,10 +32,9 @@
     {
         <MudNumericField @ref=MudNumericFieldIntRef @bind-Value=ValueInt Label=@ViewModel.GetLabel()
                             HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
-                            Min=@(ViewModel.Parameter.Validation?.Min ?? int.MinValue)
-                            Max=@(ViewModel.Parameter.Validation?.Max ?? int.MaxValue)
+                         Min=ViewModel.MinLength
+                         Max=ViewModel.MaxLength
                             Step=@(1)
-                            Pattern=@(ViewModel.Parameter.Validation?.PatternValidation ?? default)
                             Required=@(ViewModel.Parameter.Required)
                             ReadOnly=@(!ViewModel.Parameter.Editable) />
     }
@@ -43,10 +42,9 @@
     {
         <MudNumericField @ref=MudNumericFieldDecimalRef @bind-Value=ValueDecimal Label=@ViewModel.GetLabel()
                             HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
-                            Min=@(ViewModel.Parameter.Validation?.Min ?? int.MinValue)
-                            Max=@(ViewModel.Parameter.Validation?.Max ?? int.MaxValue)
+                            Min=ViewModel.MinLength
+                            Max=ViewModel.MaxLength
                             Step=@(0.01)
-                            Pattern=@(ViewModel.Parameter.Validation?.PatternValidation ?? default)
                             Required=@(ViewModel.Parameter.Required)
                             ReadOnly=@(!ViewModel.Parameter.Editable) />
     }

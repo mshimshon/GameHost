@@ -1,4 +1,5 @@
 ﻿using GameHost.Core.Features;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameInfo;
 using GameHost.Features.Lifecycle.Application.Services;
 using GameHost.Kernel.Abstractions.Mediator;
 using GameHost.Kernel.Abstractions.Services.Notification.Services;
@@ -7,7 +8,7 @@ using MedihatR;
 
 namespace GameHost.Features.Lifecycle.Application.Mediator.Queries.Handlers;
 
-internal sealed class GetGameInfoHandler : HandlerBase, IRequestHandler<GetGameInfoQuery, GameInfoEntity?>
+internal sealed class GetGameInfoHandler : HandlerBase, IRequestHandler<GetGameInfoQuery, GameInfoResponse?>
 {
     private readonly IGameInfoService _gameInfoService;
 
@@ -16,7 +17,7 @@ internal sealed class GetGameInfoHandler : HandlerBase, IRequestHandler<GetGameI
         _gameInfoService = gameInfoService;
         logger.SetModule(LifecycleKeys.MODULE_NAME);
     }
-    public async Task<GameInfoEntity?> Handle(GetGameInfoQuery request, CancellationToken cancellationToken)
+    public async Task<GameInfoResponse?> Handle(GetGameInfoQuery request, CancellationToken cancellationToken)
         => await ExecAndHandleExceptions(
                 () => _gameInfoService.LoadGameInfoAsync(cancellationToken),
                 () => default

@@ -1,9 +1,9 @@
-﻿using GameHost.Features.Lifecycle.Domain.Entites;
+﻿using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameInfo;
 using StatePulse.Net;
 
 namespace GameHost.Features.Lifecycle.Application.Pulses.Actions;
 
 internal sealed record ServerGameInfoUpdateDoneAction : IAction
 {
-    public GameInfoEntity GameInfo { get; set; } = default!;
+    public GameInfoResponse GameInfo { get; set; } = default!;
 }

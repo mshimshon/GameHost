@@ -1,10 +1,13 @@
 ﻿using CoreMap;
 using GameHost.Core.Features;
 using GameHost.Features.Lifecycle.Application.Services;
-using GameHost.Features.Lifecycle.Domain.Entites;
-using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads;
-using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Status;
 using GameHost.Features.Lifecycle.Infrastructure.Services.Exceptions;
+using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig;
+using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig.Mapping;
+using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameInfo;
+using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameInfo.Mapping;
+using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.ServerInfo;
+using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.ServerInfo.Mapping;
 using GameHost.Kernel.Abstractions.Dto;
 using GameHost.Kernel.Abstractions.Exceptions;
 using GameHost.Kernel.Abstractions.Extensions;
@@ -67,7 +70,7 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
         {
             string jsonString = await File.ReadAllTextAsync(file);
             _crazyReport.ReportInfo(jsonString);
-            var result = JsonSerializer.Deserialize<List<GameStartupParameterKeyValueResponse>>(jsonString, _jsonSerializerConfiguration)!;
+            var result = JsonSerializer.Deserialize<List<GameConfigParameterPairResponse>>(jsonString, _jsonSerializerConfiguration)!;
             if (result == default) return new();
             return result.ToDictionary(p => p.Key, p => p.Value); ;
         }
@@ -80,18 +83,18 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
         }
     }
 
-    public async Task<ICollection<GameStartupParameterHostDefResponse>> GetHostServerStartupParametersAsync(CancellationToken cancellationToken = default)
+    public async Task<ICollection<Application.Payloads.Responses.GameConfig.GameConfigParameterPairHostResponse>> GetHostServerStartupParametersAsync(CancellationToken cancellationToken = default)
     {
         string file = _pluginSystemLocation.GetConfigFor(LifecycleKeys.MODULE_NAME, LifecycleKeys.HOST_STARTUP_PARAM_FILE);
         _crazyReport.ReportInfo("Checking({1}) {0} ", file, File.Exists(file));
-        if (!File.Exists(file)) return new List<GameStartupParameterHostDefResponse>();
+        if (!File.Exists(file)) return new List<Application.Payloads.Responses.GameConfig.GameConfigParameterPairHostResponse>();
         try
         {
             string jsonString = await File.ReadAllTextAsync(file);
             _crazyReport.ReportInfo(jsonString);
-            var result = JsonSerializer.Deserialize<List<GameStartupParameterHostDefResponse>>(jsonString, _jsonSerializerConfiguration)!;
-            if (result == default) return new List<GameStartupParameterHostDefResponse>();
-            return result;
+            var result = JsonSerializer.Deserialize<List<GameConfigParameterPairHostResponse>>(jsonString, _jsonSerializerConfiguration)!;
+            if (result == default) return new List<Application.Payloads.Responses.GameConfig.GameConfigParameterPairHostResponse>();
+            return result.Select(p => p.MapToApplication()).ToList();
         }
         catch (Exception ex)
         {
@@ -130,7 +133,7 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
         }
     }
 
-    public async Task<GameInfoEntity?> LoadGameInfoAsync(CancellationToken cancellationToken = default)
+    public async Task<Application.Payloads.Responses.GameInfo.GameInfoResponse?> LoadGameInfoAsync(CancellationToken cancellationToken = default)
     {
         try
         {
@@ -138,7 +141,7 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
             if (jsonString == default) return default;
             var result = JsonSerializer.Deserialize<GameInfoResponse>(jsonString, _jsonSerializerConfiguration)!;
             if (result == default) return default;
-            var entity = _coreMap.Map(result).To<GameInfoEntity>();
+            var entity = result.MapToApplication();
             return entity;
         }
         catch (Exception ex)
@@ -176,7 +179,7 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
         _gameId = result;
         return result;
     }
-    public async Task<ServerInfoEntity?> ServerStatusAsync(CancellationToken ct = default)
+    public async Task<Application.Payloads.Responses.ServerInfo.ServerInfoResponse?> ServerStatusAsync(CancellationToken ct = default)
     {
         var gameId = await GetGameIdAsync();
         var binaryConsoleFile = _pluginUserLocation.GetUserBashFor(LinuxGameServerKeys.MODULE_NAME,
@@ -189,10 +192,10 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
 
         if (commandResult.Failed)
             throw new FailedToGetServerStatusException(_crazyReport);
-        var result = commandResult.PayloadAsOrDefault<InstallerResultDataDto<StatusResponse>>(default);
+        var result = commandResult.PayloadAsOrDefault<InstallerResultDataDto<ServerInfoResponse>>(default);
         if (result?.Data == default)
             throw new FailedToGetServerStatusException(_crazyReport);
-        var resultEntity = _coreMap.Map(result.Data).To<ServerInfoEntity>();
+        var resultEntity = result.Data.MapToApplication();
         return resultEntity;
     }
 
@@ -209,13 +212,13 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
             stream = File.Open(lockFile, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
             var current = await GetServerStartupParametersAsync(ct);
             current[key] = value;
-            var toWriteList = current.Select(p => new GameStartupParameterKeyValueResponse()
+            var toWriteList = current.Select(p => new GameConfigParameterPairResponse()
             {
                 Key = p.Key,
                 Value = p.Value
             });
             var json = JsonSerializer.Serialize(toWriteList, _jsonSerializerConfiguration);
-            await _safeFileWriter.WriteThenCopyFileAsync(userStartUpParamFile, json, ct);
+            await _safeFileWriter.WriteThenCopyFileAsync(userStartUpParamFile, json, ct, $"{LinuxGameServerKeys.USERNAME}:{LinuxGameServerKeys.USERNAME}", "755");
         }
         catch (Exception ex)
         {

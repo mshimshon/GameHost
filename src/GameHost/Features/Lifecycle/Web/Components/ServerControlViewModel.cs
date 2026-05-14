@@ -1,4 +1,5 @@
 ﻿using GameHost.Core.Features;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameInfo;
 using GameHost.Features.Lifecycle.Application.Payloads.Responses.ServerInfo.Enums;
 using GameHost.Features.Lifecycle.Application.Pulses.Actions;
 using GameHost.Features.Lifecycle.Application.Pulses.States;
@@ -25,7 +26,7 @@ internal class ServerControlViewModel : WidgetViewModelBase, IServerControlViewM
     public GameInfoState GameInfoState => _statePulse.StateOf<GameInfoState>(() => this, UpdateParentChanges);
     public ServerTransitionState TransitionState => _statePulse.StateOf<ServerTransitionState>(() => this, UpdateState);
 
-    public GameInfoEntity? GameInfo => GameInfoState?.GameInfo;
+    public GameInfoResponse? GameInfo => GameInfoState?.GameInfo;
 
     public ServerControlViewModel(IStatePulse statePulse, ICrazyReport crazyReport, IStateAccessor<ServerState> stateAccessor, IPanelControl panelControl)
     {
