@@ -24,7 +24,7 @@
     }
     else
     {
-        <MudCardMedia Image=@($"/_plugins/{BaseInfo.AssemblyName}/game_banner.png") Height="300" Style="background-position: top;background-repeat: no-repeat;" />
+        <MudCardMedia Image=@ViewModel.BanneLocation Height="300" Style="background-position: top;background-repeat: no-repeat;" />
         <MudCardContent Class="justify-space-around mud-width-full py-6 px-6">
             <h1>@ViewModel.GetPanelId()</h1>
             @if (ViewModel.ServerState.ServerInfo != default)

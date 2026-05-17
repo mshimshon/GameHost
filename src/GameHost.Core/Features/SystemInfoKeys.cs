@@ -11,11 +11,11 @@ public static class SystemInfoKeys
         /// <summary>
         /// Raised when system resource information changes (CPU, RAM, or disk usage).
         /// </summary>
-        public const string OnStateUpdate = $"{BaseInfo.AssemblyName}.{nameof(SystemInfoKeys)}.{nameof(Events)}.{nameof(OnStateUpdate)}";
+        public const string OnStateUpdate = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(SystemInfoKeys)}.{nameof(Events)}.{nameof(OnStateUpdate)}";
 
         /// <summary>
         /// Triggers the update of the system information
         /// </summary>
-        public const string UpdateInformation = $"{BaseInfo.AssemblyName}.{nameof(SystemInfoKeys)}.{nameof(Events)}.{nameof(UpdateInformation)}";
+        public const string UpdateInformation = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(SystemInfoKeys)}.{nameof(Events)}.{nameof(UpdateInformation)}";
     }
 }

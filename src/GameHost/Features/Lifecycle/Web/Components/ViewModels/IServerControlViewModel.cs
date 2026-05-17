@@ -7,6 +7,7 @@ namespace GameHost.Features.Lifecycle.Web.Components.ViewModels;
 
 public interface IServerControlViewModel : IWidgetViewModel
 {
+    string BanneLocation { get; }
     ServerState ServerState { get; }
     GameInfoState GameInfoState { get; }
     GameInfoResponse? GameInfo { get; }

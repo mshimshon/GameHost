@@ -4,6 +4,7 @@ public static class LinuxGameServerKeys
 {
     public const string MODULE_NAME = "linuxgameserver";
     public const string SERVER_CONTROL_FOLDER = "server_control";
+    public const string SERVER_CONTROL_ASSET_FOLDER = "assets";
     public const string SERVER_CONTROL_CONFIG_FOLDER = "config";
     public const string USERNAME = "lgsm";
     public const string SERVER_INSTALL_PROGRESS_FILE = "installation_progress_state.json";
@@ -13,13 +14,13 @@ public static class LinuxGameServerKeys
 
     public static class Queries
     {
-        public const string IS_GAME_SERVER_INSTALLED = $"{BaseInfo.AssemblyName}.{nameof(LinuxGameServerKeys)}.{nameof(Queries)}.{nameof(IS_GAME_SERVER_INSTALLED)}";
+        public const string IS_GAME_SERVER_INSTALLED = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(LinuxGameServerKeys)}.{nameof(Queries)}.{nameof(IS_GAME_SERVER_INSTALLED)}";
         /// <summary>
         /// Return the Game Id which correspond to the console under server_contro/GAME_ID binary.<br/>
         /// Warning: this can only return when the game server installer is initialized.
         /// </summary>
-        public const string GET_GAME_ID = $"{BaseInfo.AssemblyName}.{nameof(LinuxGameServerKeys)}.{nameof(Queries)}.{nameof(GET_GAME_ID)}";
-        public const string GET_SERVER_INSTALL_STATE = $"{BaseInfo.AssemblyName}.{nameof(LinuxGameServerKeys)}.{nameof(Queries)}.{nameof(GET_SERVER_INSTALL_STATE)}";
+        public const string GET_GAME_ID = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(LinuxGameServerKeys)}.{nameof(Queries)}.{nameof(GET_GAME_ID)}";
+        public const string GET_SERVER_INSTALL_STATE = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(LinuxGameServerKeys)}.{nameof(Queries)}.{nameof(GET_SERVER_INSTALL_STATE)}";
     }
     public static class Engine { }
     public static class Events
@@ -27,12 +28,12 @@ public static class LinuxGameServerKeys
         /// <summary>
         /// Occurs when Game Server Install State Changes, called regardless of the origin oof the installation
         /// </summary>
-        public const string ON_GAME_SERVER_INSTALL_STATE_CHANGED = $"{BaseInfo.AssemblyName}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALL_STATE_CHANGED)}";
+        public const string ON_GAME_SERVER_INSTALL_STATE_CHANGED = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALL_STATE_CHANGED)}";
 
         /// <summary>
         /// Raised when a game installation is initiated from the dashboard.
         /// </summary>
-        public const string ON_GAME_SERVER_INSTALL = $"{BaseInfo.AssemblyName}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALL)}";
+        public const string ON_GAME_SERVER_INSTALL = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALL)}";
 
         /// <summary>
         /// Event name raised when a game server installation completes.
@@ -46,7 +47,7 @@ public static class LinuxGameServerKeys
         /// use <see cref="LinuxGameServerKeys.Queries.IS_GAME_SERVER_INSTALLED"/>.
         /// </para>
         /// </summary>
-        public const string ON_GAME_SERVER_INSTALLED = $"{BaseInfo.AssemblyName}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALLED)}";
+        public const string ON_GAME_SERVER_INSTALLED = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALLED)}";
 
         /// <summary>
         /// Event name raised when a game server installation fails to complete.
@@ -60,7 +61,7 @@ public static class LinuxGameServerKeys
         /// use <see cref="LinuxGameServerKeys.Queries.IS_GAME_SERVER_INSTALLED"/>.
         /// </para>
         /// </summary>
-        public const string ON_GAME_SERVER_INSTALL_FAILED = $"{BaseInfo.AssemblyName}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALL_FAILED)}";
+        public const string ON_GAME_SERVER_INSTALL_FAILED = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALL_FAILED)}";
 
     }
 }

@@ -50,6 +50,7 @@
 	  <Folder Include="Features\SystemInfo\Web\Hooks\Queries\" />
 	  <Folder Include="Web\Pages\Hooks\Events\" />
 	  <Folder Include="Web\Pages\Hooks\Queries\" />
+	  <Folder Include="wwwroot\" />
   </ItemGroup>
 
 
@@ -81,10 +82,6 @@
 	  <Content Remove="Features\Lifecycle\Web\Hooks\UI\Components\WidgetTest.razor" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Include="Features\Lifecycle\Web\Components\WidgetTest.razor" />
-	</ItemGroup>
-
 
   <ItemGroup>
     <Content Update="Features\LinuxGameServer\Application\Bash\check_git_install.sh" Link="bash\linuxgameserver\check_git_install.sh" />
@@ -95,9 +92,6 @@
     <Content Update="Features\SystemInfo\Application\Bash\get_ram_info.sh" Link="bash\systeminfo\get_ram_info.sh" />
     <Content Update="Features\SystemInfo\Application\Bash\get_disk_info.sh" Link="bash\systeminfo\get_disk_info.sh" />
     <Content Update="Features\SystemInfo\Application\Bash\get_cpu_info.sh" Link="bash\systeminfo\get_cpu_info.sh" />
-    <Content Update="wwwroot\game_banner.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
 	<Target Name="RemoveHostOwnedAssembliesAfterBuild" AfterTargets="Build" Condition="'$(IsPublish)' != 'true'">

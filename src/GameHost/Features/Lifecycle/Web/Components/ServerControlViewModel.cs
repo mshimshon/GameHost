@@ -8,6 +8,7 @@ using GameHost.Features.SystemInfo.Application.Pulses.States;
 using LunaticPanel.Core.Abstraction.Tools;
 using LunaticPanel.Core.Abstraction.Widgets;
 using LunaticPanel.Core.Utils.Abstraction.Logging;
+using LunaticPanel.Core.Utils.Abstraction.Plugin.Location;
 using StatePulse.Net;
 
 namespace GameHost.Features.Lifecycle.Web.Components;
@@ -19,6 +20,7 @@ internal class ServerControlViewModel : WidgetViewModelBase, IServerControlViewM
     private readonly ICrazyReport _crazyReport;
     private readonly IStateAccessor<ServerState> _stateAccessor;
     private readonly IPanelControl _panelControl;
+    private readonly IPluginWebLocation _pluginWebLocation;
 
     public ServerState ServerState => _statePulse.StateOf<ServerState>(() => this, UpdateState);
     //public ServerState ServerState => _stateAccessor.State;
@@ -27,15 +29,20 @@ internal class ServerControlViewModel : WidgetViewModelBase, IServerControlViewM
     public ServerTransitionState TransitionState => _statePulse.StateOf<ServerTransitionState>(() => this, UpdateState);
 
     public GameInfoResponse? GameInfo => GameInfoState?.GameInfo;
-
-    public ServerControlViewModel(IStatePulse statePulse, ICrazyReport crazyReport, IStateAccessor<ServerState> stateAccessor, IPanelControl panelControl)
+    public string BanneLocation { get; }
+    public ServerControlViewModel(IStatePulse statePulse, ICrazyReport crazyReport, IStateAccessor<ServerState> stateAccessor,
+        IPanelControl panelControl,
+        IPluginWebLocation pluginWebLocation)
     {
         _statePulse = statePulse;
         _crazyReport = crazyReport;
         _stateAccessor = stateAccessor;
         _panelControl = panelControl;
+        _pluginWebLocation = pluginWebLocation;
         //_stateAccessor.OnStateChangedNoDetails += (_, e) => { _ = UpdateState(); };
         _crazyReport.SetModule<ServerControlViewModel>(LifecycleKeys.MODULE_NAME);
+        //  @($"/_plugins/dynamic/{BaseInfo.ASSEMBLY_NAME}/game_banner.png")
+        BanneLocation = _pluginWebLocation.GetRelativeDynamicWebFor(LinuxGameServerKeys.MODULE_NAME, [LinuxGameServerKeys.SERVER_CONTROL_FOLDER], "server_banner.jpg");
     }
 
 

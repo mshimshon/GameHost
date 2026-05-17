@@ -1,7 +1,4 @@
-﻿using GameHost.Features.Lifecycle.Infrastructure.Services.Providers.Json;
-using System.Text.Json.Serialization;
-
-namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig;
+﻿namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig;
 
 public sealed record GameConfigParameterResponse
 {
@@ -15,6 +12,5 @@ public sealed record GameConfigParameterResponse
     public string Category { get; set; } = default!;
     public string? Warning { get; set; }
 
-    [JsonConverter(typeof(ConfigParameterValidatorJsonConverter))]
     public List<GameConfigParameterValidator>? Validations { get; set; }
 }

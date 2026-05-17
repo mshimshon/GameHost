@@ -115,6 +115,7 @@ internal class LinuxGameServerService : ILinuxGameServerService
         if (!File.Exists(file)) return default;
         try
         {
+            await CopyInstallerAssetsToDynamicRoot(ct);
             string jsonString = await File.ReadAllTextAsync(file);
             InstallationStateDto result = JsonSerializer.Deserialize<InstallationStateDto>(jsonString)!;
             if (result == default) return default;
@@ -126,6 +127,28 @@ internal class LinuxGameServerService : ILinuxGameServerService
             _crazyReport.ReportErrorException(ex.Message, ex);
             return default;
         }
+    }
+
+    private async Task CopyInstallerAssetsToDynamicRoot(CancellationToken ct = default)
+    {
+        string baseDynamicPath = _pluginSystemLocation.GetDynamicWebContentBase(LinuxGameServerKeys.MODULE_NAME, [LinuxGameServerKeys.SERVER_CONTROL_FOLDER]);
+        string[] serverControlAssetSub = [LinuxGameServerKeys.SERVER_CONTROL_FOLDER, LinuxGameServerKeys.SERVER_CONTROL_ASSET_FOLDER];
+        string serverControlAssetsLocation = _pluginUserLocation.GetUserBashBase(LinuxGameServerKeys.MODULE_NAME, serverControlAssetSub);
+        // rm -rf /etc/aa/wwwroot && mkdir -p /etc/aa/wwwroot && cp -a /etc/xx/assets/. /etc/aa/wwwroot/
+        if (Path.Exists(baseDynamicPath))
+        {
+            Directory.Delete(baseDynamicPath, true);
+            Directory.CreateDirectory(baseDynamicPath);
+        }
+
+        var assetCopyCommand = $"cp -a \"{serverControlAssetsLocation}/.\" \"{baseDynamicPath}/\"";
+        var installerCopieCommandResult = await _linuxCommand.BuildCommand(assetCopyCommand)
+            .AndCommand($"chmod -R 755 \"{baseDynamicPath}\"")
+            .SetCrazyReport(_crazyReport)
+            .ExecAsync(ct);
+        if (installerCopieCommandResult.Failed)
+            throw new FailedToCopyAssetsToServeLocationException(_crazyReport);
+
     }
 
     public async Task PerformServerInstallation(string id, string installerName, CancellationToken ct = default)
@@ -152,7 +175,7 @@ internal class LinuxGameServerService : ILinuxGameServerService
             .ExecAsync(ct);
         if (extractCommandResult.Failed && !File.Exists(consoleBinaryFile))
             throw new CouldNotExtractGameInstallerException(_crazyReport);
-
+        await CopyInstallerAssetsToDynamicRoot(ct);
         var initializeCommand = $"\"{consoleBinaryFile}\" initialize";
         var initializeCommandResult = await _linuxCommand
             .BuildCommand(initializeCommand)
