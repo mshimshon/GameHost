@@ -9,9 +9,11 @@ internal static class GameInfoMappingExt
         {
             HasModdingWorkshop = data.HasModdingWorkshop,
             ManualModUpload = data.ManualModUpload,
+            SteamServerId = data.SteamServerId,
             Modding = data.Modding,
             Name = data.Name,
             StartupParameters = data.StartupParameters?.Select(GameConfigMappingExt.MapToApplication).ToList(),
-            SteamId = data.SteamId
+            SteamGameId = data.SteamGameId,
+            SteamBranch = data.SteamBranch
         };
 }

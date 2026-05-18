@@ -54,33 +54,6 @@
   </ItemGroup>
 
 
-	<ItemGroup>
-		<None Include="Features\LinuxGameServer\Application\Bash\**\*" />
-		<Content Include="Features\LinuxGameServer\Application\Bash\**\*">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>$([System.String]::Copy('bash\linuxgameserver\%(RecursiveDir)%(Filename)%(Extension)').ToLower())</Link>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="Features\SystemInfo\Application\Bash\**\*" />
-		<Content Include="Features\SystemInfo\Application\Bash\**\*">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>$([System.String]::Copy('bash\systeminfo\%(RecursiveDir)%(Filename)%(Extension)').ToLower())</Link>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="Features\Mods\Application\Bash\**\*" />
-		<Content Include="Features\Mods\Application\Bash\**\*">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>$([System.String]::Copy('bash\modlist\%(RecursiveDir)%(Filename)%(Extension)').ToLower())</Link>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Remove="Features\Lifecycle\Web\Hooks\UI\Components\WidgetTest.razor" />
-	</ItemGroup>
 
 
   <ItemGroup>

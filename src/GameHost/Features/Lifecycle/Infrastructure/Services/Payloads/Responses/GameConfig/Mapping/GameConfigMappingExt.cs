@@ -2,6 +2,7 @@
 using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig.Validators.AllowedValues;
 using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig.Validators.LengthConstraint;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
 namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig.Mapping;
@@ -73,13 +74,17 @@ internal static class GameConfigMappingExt
             PropertyNameCaseInsensitive = true,
             ReferenceHandler = ReferenceHandler.IgnoreCycles
         };
-        var typeStr = validator.Content["type"]?.ToString() ??
-            validator.Content["Type"]?.ToString() ??
-            throw new JsonException($"Bad Format: {nameof(GameConfigParameterValidator)}"); ;
+        var typeStr = validator.Type;
+        JsonObject rebuiltPartial = new JsonObject();
+        var parsedNode = JsonNode.Parse(validator.Data);
+        rebuiltPartial["data"] = parsedNode?.DeepClone();
+        rebuiltPartial["type"] = typeStr;
+        Console.WriteLine(rebuiltPartial.ToString());
+
         Application.Payloads.Responses.GameConfig.Validators.BaseConfigParameterValidator? result = typeStr switch
         {
-            ValidatorDefinitions.LENGTH_CONSTRAINT => JsonSerializer.Deserialize<ParameterLengthConstraintValidator>(validator.Content, options),
-            ValidatorDefinitions.ALLOWED_VALUES => JsonSerializer.Deserialize<ParameterAllowedValuesValidator>(validator.Content, options),
+            ValidatorDefinitions.LENGTH_CONSTRAINT => JsonSerializer.Deserialize<ParameterLengthConstraintValidator>(rebuiltPartial, options),
+            ValidatorDefinitions.ALLOWED_VALUES => JsonSerializer.Deserialize<ParameterAllowedValuesValidator>(rebuiltPartial, options),
             _ => default
         };
         if (result == default)

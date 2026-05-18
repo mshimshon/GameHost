@@ -6,8 +6,9 @@ namespace GameHost.Features.Lifecycle.Web.Components;
 
 public partial class StartupParameterField
 {
+    private const string FATAL_ERROR = "Fatal error with reading Parameter.";
     [Parameter]
-    public GameConfigParameterResponse GameStartupParameter { get; set; } = default!;
+    public GameConfigParameterResponse Value { get; set; } = default!;
 
     [Parameter]
     public string InitialValue { get; set; } = default!;
@@ -21,14 +22,11 @@ public partial class StartupParameterField
     protected override void OnWidgetParametersSet()
     {
         bool wasTouched = ViewModel.IsTouched;
-        ViewModel.Parameter = GameStartupParameter;
+        ViewModel.Parameter = Value;
         ViewModel.InitialValue = InitialValue;
         if (!wasTouched || string.Equals(ViewModel.Value, InitialValue, StringComparison.Ordinal))
             ViewModel.Value = InitialValue;
     }
-
-
-
 
     private int ValueInt
     {

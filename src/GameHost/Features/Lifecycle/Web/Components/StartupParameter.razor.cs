@@ -3,5 +3,6 @@
 public partial class StartupParameter
 {
     private const string SERVER_NOT_INSTALLED = "The server is misconfigured, it seems like the game server file has not been properly setup, contact admin or support."; // TODO: LOCALIZE CHECK ALSO OTHER
+    private const string NO_STARTUP_PARAMETERS = "This server has no start up parameters or are not supported."; // TODO: LOCALIZE CHECK ALSO OTHER
 
 }

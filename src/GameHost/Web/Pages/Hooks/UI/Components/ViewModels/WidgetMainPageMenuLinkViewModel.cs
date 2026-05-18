@@ -21,6 +21,14 @@ internal class WidgetMainPageMenuLinkViewModel : WidgetViewModelBase, IWidgetMai
 
     public bool RequiresManualModUpload => ModListState.FeatureInfo?.IsManualDownload ?? false;
 
+    // TODO: USE CONFIG TO ENABLE/DISABLE DEBUG MODE
+#if DEBUG
+    public bool DebugEnabled => true;
+
+#else
+    public bool DebugEnabled => false;
+
+#endif
     public WidgetMainPageMenuLinkViewModel(IStatePulse statePulse)
     {
         _statePulse = statePulse;

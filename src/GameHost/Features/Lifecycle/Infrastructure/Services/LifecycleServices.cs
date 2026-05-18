@@ -120,7 +120,6 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
             _crazyReport.ReportInfo("Checking({1}) {0} ", file, File.Exists(file));
             if (!File.Exists(file)) return default;
             string jsonString = await File.ReadAllTextAsync(file);
-            _crazyReport.Report(jsonString);
             _rawGameInfo = jsonString;
             return _rawGameInfo;
         }
@@ -140,6 +139,7 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
             var jsonString = await GetRawGameInfoAsync(cancellationToken);
             if (jsonString == default) return default;
             var result = JsonSerializer.Deserialize<GameInfoResponse>(jsonString, _jsonSerializerConfiguration)!;
+
             if (result == default) return default;
             var entity = result.MapToApplication();
             return entity;

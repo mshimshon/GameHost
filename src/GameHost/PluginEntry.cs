@@ -1,5 +1,6 @@
 ﻿using CoreMap;
 using GameHost.Core;
+using GameHost.Features.Debugging.Web;
 using GameHost.Features.Lifecycle;
 using GameHost.Features.LinuxGameServer;
 using GameHost.Features.Mods;
@@ -66,7 +67,7 @@ public class PluginEntry : PluginBase
         services.AddNotificationFeatureServices();
         services.AddLinuxGameServerFeatureServices(_crossCircuitSingletonProvider!, _configuration, circuit.IsMaster);
         services.AddSystemInfoFeatureServices(_configuration);
-
+        services.AddDebuggingServices();
         //services.AddTransient(typeof(ICrazyReport<>), typeof(CrazyReport<>));
         //services.AddTransient<ICrazyReport, CrazyReport>();
         // Make Singleton State cross circuit

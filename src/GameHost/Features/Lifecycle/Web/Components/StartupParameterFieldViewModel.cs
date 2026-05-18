@@ -38,10 +38,10 @@ public class StartupParameterFieldViewModel : WidgetViewModelBase, IStartupParam
         Parameter.Type == ConfigParameterType.Bool_String;
 
     public bool IsNumber => IsDecimal || IsInt;
-    public ParameterLengthConstraintValidator? LengthConstraintValidator { get; set; }
-    public ParameterAllowedValuesValidator? AllowedValueValidator { get; set; }
-    public int MaxLength => LengthConstraintValidator?.Data.Max ?? int.MaxValue;
-    public int MinLength => LengthConstraintValidator?.Data.Min ?? int.MinValue;
+    public ParameterLengthConstraintData? LengthConstraintValidator { get; set; }
+    public List<ParameterAllowedValuesData>? AllowedValueValidator { get; set; }
+    public int MaxLength => LengthConstraintValidator?.Max ?? int.MaxValue;
+    public int MinLength => LengthConstraintValidator?.Min ?? int.MinValue;
     public Dictionary<string, string> AllowedValues { get; set; } = new();
 
 
@@ -73,22 +73,28 @@ public class StartupParameterFieldViewModel : WidgetViewModelBase, IStartupParam
 
         return true;
     }
-    protected override void OnViewModelInitialized()
+    protected override void OnViewModelParametersSet()
+    {
+        AssignValidators();
+        ProcessValidators();
+    }
+    private void AssignValidators()
     {
         if (Parameter.Validations == default) return;
         foreach (var validation in Parameter.Validations)
+        {
             if (validation.Type == ValidatorDefinitions.LENGTH_CONSTRAINT)
-                LengthConstraintValidator = (ParameterLengthConstraintValidator)validation.Data;
-            else if (validation.Type == ValidatorDefinitions.LENGTH_CONSTRAINT)
-                AllowedValueValidator = (ParameterAllowedValuesValidator)validation.Data;
+                LengthConstraintValidator = (ParameterLengthConstraintData)validation.Data;
+            else if (validation.Type == ValidatorDefinitions.ALLOWED_VALUES)
+                AllowedValueValidator = (List<ParameterAllowedValuesData>)validation.Data;
+        }
 
-        ProcessValidators();
     }
-
-
     private void ProcessValidators()
     {
-        AllowedValues = AllowedValueValidator?.Data.ToDictionary(p => p.Value, p => p.Label) ?? new();
+        if (Parameter.Validations == default) return;
+        AllowedValues = AllowedValueValidator?.ToDictionary(p => p.Value, p => p.Label) ?? new();
+
     }
 
     public string GetLabel()

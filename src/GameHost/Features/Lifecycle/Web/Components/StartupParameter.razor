@@ -42,6 +42,14 @@ else
             }
             else
             {
+                @if (ViewModel.Parameters.Count <= 0)
+                
+                {
+                    <MudAlert Severity=@Severity.Info ContentAlignment=@HorizontalAlignment.Center NoIcon=true>
+                        <MudText Align=Align.Center>@NO_STARTUP_PARAMETERS</MudText>
+                    </MudAlert>
+                } else
+                {
                 @foreach (var group in ViewModel.Parameters)
                 {
                     <MudDivider Class="my-2" Style="visibility:hidden;" />
@@ -50,16 +58,14 @@ else
                      <MudGrid>
                     @foreach (var parameter in group.Value)
                     {
-                       
-                        <StartupParameterField GameStartupParameter=@parameter
-                                                            InitialValue=@ViewModel.GetInitialValue(parameter) />
-                            
-                        
-
-                    }
+                        <StartupParameterField Value=@parameter InitialValue=@ViewModel.GetInitialValue(parameter) />
+                    } 
 
                     </MudGrid>
+                } 
                 }
+
+
             }
 
         </MudItem>

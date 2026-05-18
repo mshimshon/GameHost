@@ -1,4 +1,7 @@
-﻿namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig;
+﻿using GameHost.Features.Lifecycle.Infrastructure.Services.Providers.Json;
+using System.Text.Json.Serialization;
+
+namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig;
 
 public sealed record GameConfigParameterResponse
 {
@@ -8,6 +11,7 @@ public sealed record GameConfigParameterResponse
     public string Description { get; set; } = default!;
     public bool Required { get; set; }
     public bool Editable { get; set; }
+    [JsonConverter(typeof(JsonAlwaysStringConverter))]
     public string? DefaultValue { get; set; }
     public string Category { get; set; } = default!;
     public string? Warning { get; set; }

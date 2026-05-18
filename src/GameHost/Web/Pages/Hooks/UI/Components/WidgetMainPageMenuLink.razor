@@ -9,6 +9,10 @@
         <MudNavGroup Title="Advanced Lifecycle" Expanded="true">
             <MudNavLink Href="GameHost/lifecycle/startup-parameters" Icon="@Icons.Material.Filled.LocalPlay">Startup Parameters</MudNavLink>
             <MudNavLink Href="GameHost/lifecycle/settings" Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
+            @if (ViewModel.DebugEnabled)
+            {
+                <MudNavLink Href="GameHost/_debug/" Icon="@Icons.Material.Filled.BugReport">Debug</MudNavLink>
+            }
         </MudNavGroup>
         @if (ViewModel.DoesSupportMods && !ViewModel.RequiresManualModUpload)
         {

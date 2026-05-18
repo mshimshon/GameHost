@@ -216,9 +216,9 @@ internal sealed class ModListService : IModListService
             if (json == default) return default;
             var gameinfo = JsonSerializer.Deserialize<GameInfoResponse>(json, _serializerOption);
             if (gameinfo == default) return default;
-            if (gameinfo.Schema == default) return default;
+            if (gameinfo.ModSchema == default) return default;
             // TODO: USE COREMAP WHEN 2.0 RELEASES
-            List<PartSchematicEntity> result = gameinfo.Schema.Select(p => new PartSchematicEntity(p.Key, p.Value.Name, p.Value.Type)).ToList();
+            List<PartSchematicEntity> result = gameinfo.ModSchema.Select(p => new PartSchematicEntity(p.Key, p.Value.Name, p.Value.Type)).ToList();
             return result.AsReadOnly();
         }
         catch (JsonException ex)

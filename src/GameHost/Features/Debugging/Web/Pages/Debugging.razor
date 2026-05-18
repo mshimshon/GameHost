@@ -1,0 +1,38 @@
+@page "/GameHost/_debug/"
+
+@inherits WidgetComponentBase<PluginEntry, IDebuggingViewModel>
+<MudGrid >
+    <MudItem xs=4>
+        <MudPaper >
+            <MudList T=Type SelectedValue=@ViewModel.SelectedType SelectionMode=SelectionMode.SingleSelection Color=Color.Info
+                     SelectedValueChanged=ViewModel.ChangeSelection>
+                <MudListSubheader>
+                    Current:
+                    <MudChip Color="@Color.Info">
+                        @(ViewModel.SelectedType?.Name ?? "No State Selected")
+                    </MudChip>
+                </MudListSubheader>
+                @foreach (var state in ViewModel.States)
+                {
+                    <MudListItem Value=@state Text=@state.Name />
+                }
+            </MudList>
+        </MudPaper>
+
+
+    </MudItem>
+        <MudItem xs=8>
+    @if (ViewModel.SelectedType != default)
+    {
+            <MudTextField T="string"
+                          Label=@ViewModel.SelectedType.Name
+                          Variant="Variant.Outlined"
+                          Lines="1"
+                          MaxLines="50"
+                          Sizing="InputSizing.Auto" Disabled
+                          Value=@ViewModel.CurrentPrint />
+
+        }
+    </MudItem>
+
+</MudGrid>

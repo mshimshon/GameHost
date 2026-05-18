@@ -2,53 +2,61 @@
 @inherits WidgetComponentBase<PluginEntry, IStartupParameterFieldViewModel>
 
 <MudItem xs=12 md=6 Class="d-flex flex-column gap-2">
-    @if (ViewModel.IsList)
+    @if (Value == null)
+    {
+        
+        <MudAlert Severity=Severity.Error>
+                    @FATAL_ERROR
+        </MudAlert>
+    }
+
+    else if (ViewModel.IsList)
     {
         <MudSelect @ref=MudSelectRef @bind-Value=ViewModel.Value Label=@ViewModel.GetLabel()
-               HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
-               Required=@(ViewModel.Parameter.Required)
-               ReadOnly=@(!ViewModel.Parameter.Editable)>
-        @foreach (var item in ViewModel.AllowedValues)
-        {
-            <MudSelectItem Value=@item.Key>@item.Value</MudSelectItem>
-        }
-    </MudSelect>
+        HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
+        Required=@(ViewModel.Parameter.Required)
+        ReadOnly=@(!ViewModel.Parameter.Editable)>
+            @foreach (var item in ViewModel.AllowedValues)
+            {
+                <MudSelectItem Value=@item.Key>@item.Value</MudSelectItem>
+            }
+        </MudSelect>
     }
     else if (ViewModel.IsString)
     {
         <MudTextField @ref=MudTextFieldRef @bind-Value=ViewModel.Value Label=@ViewModel.GetLabel()
-                        HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
-                        MaxLength=ViewModel.MaxLength
-                        Required=@(ViewModel.Parameter.Required)
-                        ReadOnly=@(!ViewModel.Parameter.Editable) />
+        HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
+        MaxLength=ViewModel.MaxLength
+        Required=@(ViewModel.Parameter.Required)
+        ReadOnly=@(!ViewModel.Parameter.Editable) />
     }
     else if (ViewModel.IsBool)
     {
         <MudSwitch @ref=MudSwitchRef @bind-Value=ValueBool Color="Color.Success" UncheckedColor="Color.Error"
-                   Label=@ViewModel.GetLabel() />
+        Label=@ViewModel.GetLabel() />
         <MudText Typo=@Typo.caption>@ViewModel.Parameter.Description</MudText>
     }
     else if (ViewModel.IsInt)
     {
         <MudNumericField @ref=MudNumericFieldIntRef @bind-Value=ValueInt Label=@ViewModel.GetLabel()
-                            HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
-                         Min=ViewModel.MinLength
-                         Max=ViewModel.MaxLength
-                            Step=@(1)
-                            Required=@(ViewModel.Parameter.Required)
-                            ReadOnly=@(!ViewModel.Parameter.Editable) />
+        HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
+        Min=ViewModel.MinLength
+        Max=ViewModel.MaxLength
+        Step=@(1)
+        Required=@(ViewModel.Parameter.Required)
+        ReadOnly=@(!ViewModel.Parameter.Editable) />
     }
     else if (ViewModel.IsDecimal)
     {
         <MudNumericField @ref=MudNumericFieldDecimalRef @bind-Value=ValueDecimal Label=@ViewModel.GetLabel()
-                            HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
-                            Min=ViewModel.MinLength
-                            Max=ViewModel.MaxLength
-                            Step=@(0.01)
-                            Required=@(ViewModel.Parameter.Required)
-                            ReadOnly=@(!ViewModel.Parameter.Editable) />
+        HelperText=@ViewModel.Parameter.Description Variant="Variant.Filled"
+        Min=ViewModel.MinLength
+        Max=ViewModel.MaxLength
+        Step=@(0.01)
+        Required=@(ViewModel.Parameter.Required)
+        ReadOnly=@(!ViewModel.Parameter.Editable) />
     }
-    
+
     @if (ViewModel.Parameter.Editable)
     {
         <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled">

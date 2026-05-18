@@ -8,4 +8,5 @@ public interface IWidgetMainPageMenuLinkViewModel : IWidgetViewModel
     bool IsServerInstalled { get; }
     bool DoesSupportMods { get; }
     bool RequiresManualModUpload { get; }
+    bool DebugEnabled { get; }
 }

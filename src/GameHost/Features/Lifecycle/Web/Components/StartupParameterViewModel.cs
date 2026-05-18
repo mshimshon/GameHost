@@ -25,7 +25,7 @@ public class StartupParameterViewModel : WidgetViewModelBase, IStartupParameterV
 
     public ServerState ServerState => _statePulse.StateOf<ServerState>(() => this, UpdateChanges);
 
-    public GameInfoState GameInfoState => _statePulse.StateOf<GameInfoState>(() => this, OnUpdate);
+    public GameInfoState GameInfoState => _statePulse.StateOf<GameInfoState>(() => this, UpdateChanges);
     public Dictionary<string, List<GameConfigParameterResponse>> Parameters { get; private set; } = new();
 
     public GameInfoResponse? GameInfo => GameInfoState.GameInfo;
@@ -34,29 +34,11 @@ public class StartupParameterViewModel : WidgetViewModelBase, IStartupParameterV
 
     public bool SavedParametersLoaded => GameInfoState.SavedParametersLoaded;
 
-
-    private async Task OnUpdate()
+    protected override async Task OnViewModelBeforeRenderAsync()
     {
-
         await GroupingParameters();
-        _crazyReport.ReportInfo("GameInfoState has updated now rerendering.");
-        foreach (var item in Parameters.Values)
-        {
-            foreach (var param in item)
-            {
-                _crazyReport.ReportInfo("Loaded Parameter {0} = {1}", param.Key, GetInitialValue(param));
 
-            }
-        }
-
-        foreach (var item in StartupParameters)
-        {
-            _crazyReport.ReportInfo("Loaded User Defined Parameter {0} = {1}", item.Key, item.Value);
-        }
-
-        _ = UpdateChanges();
     }
-
     public Task GroupingParameters()
     {
         Parameters = GameInfoState.GameInfo?.StartupParameters != default ? GameInfoState.GameInfo.StartupParameters
