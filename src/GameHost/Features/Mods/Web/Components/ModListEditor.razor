@@ -1,3 +1,4 @@
+@using GameHost.Features.Mods.Application.Payloads.Responses
 @using GameHost.Features.Mods.Domain.Entities
 @using GameHost.Features.Mods.Web.Components.ViewModels
 @inherits WidgetComponentBase<PluginEntry, IModListEditorViewModel>
@@ -51,18 +52,18 @@
         @foreach (var schematicPart in ViewModel.ModListState.SchematicParts)
         {
             <MudItem xs=12 xl=6>
-                <MudDropContainer T=ModEntity Items=@ViewModel.Information[schematicPart.Id]
+                <MudDropContainer T=ModResponse Items=@ViewModel.Information[schematicPart.Id]
                                   ItemsSelector=@((item, dropzone) => true)
                                   ItemDropped=ItemUpdated >
                     <ChildContent>
            
-                        <MudDropZone T=ModEntity
+                        <MudDropZone T=ModResponse
                                      Identifier=schematicPart.Id.Id
                                      AllowReorder
                                      Class="rounded mud-background-gray pa-6 flex-grow-1">
                             <MudStack>
                                 <MudText Typo=Typo.subtitle1>
-                                    @schematicPart.Name.Name
+                                    @schematicPart.Name
                                 </MudText>
                                 <MudButtonGroup>
                                     <MudButton Color=Color.Success OnClick=@(() => AddInto(schematicPart.Id))>Create</MudButton>
@@ -74,7 +75,7 @@
                         <MudPaper Elevation="25" Class="d-flex justify-center align-center pa-4 my-4">
                             <MudGrid>
                                 <MudItem xs=2 Class="d-flex align-center">
-                                    <DeleteButtonIcon TEntity=ModEntity Item=context
+                                    <DeleteButtonIcon TEntity=ModResponse Item=context
                                                       OnClick=@((p, ct) => DeleteEntity(schematicPart.Id, p, ct)) />
                                 </MudItem>
                                 <MudItem xs=10 Class="d-flex align-center">

@@ -1,5 +1,5 @@
-﻿using LunaticPanel.Core.Abstraction.Widgets;
-using GameHost.Features.Mods.Domain.Entities;
+﻿using GameHost.Features.Mods.Application.Payloads.Responses;
+using LunaticPanel.Core.Abstraction.Widgets;
 
 namespace GameHost.Features.Mods.Web.Components.Dialogs.ViewModels;
 
@@ -12,5 +12,5 @@ public interface IModListEditorCreateModDialogViewModel : IWidgetViewModel
     bool IsMaxCharacterPass(string str, int maxLength);
     bool IsMinCharacterPass(string str, int minLength);
     bool IsAlphaNumericAndSpacePass(string str);
-    ModEntity GenerateResult();
+    ModResponse GenerateResult();
 }

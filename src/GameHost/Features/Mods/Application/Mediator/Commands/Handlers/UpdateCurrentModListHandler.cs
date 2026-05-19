@@ -1,23 +1,40 @@
-﻿using GameHost.Features.Mods.Application.Services;
+﻿using GameHost.Core.Features;
+using GameHost.Features.Mods.Application.Services;
+using GameHost.Kernel.Abstractions.Exceptions;
+using GameHost.Kernel.Abstractions.Services.Notification.Services;
+using GameHost.Kernel.Extensions;
 using LunaticPanel.Core.Utils.Abstraction.Logging;
 using MedihatR;
-using GameHost.Kernel.Abstractions.Services.Notification.Services;
-using GameHost.Kernel.Abstractions.Mediator;
 
 namespace GameHost.Features.Mods.Application.Mediator.Commands.Handlers;
 
-internal class UpdateCurrentModListHandler : HandlerBase, IRequestHandler<UpdateCurrentModlistCommand>
+internal class UpdateCurrentModListHandler : IRequestHandler<UpdateCurrentModlistCommand>
 {
     private readonly IModListService _modListService;
+    private readonly INotificationService _notificationService;
+    private readonly ICrazyReport _crazyReport;
 
-    public UpdateCurrentModListHandler(IModListService modListService, INotificationService notificationService, ICrazyReport crazyReport) : base(notificationService, crazyReport)
+    public UpdateCurrentModListHandler(IModListService modListService, INotificationService notificationService, ICrazyReport crazyReport)
     {
         _modListService = modListService;
+        _notificationService = notificationService;
+        _crazyReport = crazyReport;
+        _crazyReport.SetModule(ModListKeys.MODULE_NAME);
     }
 
-    public async Task Handle(UpdateCurrentModlistCommand request, CancellationToken cancellationToken)
-                => await ExecAndHandleExceptions(
-                    () => _modListService.SetCurrentAsync(request.Id, cancellationToken),
-                    ex => throw ex
-                    );
+    public async Task Handle(UpdateCurrentModlistCommand request, CancellationToken ct)
+       => await request
+        .HandleWithData(request.Id, _modListService.SetCurrentAsync, OnFailure)
+        .HandleExceptionFor<WebServiceException>(OnFailure)
+        .ExecAsync(ct);
+    private async Task OnFailure(Exception ex)
+    {
+        await _notificationService.HandleUnknownException(_crazyReport, ex);
+    }
+
+    private async Task OnFailure(WebServiceException ex)
+    {
+        await _notificationService.NotifyAsync(ex);
+    }
 }
+

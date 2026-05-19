@@ -1,4 +1,4 @@
-﻿namespace GameHost.Features.Mods.Application.Contracts.Responses;
+﻿namespace GameHost.Features.Mods.Application.Payloads.Responses;
 
 public sealed record ModFeatureResponse
 {

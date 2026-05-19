@@ -1,16 +1,12 @@
-﻿using GameHost.Features.Mods.Application.Contracts.Responses;
-using GameHost.Features.Mods.Application.Contracts.Responses.Mapping;
-using GameHost.Features.Mods.Application.Mediator.Commands;
+﻿using GameHost.Features.Mods.Application.Mediator.Commands;
 using GameHost.Features.Mods.Application.Mediator.Commands.Handlers;
 using GameHost.Features.Mods.Application.Mediator.Queries;
 using GameHost.Features.Mods.Application.Mediator.Queries.Handlers;
+using GameHost.Features.Mods.Application.Payloads.Responses;
 using GameHost.Features.Mods.Application.Pulses.Actions;
 using GameHost.Features.Mods.Application.Pulses.Effects;
 using GameHost.Features.Mods.Application.Pulses.Reducers;
 using GameHost.Features.Mods.Application.Pulses.States;
-using GameHost.Features.Mods.Domain.Entities;
-using GameHost.Features.Mods.Domain.ValueObjects;
-using GameHost.Kernel.Extensions;
 using MedihatR;
 using Microsoft.Extensions.DependencyInjection;
 using StatePulse.Net;
@@ -85,10 +81,10 @@ public static class ModsApplicationServiceRegsiterExt
         services.AddStatePulseService<ModListState>();
         services.AddStatePulseService<ModListLocalState>();
 
-        services.AddMedihaterRequestHandler<GetModListQuery, GetModListHandler, ModListEntity?>();
+        services.AddMedihaterRequestHandler<GetModListQuery, GetModListHandler, ModListResponse?>();
         services.AddMedihaterRequestHandler<CreateModListCommand, CreateModListHandler>();
-        services.AddMedihaterRequestHandler<GetAllModListQuery, GetAllModListHandler, ICollection<ModListDescriptor>>();
-        services.AddMedihaterRequestHandler<GetModSchematicQuery, GetModSchematicHandler, IReadOnlyCollection<PartSchematicEntity>?>();
+        services.AddMedihaterRequestHandler<GetAllModListQuery, GetAllModListHandler, ICollection<ModListDescriptorResponse>>();
+        services.AddMedihaterRequestHandler<GetModSchematicQuery, GetModSchematicHandler, ICollection<PartSchematicResponse>?>();
         services.AddMedihaterRequestHandler<DeleteModListCommand, DeleteModListHandler>();
         services.AddMedihaterRequestHandler<SaveModListCommand, SaveModListHandler>();
         services.AddMedihaterRequestHandler<UpdateCurrentModlistCommand, UpdateCurrentModListHandler>();
@@ -96,7 +92,6 @@ public static class ModsApplicationServiceRegsiterExt
         services.AddMedihaterRequestHandler<GetModFeatureQuery, GetModFeatureHandler, ModFeatureResponse?>();
 
 
-        services.AddCoreMapHandler<ModFeatureEntityToModFeatureResponse>();
 
     }
 }

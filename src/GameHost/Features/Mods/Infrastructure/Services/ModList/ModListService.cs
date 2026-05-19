@@ -1,11 +1,11 @@
-﻿using CoreMap;
-using GameHost.Core.Features;
+﻿using GameHost.Core.Features;
 using GameHost.Features.Mods.Application.Services;
 using GameHost.Features.Mods.Domain.Entities;
 using GameHost.Features.Mods.Domain.ValueObjects;
 using GameHost.Features.Mods.Infrastructure.Exceptions;
-using GameHost.Features.Mods.Infrastructure.Services.Contracts;
-using GameHost.Features.Mods.Infrastructure.Services.Exceptions;
+using GameHost.Features.Mods.Infrastructure.Services.ModList.Exceptions;
+using GameHost.Features.Mods.Infrastructure.Services.ModList.Payloads;
+using GameHost.Features.Mods.Infrastructure.Services.ModList.Payloads.Mapping;
 using GameHost.Kernel.Abstractions.Exceptions;
 using GameHost.Kernel.Abstractions.Mediator.Exceptions;
 using LunaticPanel.Core.Abstraction.Messaging.QuerySystem;
@@ -18,14 +18,13 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
-namespace GameHost.Features.Mods.Infrastructure.Services;
+namespace GameHost.Features.Mods.Infrastructure.Services.ModList;
 
 internal sealed class ModListService : IModListService
 {
     private readonly IPluginUserLocation _pluginUserLocation;
     private readonly ISafeFileWriter _safeFileWriter;
     private readonly ILinuxCommand _linuxCommand;
-    private readonly ICoreMap _coreMap;
     private readonly IQueryBus _queryBus;
     private readonly ICrazyReport<ModListService> _crazyReport;
     private readonly JsonSerializerOptions _serializerOption = new JsonSerializerOptions()
@@ -36,12 +35,11 @@ internal sealed class ModListService : IModListService
     };
 
     public ModListService(IPluginLocation pluginLocation, ISafeFileWriter safeFileWriter,
-        ILinuxCommand linuxCommand, ICoreMap coreMap, IQueryBus queryBus, ICrazyReport<ModListService> crazyReport)
+        ILinuxCommand linuxCommand, IQueryBus queryBus, ICrazyReport<ModListService> crazyReport)
     {
         _pluginUserLocation = pluginLocation;
         _safeFileWriter = safeFileWriter;
         _linuxCommand = linuxCommand;
-        _coreMap = coreMap;
         _queryBus = queryBus;
         _crazyReport = crazyReport;
         _pluginUserLocation.SetUsername(LinuxGameServerKeys.USERNAME);
@@ -126,7 +124,7 @@ internal sealed class ModListService : IModListService
                 throw new WebServiceException("", $"The ModList {id} seems to be corrupted.", _crazyReport); // TODO: Localize
             _crazyReport.ReportInfo("Loaded ModList {0}.", dto.Name);
             //TODO: DEFINE EXCEPTION
-            var result = _coreMap.Map(dto).To<ModListEntity>();
+            var result = dto.MapToDomain();
             _crazyReport.Report("Converted Modlist from Contract to Entity {0}.", result.Descriptor.Name);
             return result;
         }
@@ -161,10 +159,10 @@ internal sealed class ModListService : IModListService
         try
         {
 
-            var toCommit = _coreMap.Map(modListEntity).To<ModListResponse>();
+            var toCommit = modListEntity.MapToInfrastructure();
             var json = JsonSerializer.Serialize(toCommit, _serializerOption);
             await File.WriteAllTextAsync(tmp, json, ct);
-            File.Move(tmp, filename, true);
+            await _safeFileWriter.WriteThenCopyFileAsync(filename, json, ct);
         }
         catch (OperationCanceledException ex)
         {
@@ -207,19 +205,17 @@ internal sealed class ModListService : IModListService
         }
     }
 
-    public async Task<IReadOnlyCollection<PartSchematicEntity>?> GetSchematic(CancellationToken ct = default)
+    public async Task<IReadOnlyCollection<ModSchemaPartEntity>?> GetSchematic(CancellationToken ct = default)
     {
         try
         {
             var qryResult = await _queryBus.QueryWithoutDataAsync(LifecycleKeys.Queries.GET_RAW_GAME_INFO);
             var json = await qryResult.ReadAs<string>();
             if (json == default) return default;
-            var gameinfo = JsonSerializer.Deserialize<GameInfoResponse>(json, _serializerOption);
+            var gameinfo = JsonSerializer.Deserialize<ModSchemaResponse>(json, _serializerOption);
             if (gameinfo == default) return default;
             if (gameinfo.ModSchema == default) return default;
-            // TODO: USE COREMAP WHEN 2.0 RELEASES
-            List<PartSchematicEntity> result = gameinfo.ModSchema.Select(p => new PartSchematicEntity(p.Key, p.Value.Name, p.Value.Type)).ToList();
-            return result.AsReadOnly();
+            return gameinfo.MapToDomain().Parts;
         }
         catch (JsonException ex)
         {
@@ -320,32 +316,6 @@ internal sealed class ModListService : IModListService
 
     }
 
-    public async Task<ModFeatureEntity?> GetGameInfoAsync(CancellationToken ct = default)
-    {
-        try
-        {
-            var qryResult = await _queryBus.QueryWithoutDataAsync(LifecycleKeys.Queries.GET_RAW_GAME_INFO);
-            var json = await qryResult.ReadAs<string>();
-            if (json == default) return default;
-            var gameinfo = JsonSerializer.Deserialize<GameInfoResponse>(json, _serializerOption);
-            if (gameinfo == default) return default;
-            var result = _coreMap.Map(gameinfo).To<ModFeatureEntity>();
-            return result;
-        }
-        catch (JsonException ex)
-        {
-
-            //TODO: DEFINE EXCEPTION
-            throw new WebServiceException("", $"The ModList game info seems to be corrupted.", ex, _crazyReport); // TODO: Localize
-        }
-        catch (Exception ex)
-        {
-
-            //TODO: DEFINE EXCEPTION
-            throw new WebServiceException("", $"Unknown Error", ex, _crazyReport); // TODO: Localize
-        }
-    }
-
     public async Task<ModFeatureEntity?> GetModFeatureAsync(CancellationToken ct = default)
     {
         try
@@ -357,17 +327,6 @@ internal sealed class ModListService : IModListService
                 return default;
             }
             var binaryConsoleFile = _pluginUserLocation.GetUserBashFor(LinuxGameServerKeys.MODULE_NAME, [LinuxGameServerKeys.SERVER_CONTROL_FOLDER], gameId);
-
-            var enabledMods = await _linuxCommand.BuildCommand($"{binaryConsoleFile} mod --check")
-                .ExecPayloadAsync<InstallerResponse<bool>>(ct);
-            if (enabledMods.Error != default)
-            {
-                _crazyReport.ReportError($"{enabledMods.Error.Code}=>{enabledMods.Error.Message}");
-                return default;
-            }
-            if (enabledMods.Data == default)
-                return default;
-
             var modFeatureDetails = await _linuxCommand.BuildCommand($"{binaryConsoleFile} mod --details")
                 .ExecPayloadAsync<InstallerResponse<ModFeatureResponse>>(ct);
             if (modFeatureDetails.Error != default)
@@ -377,9 +336,7 @@ internal sealed class ModListService : IModListService
             }
             if (modFeatureDetails.Data == default)
                 return default;
-            var mappedResult = _coreMap.Map(modFeatureDetails.Data).To<ModFeatureEntity>();
-            mappedResult = mappedResult with { Modding = enabledMods.Data };
-            return mappedResult;
+            return modFeatureDetails.Data.MapToDomain();
         }
         catch (JsonException ex)
         {

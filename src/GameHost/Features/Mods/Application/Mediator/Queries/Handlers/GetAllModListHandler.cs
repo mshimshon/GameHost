@@ -1,27 +1,45 @@
 ﻿using GameHost.Core.Features;
+using GameHost.Features.Mods.Application.Payloads.Responses;
+using GameHost.Features.Mods.Application.Payloads.Responses.Mapping;
 using GameHost.Features.Mods.Application.Services;
 using GameHost.Features.Mods.Domain.ValueObjects;
+using GameHost.Kernel.Abstractions.Exceptions;
+using GameHost.Kernel.Abstractions.Services.Notification.Services;
+using GameHost.Kernel.Extensions;
 using LunaticPanel.Core.Utils.Abstraction.Logging;
 using MedihatR;
-using GameHost.Kernel.Abstractions.Services.Notification.Services;
-using GameHost.Kernel.Abstractions.Mediator;
 
 namespace GameHost.Features.Mods.Application.Mediator.Queries.Handlers;
 
-internal class GetAllModListHandler : HandlerBase, IRequestHandler<GetAllModListQuery, ICollection<ModListDescriptor>>
+internal class GetAllModListHandler : IRequestHandler<GetAllModListQuery, ICollection<ModListDescriptorResponse>>
 {
     private readonly IModListService _modListService;
+    private readonly INotificationService _notificationService;
+    private readonly ICrazyReport<GetAllModListHandler> _crazyReport;
 
-    public GetAllModListHandler(IModListService modListService, INotificationService notificationService, ICrazyReport<GetAllModListHandler> logger) :
-        base(notificationService, logger)
+    public GetAllModListHandler(IModListService modListService, INotificationService notificationService, ICrazyReport<GetAllModListHandler> crazyReport)
     {
         _modListService = modListService;
-        logger.SetModule(ModListKeys.MODULE_NAME);
+        _notificationService = notificationService;
+        _crazyReport = crazyReport;
+        _crazyReport.SetModule(ModListKeys.MODULE_NAME);
     }
 
-    public async Task<ICollection<ModListDescriptor>> Handle(GetAllModListQuery request, CancellationToken cancellationToken)
-                => await ExecAndHandleExceptions(
-                () => _modListService.GetAllAsync(cancellationToken),
-                () => new List<ModListDescriptor>()
-                );
+    public async Task<ICollection<ModListDescriptorResponse>> Handle(GetAllModListQuery request, CancellationToken ct)
+            => await request
+        .Handle(_modListService.GetAllAsync, OnFailure)
+        .HandleExceptionFor<WebServiceException>(OnFailure)
+        .ExecAsync<ICollection<ModListDescriptor>, ICollection<ModListDescriptorResponse>>(
+e => e.Select(p => p.MapToApplication()).ToList(),
+                ct);
+
+    private async Task OnFailure(Exception ex)
+    {
+        await _notificationService.HandleUnknownException(_crazyReport, ex);
+    }
+
+    private async Task OnFailure(WebServiceException ex)
+    {
+        await _notificationService.NotifyAsync(ex);
+    }
 }

@@ -15,7 +15,7 @@ internal sealed class SaveModListEffect : IEffect<SaveModListAction>
     }
     public async Task EffectAsync(SaveModListAction action, IDispatcher dispatcher)
     {
-        var command = new SaveModListCommand(action.ModListEntity);
+        var command = new SaveModListCommand(action.ModList);
         await _medihater.Send(command);
 
         await dispatcher

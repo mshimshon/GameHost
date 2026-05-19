@@ -1,4 +1,4 @@
-﻿using GameHost.Features.Mods.Application.Contracts.Responses;
+﻿using GameHost.Features.Mods.Application.Payloads.Responses;
 using StatePulse.Net;
 
 namespace GameHost.Features.Mods.Application.Pulses.Actions;

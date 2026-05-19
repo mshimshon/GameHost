@@ -1,9 +1,9 @@
-﻿using GameHost.Features.Mods.Domain.ValueObjects;
+﻿using GameHost.Features.Mods.Application.Payloads.Responses;
 using StatePulse.Net;
 
 namespace GameHost.Features.Mods.Application.Pulses.Actions;
 
 internal sealed record GetCurrentModListDoneAction : IAction
 {
-    public ModListDescriptor? Current { get; set; }
+    public ModListDescriptorResponse? Current { get; set; }
 }

@@ -1,9 +1,9 @@
-﻿using GameHost.Features.Mods.Domain.ValueObjects;
+﻿using GameHost.Features.Mods.Application.Payloads.Responses;
 using StatePulse.Net;
 
 namespace GameHost.Features.Mods.Application.Pulses.Actions;
 
 public sealed record GetAvailableModListDoneAction : IAction
 {
-    public IReadOnlyCollection<ModListDescriptor> Available { get; set; } = new List<ModListDescriptor>().AsReadOnly();
+    public ICollection<ModListDescriptorResponse> Available { get; set; } = new List<ModListDescriptorResponse>();
 }

@@ -2,12 +2,12 @@
 
 namespace GameHost.Features.Mods.Domain.Entities;
 
-public sealed record PartSchematicEntity
+public sealed record ModSchemaPartEntity
 {
     public PartId Id { get; }
     public PartName Name { get; }
     public PartType Type { get; }
-    public PartSchematicEntity(string id, string name, string type)
+    public ModSchemaPartEntity(string id, string name, string type)
     {
         Id = new(id);
         Name = new(name);

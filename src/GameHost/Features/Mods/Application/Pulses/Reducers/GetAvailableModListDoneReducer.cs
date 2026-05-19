@@ -9,7 +9,7 @@ internal sealed class GetAvailableModListDoneReducer : IReducer<ModListState, Ge
     public ModListState Reduce(ModListState state, GetAvailableModListDoneAction action)
         => state with
         {
-            Available = action.Available,
+            Available = action.Available.ToList().AsReadOnly(),
             IsLoadingAvailable = false
         };
 }

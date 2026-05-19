@@ -1,7 +1,7 @@
 ﻿using GameHost.Kernel.Abstractions.Exceptions;
 using LunaticPanel.Core.Utils.Abstraction.Logging;
 
-namespace GameHost.Features.Mods.Infrastructure.Services.Exceptions;
+namespace GameHost.Features.Mods.Infrastructure.Services.ModList.Exceptions;
 
 public class CouldNotSerializeIdForCurrentModlistException : WebServiceException
 {

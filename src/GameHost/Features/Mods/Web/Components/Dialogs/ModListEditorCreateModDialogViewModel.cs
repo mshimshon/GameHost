@@ -1,7 +1,6 @@
-﻿using LunaticPanel.Core.Abstraction.Widgets;
-using GameHost.Features.Mods.Domain.Entities;
-using GameHost.Features.Mods.Domain.ValueObjects;
+﻿using GameHost.Features.Mods.Application.Payloads.Responses;
 using GameHost.Features.Mods.Web.Components.Dialogs.ViewModels;
+using LunaticPanel.Core.Abstraction.Widgets;
 using System.Text.RegularExpressions;
 
 namespace GameHost.Features.Mods.Web.Components.Dialogs;
@@ -26,12 +25,12 @@ internal class ModListEditorCreateModDialogViewModel : WidgetViewModelBase, IMod
     public bool IsMinCharacterPass(string str, int minLength) => str.Length >= minLength;
     public bool IsAlphaNumericAndSpacePass(string str) => Regex.IsMatch(str, ALPHA_NUMERIC_N_SPACES);
 
-    public ModEntity GenerateResult()
+    public ModResponse GenerateResult()
     {
-        var id = new ModId(Id!);
-        var entity = new ModEntity(id)
+        var entity = new ModResponse()
         {
-            Name = string.IsNullOrEmpty(Name) ? default : new ModName(Name)
+            Id = Id!,
+            Name = Name
         };
         return entity;
     }

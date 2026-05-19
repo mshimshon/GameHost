@@ -1,6 +1,6 @@
 ﻿using GameHost.Features.Mods.Application.Mediator.Queries;
+using GameHost.Features.Mods.Application.Payloads.Responses;
 using GameHost.Features.Mods.Application.Pulses.Actions;
-using GameHost.Features.Mods.Domain.Entities;
 using GameHost.Kernel.Abstractions.Services.Notification.Enums;
 using GameHost.Kernel.Abstractions.Services.Notification.Services;
 using MedihatR;
@@ -25,7 +25,7 @@ internal sealed class LoadModListSchematicEffect : IEffect<LoadModListSchematicA
         if (result == default)
         {
             await _notificationService.NotifyAsync($"Cannot Load Mod Schematic for some reasons", NotificationSeverity.Error);
-            result = new List<PartSchematicEntity>();
+            result = new List<PartSchematicResponse>();
         }
 
         await dispatcher

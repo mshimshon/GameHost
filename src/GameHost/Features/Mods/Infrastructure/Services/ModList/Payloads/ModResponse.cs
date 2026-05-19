@@ -1,6 +1,6 @@
-﻿namespace GameHost.Features.Mods.Infrastructure.Services.Contracts;
+﻿namespace GameHost.Features.Mods.Infrastructure.Services.ModList.Payloads;
 
-public sealed class ModResponse
+internal sealed record ModResponse
 {
     public string Id { get; set; } = default!;
     public string? Name { get; set; }

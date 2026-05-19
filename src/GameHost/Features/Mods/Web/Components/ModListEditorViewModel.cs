@@ -1,7 +1,6 @@
-﻿using GameHost.Features.Mods.Application.Pulses.Actions;
+﻿using GameHost.Features.Mods.Application.Payloads.Responses;
+using GameHost.Features.Mods.Application.Pulses.Actions;
 using GameHost.Features.Mods.Application.Pulses.States;
-using GameHost.Features.Mods.Domain.Entities;
-using GameHost.Features.Mods.Domain.ValueObjects;
 using GameHost.Features.Mods.Web.Components.ViewModels;
 using GameHost.Kernel.Abstractions.Extensions;
 using LunaticPanel.Core.Abstraction.Widgets;
@@ -16,7 +15,7 @@ internal sealed class ModListEditorViewModel : WidgetViewModelBase, IModListEdit
     private readonly IStatePulse _statePulse;
     public ModListLocalState ModListLocalState => _statePulse.StateOf<ModListLocalState>(() => this, UpdateState);
     public ModListState ModListState => _statePulse.StateOf<ModListState>(() => this, UpdateChanges);
-    public Dictionary<PartId, List<ModEntity>>? Information { get; set; }
+    public Dictionary<string, List<ModResponse>>? Information { get; set; }
     public string ModListName { get; set; } = string.Empty;
     public Guid InitialId { get; set; }
     private IDispatcher Dispatcher => _statePulse.Dispatcher;
@@ -88,7 +87,7 @@ internal sealed class ModListEditorViewModel : WidgetViewModelBase, IModListEdit
                 foreach (var id in schematicIds)
                 {
                     if (!keepers.ContainsKey(id))
-                        keepers[id] = new List<ModEntity>();
+                        keepers[id] = new List<ModResponse>();
                 }
                 Information = keepers;
 
@@ -113,28 +112,28 @@ internal sealed class ModListEditorViewModel : WidgetViewModelBase, IModListEdit
         }
     }
 
-    public void RemoveFrom(PartId partId, ModEntity toRemove)
+    public void RemoveFrom(string partId, ModResponse toRemove)
     {
         // TODO: TOAST NOTIFICATION
-        if (!TryGetInInformation(partId, out KeyValuePair<PartId, List<ModEntity>>? kp))
+        if (!TryGetInInformation(partId, out KeyValuePair<string, List<ModResponse>>? kp))
             return;
         kp!.Value.Value.Remove(toRemove);
         _ = UpdateChanges();
     }
 
-    public void AddTo(PartId partId, ModEntity toAdd)
+    public void AddTo(string partId, ModResponse toAdd)
     {
         // TODO: TOAST NOTIFICATION
-        if (!TryGetInInformation(partId, out KeyValuePair<PartId, List<ModEntity>>? kp))
+        if (!TryGetInInformation(partId, out KeyValuePair<string, List<ModResponse>>? kp))
             return;
         kp!.Value.Value.Add(toAdd);
         _ = UpdateChanges();
     }
 
-    public void MoveTo(PartId partId, ModEntity toMove, int targetIndex)
+    public void MoveTo(string partId, ModResponse toMove, int targetIndex)
     {
         // TODO: TOAST NOTIFICATION
-        if (!TryGetInInformation(partId, out KeyValuePair<PartId, List<ModEntity>>? kp))
+        if (!TryGetInInformation(partId, out KeyValuePair<string, List<ModResponse>>? kp))
             return;
         var list = kp!.Value.Value;
         var fallbackIndex = list.IndexOf(toMove);
@@ -150,11 +149,19 @@ internal sealed class ModListEditorViewModel : WidgetViewModelBase, IModListEdit
     public async Task SaveAsync()
     {
         IsLoading = true;
-        var modListDescriptor = new ModListDescriptor(InitialId, ModListName);
-        var convertedModList = Information!.ToReadOnlyDictionaryWithReadOnlyListValue();
+        var modListDescriptor = new ModListDescriptorResponse()
+        {
+            Id = InitialId,
+            Name = ModListName
+        };
 
-        var toSave = new ModListEntity(modListDescriptor, convertedModList);
-        await Dispatcher.Prepare<SaveModListAction>().With(p => p.ModListEntity, toSave).DispatchAsync();
+        var toSave = new ModListResponse()
+        {
+            Descriptor = modListDescriptor,
+            Mods = Information!
+        };
+        await Dispatcher.Prepare<SaveModListAction>().
+            With(p => p.ModList, toSave).DispatchAsync();
         IsLoading = false;
     }
 
@@ -180,10 +187,10 @@ internal sealed class ModListEditorViewModel : WidgetViewModelBase, IModListEdit
         await UpdateChanges();
     }
 
-    public string GetModName(ModEntity item)
-        => item.Name == default ? item.Id.Id : item.Name.Name;
+    public string GetModName(ModResponse item)
+        => item.Name == default ? item.Id : item.Name;
 
-    public bool TryGetInInformation(PartId partId, [MaybeNullWhen(false)] out KeyValuePair<PartId, List<ModEntity>>? result)
+    public bool TryGetInInformation(string partId, [MaybeNullWhen(false)] out KeyValuePair<string, List<ModResponse>>? result)
     {
         if (Information == default || !Information.ContainsKey(partId))
         {

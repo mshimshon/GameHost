@@ -1,7 +1,6 @@
-﻿using LunaticPanel.Core.Abstraction.Widgets;
+﻿using GameHost.Features.Mods.Application.Payloads.Responses;
 using GameHost.Features.Mods.Application.Pulses.States;
-using GameHost.Features.Mods.Domain.Entities;
-using GameHost.Features.Mods.Domain.ValueObjects;
+using LunaticPanel.Core.Abstraction.Widgets;
 
 namespace GameHost.Features.Mods.Web.Components.ViewModels;
 
@@ -11,11 +10,11 @@ public interface IModListEditorViewModel : IWidgetViewModel
     ModListLocalState ModListLocalState { get; }
     ModListState ModListState { get; }
     string ModListName { get; }
-    Dictionary<PartId, List<ModEntity>>? Information { get; }
-    string GetModName(ModEntity item);
-    void MoveTo(PartId partId, ModEntity toMove, int targetIndex);
-    void AddTo(PartId partId, ModEntity toAdd);
-    void RemoveFrom(PartId partId, ModEntity toRemove);
+    Dictionary<string, List<ModResponse>>? Information { get; }
+    string GetModName(ModResponse item);
+    void MoveTo(string partId, ModResponse toMove, int targetIndex);
+    void AddTo(string partId, ModResponse toAdd);
+    void RemoveFrom(string partId, ModResponse toRemove);
     Task CloseAsync();
     Task SaveAsync();
     Task DeleteAsync();

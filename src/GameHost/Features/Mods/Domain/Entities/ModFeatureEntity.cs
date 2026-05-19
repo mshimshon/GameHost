@@ -3,5 +3,5 @@
 public sealed record ModFeatureEntity
 {
     public bool Modding { get; init; }
-    public bool ManualModUpload { get; init; }
+    public bool ManualModDownload { get; init; }
 }

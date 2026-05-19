@@ -1,11 +1,11 @@
-﻿using GameHost.Features.Mods.Domain.Entities;
+﻿using GameHost.Features.Mods.Application.Payloads.Responses;
 using StatePulse.Net;
 
 namespace GameHost.Features.Mods.Application.Pulses.States;
 
 public record ModListLocalState : IStateFeature
 {
-    public ModListEntity? Current { get; init; }
+    public ModListResponse? Current { get; init; }
     public bool IsCurrentLoading { get; init; }
 
     public bool IsCreationLoading { get; init; }

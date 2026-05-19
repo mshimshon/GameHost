@@ -1,6 +1,6 @@
 ﻿using GameHost.Kernel.Abstractions.Exceptions;
 
-namespace GameHost.Features.Mods.Infrastructure.Services.Exceptions;
+namespace GameHost.Features.Mods.Infrastructure.Services.ModList.Exceptions;
 
 public class SetCurrentModlistCancelledException : WebServiceException
 {
