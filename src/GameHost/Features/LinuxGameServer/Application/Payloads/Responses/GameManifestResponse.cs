@@ -1,11 +1,11 @@
-﻿namespace GameHost.Features.LinuxGameServer.Infrastructure.Services.Contracts.Responses;
+﻿namespace GameHost.Features.LinuxGameServer.Application.Payloads.Responses;
 
 public sealed record GameManifestResponse
 {
     public string Id { get; set; } = default!;
     public string DisplayName { get; set; } = default!;
     public string? Icon { get; set; }
-    public List<string> CompatibleDistro { get; set; } = default!;
+    public List<string> DistroCompatibility { get; set; } = default!;
     public string InstallerName { get; set; } = default!;
     public string InstallerSource { get; set; } = default!;
 }

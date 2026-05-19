@@ -39,7 +39,7 @@
 
   <ItemGroup>
 	  <Folder Include="Features\LinuxGameServer\Application\Config\" />
-	  <Folder Include="Features\LinuxGameServer\Application\Contracts\Requests\" />
+	  <Folder Include="Features\LinuxGameServer\Application\Payloads\Requests\" />
 	  <Folder Include="Features\LinuxGameServer\Application\Mediator\Notifications\Handlers\" />
 	  <Folder Include="Features\LinuxGameServer\Web\Hooks\Events\" />
 	  <Folder Include="Features\Mods\Application\Bash\" />
@@ -57,11 +57,6 @@
 
 
   <ItemGroup>
-    <Content Update="Features\LinuxGameServer\Application\Bash\check_git_install.sh" Link="bash\linuxgameserver\check_git_install.sh" />
-    <Content Update="Features\LinuxGameServer\Application\Bash\git_clone.sh" Link="bash\linuxgameserver\git_clone.sh" />
-    <Content Update="Features\LinuxGameServer\Application\Bash\install_game_server.sh" Link="bash\linuxgameserver\install_game_server.sh" />
-    <Content Update="Features\LinuxGameServer\Application\Bash\is_user_exist.sh" Link="bash\linuxgameserver\is_user_exist.sh" />
-    <Content Update="Features\LinuxGameServer\Application\Bash\set_local_culture.sh" Link="bash\linuxgameserver\set_local_culture.sh" />
     <Content Update="Features\SystemInfo\Application\Bash\get_ram_info.sh" Link="bash\systeminfo\get_ram_info.sh" />
     <Content Update="Features\SystemInfo\Application\Bash\get_disk_info.sh" Link="bash\systeminfo\get_disk_info.sh" />
     <Content Update="Features\SystemInfo\Application\Bash\get_cpu_info.sh" Link="bash\systeminfo\get_cpu_info.sh" />

@@ -4,6 +4,7 @@ namespace GameHost.Features.LinuxGameServer.Domain.Entities;
 
 public sealed record GameManifestEntity
 {
+    public string DisplayName { get; init; } = default!;
     public ManifestId Id { get; init; } = default!;
     public string? Icon { get; init; }
     public IReadOnlyCollection<string> DistroCompatibility { get; init; } = default!;

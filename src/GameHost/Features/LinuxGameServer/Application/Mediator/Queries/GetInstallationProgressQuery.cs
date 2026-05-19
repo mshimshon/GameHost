@@ -1,8 +1,8 @@
-﻿using GameHost.Features.LinuxGameServer.Application.Models;
+﻿using GameHost.Features.LinuxGameServer.Application.Payloads.Responses;
 using MedihatR;
 
 namespace GameHost.Features.LinuxGameServer.Application.Mediator.Queries;
 
-public sealed record GetInstallationProgressQuery : IRequest<GameServerInstallProcessModel>
+public sealed record GetInstallationProgressQuery : IRequest<GameServerInstallProgressResponse>
 {
 }

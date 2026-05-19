@@ -1,4 +1,4 @@
-﻿using GameHost.Features.LinuxGameServer.Application.Contracts.Responses;
+﻿using GameHost.Features.LinuxGameServer.Application.Payloads.Responses;
 using GameHost.Features.LinuxGameServer.Application.Pulses.States;
 using LunaticPanel.Core.Abstraction.Widgets;
 

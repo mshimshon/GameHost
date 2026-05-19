@@ -1,4 +1,6 @@
 ﻿using GameHost.Core.Features;
+using GameHost.Features.LinuxGameServer.Application.Payloads.Responses;
+using GameHost.Features.LinuxGameServer.Application.Payloads.Responses.Mapping;
 using GameHost.Features.LinuxGameServer.Application.Services;
 using GameHost.Features.LinuxGameServer.Domain.Entities;
 using GameHost.Kernel.Abstractions.Exceptions;
@@ -9,7 +11,7 @@ using MedihatR;
 
 namespace GameHost.Features.LinuxGameServer.Application.Mediator.Queries.Handlers;
 
-internal class GetInstalledGameHandler : IRequestHandler<GetInstalledGameQuery, GameServerInfoEntity?>
+internal class GetInstalledGameHandler : IRequestHandler<GetInstalledGameQuery, GameServerInfoResponse?>
 {
     private readonly ILinuxGameServerService _linuxGameServerService;
     private readonly INotificationService _notificationService;
@@ -25,14 +27,11 @@ internal class GetInstalledGameHandler : IRequestHandler<GetInstalledGameQuery, 
         _crazyReport.SetModule(LinuxGameServerKeys.MODULE_NAME);
     }
 
-
-
-
-    public async Task<GameServerInfoEntity?> Handle(GetInstalledGameQuery request, CancellationToken cancellationToken)
-    => await request
+    public async Task<GameServerInfoResponse?> Handle(GetInstalledGameQuery request, CancellationToken cancellationToken)
+        => await request
         .Handle(_linuxGameServerService.GetInstalledGameServer, OnFailure)
         .HandleExceptionFor<WebServiceException>(OnFailure)
-        .ExecOrDefaultAsync<GameServerInfoEntity>(cancellationToken);
+        .ExecOrDefaultAsync<GameServerInfoEntity, GameServerInfoResponse>((e) => e.MapToApplication(), cancellationToken);
 
     private Task OnFailure(Exception ex) => _notificationService.HandleUnknownException(_crazyReport, ex);
 

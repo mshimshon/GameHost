@@ -13,7 +13,6 @@
     <Project Path="../../GameHost.Games/src/Library/Steam/Steam.csproj" />
   </Folder>
   <Folder Name="/Games/Setup/" />
-  <Folder Name="/Games/Setup/Arma3/" />
   <Folder Name="/Games/Setup/Project Zomboid/">
     <Project Path="../../GameHost.Games/src/Setup/ProjectZomboid/ProjectZomboid.csproj" />
   </Folder>

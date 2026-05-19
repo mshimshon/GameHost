@@ -9,7 +9,7 @@ internal class GameServerInstallFailedReducer : IReducer<InstallationState, Game
     public InstallationState Reduce(InstallationState state, GameServerInstallFailedAction action)
     => state with
     {
-        InProgressInstallation = new Models.GameServerInstallProcessModel()
+        InProgressInstallation = new()
         {
             FailureReason = action.FailureReason,
             Id = action.Id,

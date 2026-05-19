@@ -1,5 +1,4 @@
-﻿using GameHost.Features.LinuxGameServer.Application.Models;
-using GameHost.Features.LinuxGameServer.Domain.Entities;
+﻿using GameHost.Features.LinuxGameServer.Domain.Entities;
 
 namespace GameHost.Features.LinuxGameServer.Application.Services;
 
@@ -9,7 +8,7 @@ public interface ILinuxGameServerService
 
     Task PerformServerInstallation(string id, string installerName, CancellationToken ct = default);
 
-    Task<GameServerInstallProcessModel?> GetInstallationProgress(CancellationToken ct = default);
+    Task<GameServerInstallProgressEntity?> GetInstallationProgress(CancellationToken ct = default);
     Task<GameServerInfoEntity?> GetInstalledGameServer(CancellationToken ct = default);
 
 

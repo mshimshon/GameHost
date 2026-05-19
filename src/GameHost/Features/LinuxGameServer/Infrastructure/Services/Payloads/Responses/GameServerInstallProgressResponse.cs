@@ -1,7 +1,8 @@
-﻿namespace GameHost.Features.LinuxGameServer.Application.Contracts.Responses;
+﻿namespace GameHost.Features.LinuxGameServer.Infrastructure.Services.Payloads.Responses;
 
-public sealed record InstallationProgressStateDto
+public sealed record GameServerInstallProgressResponse
 {
+    public bool Failed => !string.IsNullOrWhiteSpace(FailureReason);
     public string? FailureReason { get; set; }
     public bool IsInstalling { get; set; }
     public string CurrentStep { get; set; } = default!;

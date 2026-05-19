@@ -1,9 +1,9 @@
-﻿using GameHost.Features.LinuxGameServer.Domain.Entities;
+﻿using GameHost.Features.LinuxGameServer.Application.Payloads.Responses;
 using StatePulse.Net;
 
 namespace GameHost.Features.LinuxGameServer.Application.Pulses.Actions;
 
 public sealed record UpdateInstalledGameServerDoneAction : IAction
 {
-    public GameServerInfoEntity? GameServerInfo { get; set; }
+    public GameServerInfoResponse? GameServerInfo { get; set; }
 }

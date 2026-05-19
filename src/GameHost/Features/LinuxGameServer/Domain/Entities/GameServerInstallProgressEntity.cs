@@ -2,11 +2,11 @@
 
 namespace GameHost.Features.LinuxGameServer.Domain.Entities;
 
-public record GameServerInfoEntity
+public sealed record GameServerInstallProgressEntity
 {
+    public string? FailureReason { get; init; }
+    public bool IsInstalling { get; init; }
+    public string CurrentStep { get; init; } = default!;
     public ServerGameId Id { get; init; } = default!;
     public string DisplayName { get; init; } = default!;
-    public DateTime InstallDate { get; init; }
-
-
 }

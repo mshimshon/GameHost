@@ -1,18 +1,14 @@
 ﻿
-using GameHost.Features.LinuxGameServer.Application.Contracts.Responses;
-using GameHost.Features.LinuxGameServer.Application.Contracts.Responses.Mapping;
 using GameHost.Features.LinuxGameServer.Application.Mediator.Commands;
 using GameHost.Features.LinuxGameServer.Application.Mediator.Commands.Handlers;
 using GameHost.Features.LinuxGameServer.Application.Mediator.Queries;
 using GameHost.Features.LinuxGameServer.Application.Mediator.Queries.Handlers;
-using GameHost.Features.LinuxGameServer.Application.Models;
+using GameHost.Features.LinuxGameServer.Application.Payloads.Responses;
 using GameHost.Features.LinuxGameServer.Application.Pulses.Actions;
 using GameHost.Features.LinuxGameServer.Application.Pulses.Effects;
 using GameHost.Features.LinuxGameServer.Application.Pulses.Reducers;
 using GameHost.Features.LinuxGameServer.Application.Pulses.Reducers.Middlewares;
 using GameHost.Features.LinuxGameServer.Application.Pulses.States;
-using GameHost.Features.LinuxGameServer.Domain.Entities;
-using GameHost.Kernel.Extensions;
 using MedihatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +22,6 @@ public static class RegistrationServiceExt
         IConfiguration configuration,
         bool isMaster)
     {
-        services.AddCoreMapHandler<GameManifestEntityToGameManifestResponse>();
         services.AddMedihaterRequestHandler<GetAvailableGameManifestsQuery, GetAvailableGameManifestsHandler, ICollection<GameManifestResponse>?>();
         services.AddStatePulseService<PopulateAvailableGamesForInstallAction>();
         services.AddStatePulseService<PopulateAvailableGamesForInstallDoneAction>();
@@ -65,9 +60,7 @@ public static class RegistrationServiceExt
 
 
         services.AddMedihaterRequestHandler<InstallGameServerCommand, InstallGameServerHandler>();
-        services.AddMedihaterRequestHandler<GetInstallationProgressQuery, GetInstallationProgressHandler, GameServerInstallProcessModel?>();
-        services.AddMedihaterRequestHandler<GetInstalledGameQuery, GetInstalledGameHandler, GameServerInfoEntity?>();
-        services.AddCoreMapHandler<InstallationProgressToInstallationProcessModel>();
-        services.AddCoreMapHandler<InstallationStateToGameServerInfoEntity>();
+        services.AddMedihaterRequestHandler<GetInstallationProgressQuery, GetInstallationProgressHandler, GameServerInstallProgressResponse?>();
+        services.AddMedihaterRequestHandler<GetInstalledGameQuery, GetInstalledGameHandler, GameServerInfoResponse?>();
     }
 }

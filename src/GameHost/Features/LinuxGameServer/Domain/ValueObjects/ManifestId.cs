@@ -2,12 +2,10 @@
 
 public sealed record ManifestId
 {
-    public string Id { get; init; } = default!;
-    public string DisplayName { get; init; } = default!;
-    public ManifestId(string id, string displayName)
+    public string Value { get; init; } = default!;
+    public ManifestId(string value)
     {
-        Id = id;
-        DisplayName = displayName;
+        Value = value;
 
     }
 }

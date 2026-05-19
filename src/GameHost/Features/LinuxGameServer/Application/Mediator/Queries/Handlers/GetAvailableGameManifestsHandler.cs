@@ -1,5 +1,6 @@
 ﻿using CoreMap;
-using GameHost.Features.LinuxGameServer.Application.Contracts.Responses;
+using GameHost.Features.LinuxGameServer.Application.Payloads.Responses;
+using GameHost.Features.LinuxGameServer.Application.Payloads.Responses.Mapping;
 using GameHost.Features.LinuxGameServer.Application.Services;
 using GameHost.Kernel.Abstractions.Exceptions;
 using GameHost.Kernel.Abstractions.Services.Notification.Services;
@@ -36,6 +37,6 @@ internal class GetAvailableGameManifestsHandler : IRequestHandler<GetAvailableGa
     {
         var result = await _linuxGameServerService.GetAvailableGames(cancellationToken);
         if (result == default) return default;
-        return _coreMap.MapEach(result).To<GameManifestResponse>();
+        return result.Select(p => p.MapToApplication()).ToList();
     }
 }

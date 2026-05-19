@@ -1,12 +1,9 @@
-﻿using CoreMap;
-using GameHost.Core.Features;
-using GameHost.Features.LinuxGameServer.Application.Contracts.Responses;
-using GameHost.Features.LinuxGameServer.Application.Models;
-using GameHost.Features.LinuxGameServer.Application.Pulses.States;
+﻿using GameHost.Core.Features;
 using GameHost.Features.LinuxGameServer.Application.Services;
 using GameHost.Features.LinuxGameServer.Domain.Entities;
-using GameHost.Features.LinuxGameServer.Infrastructure.Services.Contracts.Responses;
 using GameHost.Features.LinuxGameServer.Infrastructure.Services.Exceptions;
+using GameHost.Features.LinuxGameServer.Infrastructure.Services.Payloads.Responses;
+using GameHost.Features.LinuxGameServer.Infrastructure.Services.Payloads.Responses.Mapping;
 using LunaticPanel.Core.Utils.Abstraction.LinuxCommand;
 using LunaticPanel.Core.Utils.Abstraction.Logging;
 using LunaticPanel.Core.Utils.Abstraction.Plugin.Location;
@@ -23,8 +20,7 @@ internal class LinuxGameServerService : ILinuxGameServerService
     private readonly IPluginUserLocation _pluginUserLocation;
     private readonly ILinuxCommand _linuxCommand;
     private readonly ICrazyReport _crazyReport;
-    private readonly ICoreMap _coreMap;
-    private readonly IStateAccessor<InstallationState> _installationStateAccess;
+    private readonly IStateAccessor<Application.Pulses.States.InstallationState> _installationStateAccess;
     private readonly ISafeFileWriter _safeFileWriter;
     private const string MOCK_FOLDER = "mockup";
     private const string MOCK_INSTALLER_FOLDER = "installers";
@@ -40,7 +36,7 @@ internal class LinuxGameServerService : ILinuxGameServerService
     };
     public LinuxGameServerService(IPluginLocation pluginLocation,
         ILinuxCommand linuxCommand,
-        ICrazyReport<LinuxGameServerService> crazyReport, ICoreMap coreMap, IStateAccessor<InstallationState> installationStateAccess,
+        ICrazyReport<LinuxGameServerService> crazyReport, IStateAccessor<Application.Pulses.States.InstallationState> installationStateAccess,
         ISafeFileWriter safeFileWriter)
     {
 
@@ -48,7 +44,6 @@ internal class LinuxGameServerService : ILinuxGameServerService
         _pluginUserLocation = pluginLocation;
         _linuxCommand = linuxCommand;
         _crazyReport = crazyReport;
-        _coreMap = coreMap;
         _installationStateAccess = installationStateAccess;
         _safeFileWriter = safeFileWriter;
         crazyReport.SetModule(LinuxGameServerKeys.MODULE_NAME);
@@ -78,10 +73,10 @@ internal class LinuxGameServerService : ILinuxGameServerService
             _crazyReport.Report("Reading Available Game Manifest...");
             string json = File.ReadAllText(manifestDownloadTarget);
             _crazyReport.Report("Deserializing Available Game Manifest...");
-            var response = JsonSerializer.Deserialize<List<Contracts.Responses.GameManifestResponse>>(json, _jsonSerializerOptions);
+            var response = JsonSerializer.Deserialize<List<GameManifestResponse>>(json, _jsonSerializerOptions)!;
             _crazyReport.Report("Mapping Available Game Manifest...");
-            var entitesResponse = _coreMap.MapEach(response!).To<GameManifestEntity>();
-            _crazyReport.ReportInfo("Available Game Server Manifest Loaded.");
+            var entitesResponse = response!.Select(p => p.MapToDomain()).ToList();
+            _crazyReport.ReportInfo("{0} Available Game Server Manifest Loaded.", response.Count);
             return entitesResponse;
         }
         catch (Exception ex)
@@ -90,7 +85,7 @@ internal class LinuxGameServerService : ILinuxGameServerService
         }
     }
 
-    public async Task<GameServerInstallProcessModel?> GetInstallationProgress(CancellationToken ct = default)
+    public async Task<GameServerInstallProgressEntity?> GetInstallationProgress(CancellationToken ct = default)
     {
         string file = _pluginSystemLocation.GetConfigFor(LinuxGameServerKeys.MODULE_NAME, LinuxGameServerKeys.SERVER_INSTALL_PROGRESS_FILE);
         if (!File.Exists(file)) return default;
@@ -98,9 +93,9 @@ internal class LinuxGameServerService : ILinuxGameServerService
         {
             string jsonString = await File.ReadAllTextAsync(file);
             _crazyReport.ReportInfo(jsonString);
-            var result = JsonSerializer.Deserialize<InstallationProgressStateDto>(jsonString)!;
+            var result = JsonSerializer.Deserialize<GameServerInstallProgressResponse>(jsonString)!;
             if (result == default) return default;
-            var entity = _coreMap.Map(result).To<GameServerInstallProcessModel>();
+            var entity = result.MapToDomain();
             return entity;
         }
         catch (Exception ex)
@@ -109,6 +104,7 @@ internal class LinuxGameServerService : ILinuxGameServerService
             return default;
         }
     }
+
     public async Task<GameServerInfoEntity?> GetInstalledGameServer(CancellationToken ct = default)
     {
         string file = _pluginSystemLocation.GetConfigFor(LinuxGameServerKeys.MODULE_NAME, LinuxGameServerKeys.SERVER_INSTALL_STATE_FILE);
@@ -117,9 +113,9 @@ internal class LinuxGameServerService : ILinuxGameServerService
         {
             await CopyInstallerAssetsToDynamicRoot(ct);
             string jsonString = await File.ReadAllTextAsync(file);
-            InstallationStateDto result = JsonSerializer.Deserialize<InstallationStateDto>(jsonString)!;
+            GameServerInfoResponse result = JsonSerializer.Deserialize<GameServerInfoResponse>(jsonString)!;
             if (result == default) return default;
-            var entity = _coreMap.Map(result).To<GameServerInfoEntity>();
+            var entity = result.MapToDomain();
             return entity;
         }
         catch (Exception ex)

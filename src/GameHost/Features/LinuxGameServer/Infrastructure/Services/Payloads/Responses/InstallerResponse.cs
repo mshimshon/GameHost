@@ -1,4 +1,4 @@
-﻿namespace GameHost.Features.LinuxGameServer.Infrastructure.Services.Contracts.Responses;
+﻿namespace GameHost.Features.LinuxGameServer.Infrastructure.Services.Payloads.Responses;
 
 internal class InstallerResponse<TData>
 {

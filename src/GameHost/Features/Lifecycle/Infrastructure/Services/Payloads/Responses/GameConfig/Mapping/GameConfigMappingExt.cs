@@ -79,7 +79,6 @@ internal static class GameConfigMappingExt
         var parsedNode = JsonNode.Parse(validator.Data);
         rebuiltPartial["data"] = parsedNode?.DeepClone();
         rebuiltPartial["type"] = typeStr;
-        Console.WriteLine(rebuiltPartial.ToString());
 
         Application.Payloads.Responses.GameConfig.Validators.BaseConfigParameterValidator? result = typeStr switch
         {

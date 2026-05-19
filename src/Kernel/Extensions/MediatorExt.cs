@@ -69,4 +69,21 @@ public static class MediatorExt
         if (result == default) return default;
         return (TResult)result;
     }
+
+    public static async Task<TPayload> ExecAsync<TEntity, TPayload>(this HandlerBuilder builder, Func<TEntity, TPayload> mapper, CancellationToken ct = default)
+    where TEntity : notnull
+    where TPayload : notnull
+    {
+        var result = await builder.ExecAsync(ct);
+        return mapper.Invoke((TEntity)result!);
+    }
+
+    public static async Task<TPayload?> ExecOrDefaultAsync<TEntity, TPayload>(this HandlerBuilder builder, Func<TEntity, TPayload> mapper, CancellationToken ct = default)
+    where TEntity : notnull
+    where TPayload : notnull
+    {
+        var result = await builder.ExecAsync(ct);
+        if (result == default) return default;
+        return mapper.Invoke((TEntity)result!);
+    }
 }
