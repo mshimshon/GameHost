@@ -1,5 +1,4 @@
-﻿using CoreMap;
-using GameHost.Core;
+﻿using GameHost.Core;
 using GameHost.Features.Debugging.Web;
 using GameHost.Features.Lifecycle;
 using GameHost.Features.LinuxGameServer;
@@ -48,7 +47,6 @@ public class PluginEntry : PluginBase
         //services.AddScoped(sp => new PluginConfiguration(sp.GetRequiredService<IPluginConfiguration>(), sp.GetRequiredService<ICrazyReport>()));
 
         services.AddLogging();
-        services.AddCoreMap(o => o.Scope = CoreMap.Enums.ServiceScope.Transient);
         services.AddStatePulseServices(c =>
         {
             c.DispatchOrderBehavior = DispatchOrdering.ReducersFirst;

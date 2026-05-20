@@ -30,7 +30,7 @@ public static class ModServiceRegistrationExt
         services.AddScoped<IModListHomeViewModel, ModListHomeViewModel>();
         services.AddTransient<ICreateModListDialogViewModel, CreateModListDialogViewModel>();
         services.AddTransient<IModListEditorCreateModDialogViewModel, ModListEditorCreateModDialogViewModel>();
-        services.RegisterModInfrastructureServices();
+        services.RegisterInfrastructureServices();
         if (isMaster)
         {
             services.AddMasterStateFileWatcherService<MonitoredModListFolderUpdateAction>(

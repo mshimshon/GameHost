@@ -1,6 +1,6 @@
-﻿using CoreMap;
-using GameHost.Core.Features;
+﻿using GameHost.Core.Features;
 using GameHost.Features.Lifecycle.Application.Payloads.Responses.Events;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.Events.Mapping;
 using GameHost.Features.Lifecycle.Application.Payloads.Responses.ServerInfo.Enums;
 using GameHost.Features.Lifecycle.Application.Pulses.Actions;
 using GameHost.Features.Lifecycle.Application.Pulses.States;
@@ -15,14 +15,12 @@ internal sealed class TransitionEffect : IEffect<TransitionAction>
 {
     private readonly IStateAccessor<ServerState> _serverStatusStateAccess;
     private readonly IEventBus _eventBus;
-    private readonly ICoreMap _coreMap;
 
     public TransitionEffect(IStateAccessor<ServerState> serverStatusStateAccess,
-        IEventBus eventBus, ICoreMap coreMap)
+        IEventBus eventBus)
     {
         _serverStatusStateAccess = serverStatusStateAccess;
         _eventBus = eventBus;
-        _coreMap = coreMap;
     }
     public async Task EffectAsync(TransitionAction action, IDispatcher dispatcher)
     {
@@ -39,7 +37,7 @@ internal sealed class TransitionEffect : IEffect<TransitionAction>
             ServerStateTransitionResponse? payload = default;
             if (generatePayload)
             {
-                payload = _coreMap.Map(serverInfoState).To<ServerStateTransitionResponse>();
+                payload = serverInfoState.MapToApplication();
             }
             if (isTransitionCompleted)
             {

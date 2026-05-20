@@ -7,9 +7,9 @@ namespace GameHost.Features.Mods.Infrastructure;
 
 public static class InfrastructureServiceRegistrationExt
 {
-    public static void RegisterModInfrastructureServices(this IServiceCollection services)
+    public static void RegisterInfrastructureServices(this IServiceCollection services)
     {
-        services.RegisterModApplicationServices();
+        services.RegisterApplicationServices();
         services.AddScoped<IModListService, ModListService>();
     }
 }

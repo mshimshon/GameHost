@@ -15,7 +15,7 @@ namespace GameHost.Features.Mods.Application;
 
 public static class ModsApplicationServiceRegsiterExt
 {
-    public static void RegisterModApplicationServices(this IServiceCollection services)
+    public static void RegisterApplicationServices(this IServiceCollection services)
     {
         services.AddStatePulseService<MonitoredModListFolderUpdateAction>();
         services.AddStatePulseService<MonitoredModListFolderUpdateEffect>();

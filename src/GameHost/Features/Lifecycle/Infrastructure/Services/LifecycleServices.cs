@@ -1,5 +1,4 @@
-﻿using CoreMap;
-using GameHost.Core.Features;
+﻿using GameHost.Core.Features;
 using GameHost.Features.Lifecycle.Application.Services;
 using GameHost.Features.Lifecycle.Infrastructure.Services.Exceptions;
 using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig;
@@ -25,7 +24,6 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
 {
     private readonly IQueryBus _queryBus;
     private readonly ILinuxCommand _linuxCommand;
-    private readonly ICoreMap _coreMap;
     private readonly ISafeFileWriter _safeFileWriter;
     private readonly IPluginUserLocation _pluginUserLocation;
     private readonly IPluginSystemLocation _pluginSystemLocation;
@@ -45,14 +43,13 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
     private string? _rawGameInfo;
     public LifecycleServices(IQueryBus queryBus,
         ILinuxCommand linuxCommand,
-        ICoreMap coreMap,
+
         ISafeFileWriter safeFileWriter,
         IPluginLocation pluginLocation,
         ICrazyReport<LifecycleServices> crazyReport)
     {
         _queryBus = queryBus;
         _linuxCommand = linuxCommand;
-        _coreMap = coreMap;
         _safeFileWriter = safeFileWriter;
         _pluginUserLocation = pluginLocation;
         _pluginSystemLocation = pluginLocation;

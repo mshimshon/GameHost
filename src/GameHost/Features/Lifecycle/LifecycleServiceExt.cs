@@ -3,7 +3,6 @@ using GameHost.Features.Lifecycle.Application.Mediator.Commands;
 using GameHost.Features.Lifecycle.Application.Mediator.Commands.Handlers;
 using GameHost.Features.Lifecycle.Application.Mediator.Queries;
 using GameHost.Features.Lifecycle.Application.Mediator.Queries.Handlers;
-using GameHost.Features.Lifecycle.Application.Payloads.Responses.Events.Mapping;
 using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameInfo;
 using GameHost.Features.Lifecycle.Application.Payloads.Responses.ServerInfo;
 using GameHost.Features.Lifecycle.Application.Pulses.Actions;
@@ -87,7 +86,6 @@ public static class LifecycleServiceExt
         services.AddMedihaterRequestHandler<GetGameInfoQuery, GetGameInfoHandler, GameInfoResponse?>();
         services.AddMedihaterRequestHandler<GetRawGameInfoQuery, GetRawGameInfoHandler, string?>();
 
-        services.AddCoreMapHandler<ServerStateToServerStateTransitionResponse>();
 
         if (isMaster)
         {

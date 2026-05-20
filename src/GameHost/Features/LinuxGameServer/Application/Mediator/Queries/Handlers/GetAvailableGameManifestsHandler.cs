@@ -1,5 +1,4 @@
-﻿using CoreMap;
-using GameHost.Features.LinuxGameServer.Application.Payloads.Responses;
+﻿using GameHost.Features.LinuxGameServer.Application.Payloads.Responses;
 using GameHost.Features.LinuxGameServer.Application.Payloads.Responses.Mapping;
 using GameHost.Features.LinuxGameServer.Application.Services;
 using GameHost.Kernel.Abstractions.Exceptions;
@@ -13,17 +12,15 @@ namespace GameHost.Features.LinuxGameServer.Application.Mediator.Queries.Handler
 internal class GetAvailableGameManifestsHandler : IRequestHandler<GetAvailableGameManifestsQuery, ICollection<GameManifestResponse>?>
 {
     private readonly ILinuxGameServerService _linuxGameServerService;
-    private readonly ICoreMap _coreMap;
     private readonly INotificationService _notificationService;
     private readonly ICrazyReport<GetAvailableGameManifestsHandler> _crazyReport;
 
     public GetAvailableGameManifestsHandler(ILinuxGameServerService linuxGameServerService,
-        ICoreMap coreMap,
+
         INotificationService notificationService,
         ICrazyReport<GetAvailableGameManifestsHandler> crazyReport)
     {
         _linuxGameServerService = linuxGameServerService;
-        _coreMap = coreMap;
         _notificationService = notificationService;
         _crazyReport = crazyReport;
     }
