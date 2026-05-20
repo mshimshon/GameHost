@@ -2,6 +2,6 @@
 
 public record LinuxSystemInfoConfiguration
 {
-    public string WorkingDisk { get; init; } = "$HOME";
+    public string WorkingDisk { get; init; } = "/home";
     public int PeriodicResourceCheckDelaySeconds { get; init; } = 8;
 }

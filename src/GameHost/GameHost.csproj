@@ -46,20 +46,12 @@
 	  <Folder Include="Features\Mods\Application\Hooks\" />
 	  <Folder Include="Features\Mods\Web\Hooks\Queries\" />
 	  <Folder Include="Features\Mods\Web\Hooks\Events\Scheduled\" />
-	  <Folder Include="Features\SystemInfo\Application\CQRS\Commands\" />
+	  <Folder Include="Features\SystemInfo\Application\Mediator\Commands\" />
+	  <Folder Include="Features\SystemInfo\Infrastructure\Exceptions\" />
 	  <Folder Include="Features\SystemInfo\Web\Hooks\Queries\" />
 	  <Folder Include="Web\Pages\Hooks\Events\" />
 	  <Folder Include="Web\Pages\Hooks\Queries\" />
 	  <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-
-
-
-  <ItemGroup>
-    <Content Update="Features\SystemInfo\Application\Bash\get_ram_info.sh" Link="bash\systeminfo\get_ram_info.sh" />
-    <Content Update="Features\SystemInfo\Application\Bash\get_disk_info.sh" Link="bash\systeminfo\get_disk_info.sh" />
-    <Content Update="Features\SystemInfo\Application\Bash\get_cpu_info.sh" Link="bash\systeminfo\get_cpu_info.sh" />
   </ItemGroup>
 
 	<Target Name="RemoveHostOwnedAssembliesAfterBuild" AfterTargets="Build" Condition="'$(IsPublish)' != 'true'">

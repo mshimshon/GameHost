@@ -1,8 +1,9 @@
 ﻿using GameHost.Core.Features;
 using GameHost.Features.SystemInfo.Application.Services;
 using GameHost.Features.SystemInfo.Domain.Entites;
-using GameHost.Features.SystemInfo.Domain.ValueObjects;
 using GameHost.Features.SystemInfo.Infrastructure.Configurations;
+using GameHost.Features.SystemInfo.Infrastructure.Payloads.Response;
+using GameHost.Features.SystemInfo.Infrastructure.Payloads.Response.Mapping;
 using LunaticPanel.Core.Utils.Abstraction.LinuxCommand;
 using LunaticPanel.Core.Utils.Abstraction.Logging;
 using LunaticPanel.Core.Utils.Abstraction.Plugin.Location;
@@ -25,35 +26,98 @@ internal class LinuxSystemInfoService : ISystemInfoService
         _crazyReport = crazyReport;
         _crazyReport.SetModule(SystemInfoKeys.MODULE_NAME);
     }
-
+    private async Task<SystemInfoRamResponse?> GetRamAsync(CancellationToken ct = default)
+    {
+        SystemInfoRamResponse? ramInfo = default;
+        try
+        {
+            var ram = await _linuxCommand
+                .BuildCommand("free -b")
+                .PatchInStdPipeCommand("awk '/Mem:/ {printf \"%.2f;%.2f\", $3/1024/1024, $2/1024/1024}'")
+                .PatchInStdOutAsPayload()
+                .ExecPayloadAsync<string>(ct);
+            var ramSplit = ram.Trim().Split(';');
+            var ramUsage = float.Parse(ramSplit[0]);
+            var ramTotal = float.Parse(ramSplit[1]);
+            ramInfo = new()
+            {
+                Total = ramTotal,
+                Current = ramUsage
+            };
+        }
+        catch (Exception ex)
+        {
+            _crazyReport.ReportErrorException(ex.Message, ex);
+        }
+        return ramInfo;
+    }
+    private async Task<SystemInfoDiskResponse?> GetDiskAsync(CancellationToken ct = default)
+    {
+        SystemInfoDiskResponse? info = default; ;
+        try
+        {
+            var ram = await _linuxCommand
+                .BuildCommand($"df -B1 \"{_linuxSystemInfoConfiguration.WorkingDisk}\"")
+                .PatchInStdPipeCommand("awk 'NR==2 {printf \"%.2f;%.2f\\n\", $3/1024/1024, $2/1024/1024}'")
+                .PatchInStdOutAsPayload()
+                .ExecPayloadAsync<string>(ct);
+            var split = ram.Trim().Split(';');
+            var usage = float.Parse(split[0]);
+            var total = float.Parse(split[1]);
+            info = new()
+            {
+                Total = total,
+                Current = usage
+            };
+        }
+        catch (Exception ex)
+        {
+            _crazyReport.ReportErrorException(ex.Message, ex);
+        }
+        return info;
+    }
+    private async Task<SystemInfoProcessorResponse?> GetProcessorAsync(CancellationToken ct = default)
+    {
+        SystemInfoProcessorResponse? info = default;
+        try
+        {
+            var ram = await _linuxCommand
+                .BuildCommand($"cpu_usage=$(grep 'cpu ' /proc/stat | awk '{{idle=$5; total=0; for(i=2;i<=NF;i++) total+=$i; print 100*(1-idle/total)}}')")
+                .AndCommand("cores=$(nproc)")
+                .AndCommand("model=$(awk -F': ' '/model name/ {print $2; exit}' /proc/cpuinfo)")
+                .AndCommand("echo \"${cpu_usage};${cores};${model}\"")
+                .PatchInStdOutAsPayload()
+                .ExecPayloadAsync<string>(ct);
+            var split = ram.Trim().Split(';');
+            var usage = float.Parse(split[0]);
+            var cores = int.Parse(split[1]);
+            var model = split[2];
+            info = new()
+            {
+                Cores = cores,
+                Model = model,
+                Current = usage
+            };
+        }
+        catch (Exception ex)
+        {
+            _crazyReport.ReportErrorException(ex.Message, ex);
+        }
+        return info;
+    }
     public async Task<SystemInfoEntity?> GetSystemInfoAsync(CancellationToken ct = default)
     {
-        var ramScript = _pluginSystemLocation.GetBashFor(SystemInfoKeys.MODULE_NAME, "get_ram_info.sh");
-        var ram = await _linuxCommand.BuildBash(ramScript).ExecAsync(ct);
-        _crazyReport.Report("Ram={0}", ram);
-        var ramUsage = float.Parse(ram.StandardOutput.Split(';')[0]);
-        var ramTotal = float.Parse(ram.StandardOutput.Split(';')[1]);
 
-        var diskScript = _pluginSystemLocation.GetBashFor(SystemInfoKeys.MODULE_NAME, "get_disk_info.sh", _linuxSystemInfoConfiguration.WorkingDisk);
-        var disk = await _linuxCommand.BuildBash(diskScript).ExecOutputAsync<string>(ct);
-        _crazyReport.Report("Disk={0}", disk);
-        var diskUsage = float.Parse(disk.Split(';')[0]);
-        var diskTotal = float.Parse(disk.Split(';')[1]);
-
-        var processorScript = _pluginSystemLocation.GetBashFor(SystemInfoKeys.MODULE_NAME, "get_cpu_info.sh");
-        var processor = await _linuxCommand.BuildBash(processorScript).ExecOutputAsync<string>(ct);
-        _crazyReport.Report("Processor={0}", processor);
-        var processorUsage = float.Parse(processor.Split(';')[0]);
-        var processorCores = int.Parse(processor.Split(';')[1]);
-        var processorModel = processor.Split(';')[2];
-
+        var ram = await GetRamAsync(ct);
+        var disk = await GetDiskAsync(ct);
+        var processor = await GetProcessorAsync(ct);
         SystemInfoEntity? result = default;
         if (ram != default && disk != default && processor != default)
             result = new SystemInfoEntity()
             {
-                Disk = new(diskUsage, diskTotal),
-                Memory = new(ramUsage, ramTotal),
-                Processor = new SystemProcessor(processorUsage, processorCores, processorModel)
+                Disk = disk.MapToDomain(),
+                Memory = ram.MapToDomain(),
+                Processor = processor.MapToDomain()
             };
 
         return result;

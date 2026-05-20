@@ -1,4 +1,4 @@
-﻿using GameHost.Features.SystemInfo.Application.CQRS.Queries;
+﻿using GameHost.Features.SystemInfo.Application.Mediator.Queries;
 using GameHost.Features.SystemInfo.Application.Pulses.Actions;
 using GameHost.Features.SystemInfo.Application.Pulses.States;
 using MedihatR;
@@ -24,7 +24,7 @@ internal class SystemInfoUpdateEffect : IEffect<SystemInfoUpdateAction>
         var exec = new GetSystemInfoQuery();
         var serverInfo = await _medihater.Send(exec);
 
-        if (serverInfo != default && serverInfo.Disk != default && serverInfo.Processor != default && serverInfo.Memory != default)
+        if (serverInfo != default)
             await dispatcher.Prepare<SystemInfoUpdatedAction>()
                 .With(p => p.SystemInfo, serverInfo)
                 .DispatchAsync();
