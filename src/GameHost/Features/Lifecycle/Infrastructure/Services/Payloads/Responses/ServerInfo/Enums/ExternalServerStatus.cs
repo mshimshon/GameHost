@@ -1,6 +1,6 @@
 ﻿namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.ServerInfo.Enums;
 
-public enum ServerStatus
+public enum ExternalServerStatus
 {
     Running,
     Restarting,

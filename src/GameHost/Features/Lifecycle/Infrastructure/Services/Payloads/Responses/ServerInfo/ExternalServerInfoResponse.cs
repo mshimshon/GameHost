@@ -3,10 +3,10 @@ using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.Ser
 
 namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.ServerInfo;
 
-public sealed record ServerInfoResponse
+public sealed record ExternalServerInfoResponse
 {
-    public ServerStatus Status { get; set; }
-    public List<ServerInfoConnectionResponse>? ConnectionPorts { get; set; }
+    public ExternalServerStatus Status { get; set; }
+    public List<ExternalServerInfoConnectionResponse>? ConnectionPorts { get; set; }
     public string? Address { get; set; }
     public DateTime LastUpdate { get; set; }
 }

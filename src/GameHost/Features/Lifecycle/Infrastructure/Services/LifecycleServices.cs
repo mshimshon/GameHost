@@ -67,7 +67,7 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
         {
             string jsonString = await File.ReadAllTextAsync(file);
             _crazyReport.ReportInfo(jsonString);
-            var result = JsonSerializer.Deserialize<List<GameConfigParameterPairResponse>>(jsonString, _jsonSerializerConfiguration)!;
+            var result = JsonSerializer.Deserialize<List<ExternalGameConfigParameterPairResponse>>(jsonString, _jsonSerializerConfiguration)!;
             if (result == default) return new();
             return result.ToDictionary(p => p.Key, p => p.Value); ;
         }
@@ -89,7 +89,7 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
         {
             string jsonString = await File.ReadAllTextAsync(file);
             _crazyReport.ReportInfo(jsonString);
-            var result = JsonSerializer.Deserialize<List<GameConfigParameterPairHostResponse>>(jsonString, _jsonSerializerConfiguration)!;
+            var result = JsonSerializer.Deserialize<List<ExternalGameConfigParameterPairHostResponse>>(jsonString, _jsonSerializerConfiguration)!;
             if (result == default) return new List<Application.Payloads.Responses.GameConfig.GameConfigParameterPairHostResponse>();
             return result.Select(p => p.MapToApplication()).ToList();
         }
@@ -135,7 +135,7 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
         {
             var jsonString = await GetRawGameInfoAsync(cancellationToken);
             if (jsonString == default) return default;
-            var result = JsonSerializer.Deserialize<GameInfoResponse>(jsonString, _jsonSerializerConfiguration)!;
+            var result = JsonSerializer.Deserialize<ExternalGameInfoResponse>(jsonString, _jsonSerializerConfiguration)!;
 
             if (result == default) return default;
             var entity = result.MapToApplication();
@@ -189,7 +189,7 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
 
         if (commandResult.Failed)
             throw new FailedToGetServerStatusException(_crazyReport);
-        var result = commandResult.PayloadAsOrDefault<InstallerResultDataDto<ServerInfoResponse>>(default);
+        var result = commandResult.PayloadAsOrDefault<InstallerResultDataDto<ExternalServerInfoResponse>>(default);
         if (result?.Data == default)
             throw new FailedToGetServerStatusException(_crazyReport);
         var resultEntity = result.Data.MapToApplication();
@@ -209,7 +209,7 @@ internal class LifecycleServices : ILifecycleServices, IGameInfoService, IStartu
             stream = File.Open(lockFile, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
             var current = await GetServerStartupParametersAsync(ct);
             current[key] = value;
-            var toWriteList = current.Select(p => new GameConfigParameterPairResponse()
+            var toWriteList = current.Select(p => new ExternalGameConfigParameterPairResponse()
             {
                 Key = p.Key,
                 Value = p.Value

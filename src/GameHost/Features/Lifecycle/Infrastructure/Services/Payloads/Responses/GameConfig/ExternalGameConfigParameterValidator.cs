@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig;
 
 
-public sealed record GameConfigParameterValidator
+public sealed record ExternalGameConfigParameterValidator
 {
     public string Type { get; set; } = default!;
     [JsonConverter(typeof(JsonAlwaysStringConverter))]

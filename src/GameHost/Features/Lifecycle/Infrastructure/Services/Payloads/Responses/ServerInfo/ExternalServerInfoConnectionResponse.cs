@@ -1,6 +1,6 @@
 ﻿namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.ServerInfo;
 
-public sealed record ServerInfoConnectionResponse
+public sealed record ExternalServerInfoConnectionResponse
 {
 
     public string Name { get; set; } = default!;

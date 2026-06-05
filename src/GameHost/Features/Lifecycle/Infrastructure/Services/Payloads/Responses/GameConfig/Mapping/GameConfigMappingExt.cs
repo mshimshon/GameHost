@@ -1,4 +1,6 @@
-﻿using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig.Validators;
+﻿using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig.Enums;
+using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig.Validators;
 using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig.Validators.AllowedValues;
 using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig.Validators.LengthConstraint;
 using System.Text.Json;
@@ -9,13 +11,13 @@ namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses
 
 internal static class GameConfigMappingExt
 {
-    public static Application.Payloads.Responses.GameConfig.GameConfigInfoResponse MapToApplication(this GameConfigInfoResponse data)
+    public static GameConfigInfoResponse MapToApplication(this ExternalGameConfigInfoResponse data)
         => new()
         {
             ConfigDefinitions = data.ConfigDefinitions?.ToDictionary(p => p.Key, p => p.Value.MapToApplication())
         };
 
-    public static Application.Payloads.Responses.GameConfig.GameConfigParameterResponse MapToApplication(this GameConfigParameterResponse data)
+    public static GameConfigParameterResponse MapToApplication(this ExternalGameConfigParameterResponse data)
         => new()
         {
             Category = data.Category,
@@ -31,27 +33,27 @@ internal static class GameConfigMappingExt
         };
 
 
-    private static Application.Payloads.Responses.GameConfig.Enums.ConfigParameterType MapTypeEnum(GameConfigParameterResponse data)
+    private static ConfigParameterType MapTypeEnum(ExternalGameConfigParameterResponse data)
     => data.Type switch
     {
-        "decimal" => Application.Payloads.Responses.GameConfig.Enums.ConfigParameterType.Decimal,
-        "bool_S" => Application.Payloads.Responses.GameConfig.Enums.ConfigParameterType.Bool_String,
-        "bool_E" => Application.Payloads.Responses.GameConfig.Enums.ConfigParameterType.Bool_Explicit,
-        "bool" => Application.Payloads.Responses.GameConfig.Enums.ConfigParameterType.Bool,
-        "integer" => Application.Payloads.Responses.GameConfig.Enums.ConfigParameterType.Int,
-        "list_decimal" => Application.Payloads.Responses.GameConfig.Enums.ConfigParameterType.List_Decimal,
-        "list_int" => Application.Payloads.Responses.GameConfig.Enums.ConfigParameterType.List_Int,
-        "list_str" => Application.Payloads.Responses.GameConfig.Enums.ConfigParameterType.List_String,
-        _ => Application.Payloads.Responses.GameConfig.Enums.ConfigParameterType.String
+        "decimal" => ConfigParameterType.Decimal,
+        "bool_S" => ConfigParameterType.Bool_String,
+        "bool_E" => ConfigParameterType.Bool_Explicit,
+        "bool" => ConfigParameterType.Bool,
+        "integer" => ConfigParameterType.Int,
+        "list_decimal" => ConfigParameterType.List_Decimal,
+        "list_int" => ConfigParameterType.List_Int,
+        "list_str" => ConfigParameterType.List_String,
+        _ => ConfigParameterType.String
     };
 
-    public static Application.Payloads.Responses.GameConfig.GameConfigResponse MapToApplication(this GameConfigResponse data)
+    public static Application.Payloads.Responses.GameConfig.GameConfigResponse MapToApplication(this ExternalGameConfigResponse data)
         => new()
         {
             DisplayName = data.DisplayName,
             Parameters = data.Parameters?.Select(MapToApplication).ToList()
         };
-    public static Application.Payloads.Responses.GameConfig.GameConfigParameterPairHostResponse MapToApplication(this GameConfigParameterPairHostResponse data)
+    public static Application.Payloads.Responses.GameConfig.GameConfigParameterPairHostResponse MapToApplication(this ExternalGameConfigParameterPairHostResponse data)
         => new()
         {
             DefaultValue = data.DefaultValue,
@@ -59,14 +61,14 @@ internal static class GameConfigMappingExt
             Key = data.Key
         };
 
-    public static Application.Payloads.Responses.GameConfig.GameConfigParameterPairResponse MapToApplication(this GameConfigParameterPairResponse data)
+    public static Application.Payloads.Responses.GameConfig.GameConfigParameterPairResponse MapToApplication(this ExternalGameConfigParameterPairResponse data)
     => new()
     {
         Value = data.Value,
         Key = data.Key
     };
 
-    public static Application.Payloads.Responses.GameConfig.Validators.BaseConfigParameterValidator MapToApplication(this GameConfigParameterValidator validator)
+    public static BaseConfigParameterValidator MapToApplication(this ExternalGameConfigParameterValidator validator)
     {
         var options = new JsonSerializerOptions()
         {
@@ -80,7 +82,7 @@ internal static class GameConfigMappingExt
         rebuiltPartial["data"] = parsedNode?.DeepClone();
         rebuiltPartial["type"] = typeStr;
 
-        Application.Payloads.Responses.GameConfig.Validators.BaseConfigParameterValidator? result = typeStr switch
+        BaseConfigParameterValidator? result = typeStr switch
         {
             ValidatorDefinitions.LENGTH_CONSTRAINT => JsonSerializer.Deserialize<ParameterLengthConstraintValidator>(rebuiltPartial, options),
             ValidatorDefinitions.ALLOWED_VALUES => JsonSerializer.Deserialize<ParameterAllowedValuesValidator>(rebuiltPartial, options),

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig;
 
-public sealed record GameConfigParameterResponse
+public sealed record ExternalGameConfigParameterResponse
 {
     public string Key { get; set; } = default!;
     public string Type { get; set; } = default!;
@@ -16,5 +16,5 @@ public sealed record GameConfigParameterResponse
     public string Category { get; set; } = default!;
     public string? Warning { get; set; }
 
-    public List<GameConfigParameterValidator>? Validations { get; set; }
+    public List<ExternalGameConfigParameterValidator>? Validations { get; set; }
 }

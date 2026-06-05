@@ -1,10 +1,11 @@
-﻿using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig.Mapping;
+﻿using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameInfo;
+using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig.Mapping;
 
 namespace GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameInfo.Mapping;
 
 internal static class GameInfoMappingExt
 {
-    public static Application.Payloads.Responses.GameInfo.GameInfoResponse MapToApplication(this GameInfoResponse data)
+    public static GameInfoResponse MapToApplication(this ExternalGameInfoResponse data)
         => new()
         {
             HasModdingWorkshop = data.HasModdingWorkshop,
