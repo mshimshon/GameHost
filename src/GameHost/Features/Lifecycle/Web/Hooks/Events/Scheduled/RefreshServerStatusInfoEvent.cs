@@ -9,7 +9,7 @@ using StatePulse.Net;
 
 namespace GameHost.Features.Lifecycle.Web.Hooks.Events.Scheduled;
 
-[EventScheduledBusId(LifecycleKeys.Events.Scheduled.GAME_SERVER_INFO_CHECK, 0, 4,
+[EventScheduledBusKey(LifecycleKeys.Events.Scheduled.GAME_SERVER_INFO_CHECK, 0, 4,
     RunAtStartup = true,
     ScheduleAtStartup = true,
     ServiceLifetime = EBusLifetime.Transient)]

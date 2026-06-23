@@ -5,7 +5,7 @@ using LunaticPanel.Engine.Keys.UI;
 
 namespace GameHost.Web.Pages.Hooks.UI;
 
-[EngineBusId(MainMenuKeys.UI.GetElements)]
+[EngineBusKey(MainMenuKeys.UI.GetElements)]
 public class MenuMainPageElementHook : IEngineBusHandler
 {
 

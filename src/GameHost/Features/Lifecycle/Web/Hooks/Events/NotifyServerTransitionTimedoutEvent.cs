@@ -11,7 +11,7 @@ using GameHost.Features.Lifecycle.Application.Payloads.Responses.Events;
 
 namespace GameHost.Features.Lifecycle.Web.Hooks.Events;
 
-[EventBusId(LifecycleKeys.Events.ServerControl.TRANSITION_TIMEDOUT, CrossCircuitReceiver = EventBusSpreadType.CrossCircuitAll)]
+[EventBusKey(LifecycleKeys.Events.ServerControl.TRANSITION_TIMEDOUT, CrossCircuitReceiver = EventBusSpreadType.CrossCircuitAll)]
 internal class NotifyServerTransitionTimedoutEvent : IEventBusHandler
 {
     private readonly INotificationService _notificationService;

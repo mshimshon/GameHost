@@ -7,7 +7,7 @@ using StatePulse.Net;
 
 namespace GameHost.Features.LinuxGameServer.Web.Hooks.Queries;
 
-[QueryBusId(LinuxGameServerKeys.Queries.GET_GAME_ID, ServiceLifetime = EBusLifetime.Scoped)]
+[QueryBusKey(LinuxGameServerKeys.Queries.GET_GAME_ID, ServiceLifetime = EBusLifetime.Scoped)]
 internal class GetGameIdHook : IQueryBusHandler
 {
     private readonly IStateAccessor<InstallationState> _installlationStateAccess;

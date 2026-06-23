@@ -11,7 +11,7 @@ using GameHost.Features.Lifecycle.Application.Payloads.Responses.Events;
 
 namespace GameHost.Features.Lifecycle.Web.Hooks.Events;
 
-[EventBusId(LifecycleKeys.Events.ServerControl.TRANSITION_COMPLETED, CrossCircuitReceiver = EventBusSpreadType.CrossCircuitAll)]
+[EventBusKey(LifecycleKeys.Events.ServerControl.TRANSITION_COMPLETED, CrossCircuitReceiver = EventBusSpreadType.CrossCircuitAll)]
 internal class NotifyServerTransitionCompletedEvent : IEventBusHandler
 {
     private readonly IStateAccessor<ServerTransitionState> _serverTransitionStateAccess;

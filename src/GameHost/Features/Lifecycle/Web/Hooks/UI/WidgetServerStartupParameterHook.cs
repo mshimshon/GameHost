@@ -7,7 +7,7 @@ using StatePulse.Net;
 
 namespace GameHost.Features.Lifecycle.Web.Hooks.UI;
 
-[EngineBusId(DashboardKeys.UI.GetWidgets)]
+[EngineBusKey(DashboardKeys.UI.GetWidgets)]
 internal class WidgetServerStartupParameterHook : IEngineBusHandler
 {
     private readonly IStateAccessor<GameInfoState> _stateGameInfoAccess;

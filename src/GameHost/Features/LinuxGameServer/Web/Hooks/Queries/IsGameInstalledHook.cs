@@ -6,7 +6,7 @@ using StatePulse.Net;
 
 namespace GameHost.Features.LinuxGameServer.Web.Hooks.Queries;
 
-[QueryBusId(LinuxGameServerKeys.Queries.IS_GAME_SERVER_INSTALLED)]
+[QueryBusKey(LinuxGameServerKeys.Queries.IS_GAME_SERVER_INSTALLED)]
 internal class IsGameInstalledHook : IQueryBusHandler
 {
     private readonly IStateAccessor<InstallationState> _gameInstallState;

@@ -7,7 +7,7 @@ using StatePulse.Net;
 
 namespace GameHost.Features.LinuxGameServer.Web.Hooks.UI;
 
-[EngineBusId(DashboardKeys.UI.GetWidgets)]
+[EngineBusKey(DashboardKeys.UI.GetWidgets)]
 public class WidgetServerSetupHook : IEngineBusHandler
 {
     private readonly IStateAccessor<InstallationState> _installStateAccess;

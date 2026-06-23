@@ -9,7 +9,7 @@ using LunaticPanel.Engine.Keys.UI;
 
 namespace GameHost.Features.Mods.Web.Hooks.UI;
 
-[EngineBusId(DashboardKeys.UI.GetWidgets)]
+[EngineBusKey(DashboardKeys.UI.GetWidgets)]
 internal class WidgetModListSelectorHook : HostStateHookBase, IEngineBusHandler
 {
 

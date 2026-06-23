@@ -6,7 +6,7 @@ using StatePulse.Net;
 
 namespace GameHost.Features.Mods.Web.Hooks.Events;
 
-[EventBusId(ModListKeys.Events.ON_FILES_IN_MONITORED_MOD_LIST_FOLDER_CHANGED, CrossCircuitReceiver = EventBusSpreadType.CrossCircuitExcludeSender)]
+[EventBusKey(ModListKeys.Events.ON_FILES_IN_MONITORED_MOD_LIST_FOLDER_CHANGED, CrossCircuitReceiver = EventBusSpreadType.CrossCircuitExcludeSender)]
 internal class CloseOpenedModListWhenDeleted : IEventBusHandler
 {
     private readonly IStateAccessor<ModListLocalState> _modListLocalStateAccess;

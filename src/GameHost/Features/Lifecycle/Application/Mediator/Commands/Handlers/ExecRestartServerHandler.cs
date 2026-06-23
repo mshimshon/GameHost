@@ -37,7 +37,6 @@ public class ExecRestartServerHandler : IRequestHandler<ExecRestartServerCommand
 
     private async Task OnFailure()
     {
-        await Task.Delay(1000);
         await _dispatcher.Prepare<TransitionDoneAction>().DispatchAsync();
     }
 

@@ -9,7 +9,7 @@ using StatePulse.Net;
 
 namespace GameHost.Features.SystemInfo.Web.Hooks.Events.Scheduled;
 
-[EventScheduledBusId(SystemInfoKeys.Events.UpdateInformation, 0, 10, RunAtStartup = true)]
+[EventScheduledBusKey(SystemInfoKeys.Events.UpdateInformation, 0, 10, RunAtStartup = true)]
 internal sealed class PeriodicSystemInfoUpdate : IEventScheduledBusHandler
 {
     private readonly IDispatcher _dispatcher;

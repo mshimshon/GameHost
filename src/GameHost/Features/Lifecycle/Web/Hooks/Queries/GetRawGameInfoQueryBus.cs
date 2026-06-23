@@ -6,7 +6,7 @@ using MedihatR;
 
 namespace GameHost.Features.Lifecycle.Web.Hooks.Queries;
 
-[QueryBusId(LifecycleKeys.Queries.GET_RAW_GAME_INFO)]
+[QueryBusKey(LifecycleKeys.Queries.GET_RAW_GAME_INFO)]
 internal class GetRawGameInfoQueryBus : IQueryBusHandler
 {
     private readonly IMedihater _medihater;

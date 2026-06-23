@@ -5,7 +5,7 @@ using LunaticPanel.Engine.Keys.UI;
 
 namespace GameHost.Features.SystemInfo.Web.Hooks.UI;
 
-[EngineBusId(DashboardKeys.UI.GetWidgets)]
+[EngineBusKey(DashboardKeys.UI.GetWidgets)]
 public class WidgetSystemInfoHook : IEngineBusHandler
 {
     public Task<EngineBusResponse> HandleAsync(IEngineBusMessage engineBusMessage)

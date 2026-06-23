@@ -115,4 +115,11 @@ public class PluginEntry : PluginBase
 
         await eventBus.PublishDatalessAsync(PluginKeys.Events.OnAfterRuntimeInitialization);
     }
+
+    public override string[] GetMyPackageKeys() => Array.Empty<string>();
+    public override void CheckFeatureDegradation(Func<string, bool> isBusAvailable)
+    {
+
+    }
 }
+

@@ -9,7 +9,7 @@ using StatePulse.Net;
 
 namespace GameHost.Features.Mods.Web.Hooks.Events;
 
-[EventBusId(LinuxGameServerKeys.Events.ON_GAME_SERVER_INSTALL_STATE_CHANGED)]
+[EventBusKey(LinuxGameServerKeys.Events.ON_GAME_SERVER_INSTALL_STATE_CHANGED)]
 internal class WhenServerInstallationStateChanged : IEventBusHandler
 {
     private readonly IDispatcher _dispatcher;
