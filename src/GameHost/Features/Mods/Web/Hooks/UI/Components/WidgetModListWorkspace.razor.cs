@@ -10,7 +10,7 @@ public partial class WidgetModListWorkspace
 
     [Inject] public NavigationManager Navigation { get; set; } = default!;
     [Parameter] public bool AutoRedirect { get; set; } = false;
-    [Parameter] public string LinkBaseNoTrailing { get; set; } = $"/{BaseInfo.ASSEMBLY_NAME}/{ModListKeys.MODULE_NAME}";
+    [Parameter] public string LinkBaseNoTrailing { get; set; } = $"/{GameHostKeys.ASSEMBLY_NAME}/{ModListKeys.MODULE_NAME}";
     protected override async Task OnWidgetParametersSetAsync()
     {
     }

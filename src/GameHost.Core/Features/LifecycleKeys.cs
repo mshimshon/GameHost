@@ -24,7 +24,7 @@ public static class LifecycleKeys
         ///   </item>
         /// </list>
         /// </remarks>
-        public const string GET_RAW_GAME_INFO = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(LifecycleKeys)}.{nameof(Events)}.{nameof(Queries)}.{nameof(GET_RAW_GAME_INFO)}";
+        public const string GET_RAW_GAME_INFO = $"{GameHostKeys.QUERY_PREFIX}.{GameHostKeys.ASSEMBLY_NAME}.{GameHostKeys.API_V1}.{nameof(LifecycleKeys)}.{nameof(Events)}.{nameof(Queries)}.{nameof(GET_RAW_GAME_INFO)}";
 
     }
     public static class Engine { }
@@ -38,18 +38,18 @@ public static class LifecycleKeys
         /// <summary>
         /// This is trigger upon Lifecycle GameInfo changed send gameinfo raw data along with the event.
         /// </summary>
-        public const string GAMEINFO_STATE_CHANGED = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(LifecycleKeys)}.{nameof(Events)}.{nameof(GAMEINFO_STATE_CHANGED)}";
+        public const string GAMEINFO_STATE_CHANGED = $"{GameHostKeys.EVENT_PREFIX}.{GameHostKeys.ASSEMBLY_NAME}.{GameHostKeys.API_V1}.{nameof(LifecycleKeys)}.{nameof(Events)}.{nameof(GAMEINFO_STATE_CHANGED)}";
 
         public static class ServerControl
         {
             /// <summary>
             /// This occur when the stop/start/restart of the server take too long and the transition resets to IDLE in order unlock the UI.
             /// </summary>
-            public const string TRANSITION_TIMEDOUT = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(LifecycleKeys)}.{nameof(Events)}.{nameof(ServerControl)}.{nameof(TRANSITION_TIMEDOUT)}";
+            public const string TRANSITION_TIMEDOUT = $"{GameHostKeys.EVENT_PREFIX}.{GameHostKeys.ASSEMBLY_NAME}.{GameHostKeys.API_V1}.{nameof(LifecycleKeys)}.{nameof(Events)}.{nameof(ServerControl)}.{nameof(TRANSITION_TIMEDOUT)}";
             /// <summary>
             /// This occurs when stop/start/restart has complete and transited to expect state stopped -> started, started -> stopped.
             /// </summary>
-            public const string TRANSITION_COMPLETED = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(LifecycleKeys)}.{nameof(Events)}.{nameof(ServerControl)}.{nameof(TRANSITION_COMPLETED)}";
+            public const string TRANSITION_COMPLETED = $"{GameHostKeys.EVENT_PREFIX}.{GameHostKeys.ASSEMBLY_NAME}.{GameHostKeys.API_V1}.{nameof(LifecycleKeys)}.{nameof(Events)}.{nameof(ServerControl)}.{nameof(TRANSITION_COMPLETED)}";
         }
         public static class Scheduled
         {
@@ -62,7 +62,7 @@ public static class LifecycleKeys
             ///   <item>No Input Required</item>
             /// </list>
             /// </remarks>
-            public const string GAME_SERVER_INFO_CHECK = $"{BaseInfo.ASSEMBLY_NAME}.{nameof(LifecycleKeys)}.{nameof(Events)}.{nameof(Scheduled)}.{nameof(GAME_SERVER_INFO_CHECK)}";
+            public const string GAME_SERVER_INFO_CHECK = $"{GameHostKeys.EVENT_PREFIX}.{GameHostKeys.ASSEMBLY_NAME}.{GameHostKeys.API_V1}.{nameof(LifecycleKeys)}.{nameof(Events)}.{nameof(Scheduled)}.{nameof(GAME_SERVER_INFO_CHECK)}";
 
         }
     }

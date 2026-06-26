@@ -4,7 +4,6 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Title>$(AssemblyName)</Title>
 	<Version>$(GlobalVersion)</Version>
 	<Company>$(GlobalCompany)</Company>
@@ -54,7 +53,7 @@
 	  <Folder Include="wwwroot\" />
   </ItemGroup>
 
-	<Target Name="RemoveHostOwnedAssembliesAfterBuild" AfterTargets="Build" Condition="'$(IsPublish)' != 'true'">
+	<Target Name="RemoveHostOwnedAssembliesAfterBuild" AfterTargets="CopyFilesToOutputDirectory" >
 
 		<ItemGroup>
 			<_DeleteDlls Include="&#xD;&#xA;				$(OutputPath)**\Microsoft.*.dll;&#xD;&#xA;				$(OutputPath)**\LunaticPanel.*.dll;&#xD;&#xA;				$(OutputPath)**\LunaticPanel.*.*.dll;&#xD;&#xA;				$(OutputPath)MudBlazor.dll&#xD;&#xA;			" />

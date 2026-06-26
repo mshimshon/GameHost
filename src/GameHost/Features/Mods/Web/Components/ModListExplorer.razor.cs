@@ -12,7 +12,7 @@ public partial class ModListExplorer
     public bool AutoRedirect { get; set; } = false;
 
     [Parameter]
-    public string LinkBaseNoTrailing { get; set; } = $"/{BaseInfo.ASSEMBLY_NAME}/{ModListKeys.MODULE_NAME}";
+    public string LinkBaseNoTrailing { get; set; } = $"/{GameHostKeys.ASSEMBLY_NAME}/{ModListKeys.MODULE_NAME}";
 
     [Inject] public NavigationManager Navigation { get; set; } = default!;
     [Inject] public IDialogService DialogService { get; set; } = default!;

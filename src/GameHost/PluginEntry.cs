@@ -14,6 +14,7 @@ using LunaticPanel.Core.Abstraction.Circuit;
 using LunaticPanel.Core.Abstraction.Messaging.EventBus;
 using LunaticPanel.Core.Abstraction.Plugin;
 using LunaticPanel.Core.Extensions;
+using LunaticPanel.Core.Utils.Logging;
 using MedihatR;
 using MedihatR.Configuraions.Enums;
 using Microsoft.Extensions.Configuration;
@@ -33,8 +34,6 @@ public class PluginEntry : PluginBase
         _configuration = configuration;
 
     }
-    private IServiceCollection? _statePulseStatesRedirectionSingleton;
-    private List<ServiceDescriptor>? _statePulseStatesSingleton;
     private static Guid MasterId { get; set; }
     protected override void RegisterPluginServices(IServiceCollection services, CircuitIdentity circuit)
     {
@@ -66,45 +65,15 @@ public class PluginEntry : PluginBase
         services.AddLinuxGameServerFeatureServices(_crossCircuitSingletonProvider!, _configuration, circuit.IsMaster);
         services.AddSystemInfoFeatureServices(_configuration);
         services.AddDebuggingServices();
-        //services.AddTransient(typeof(ICrazyReport<>), typeof(CrazyReport<>));
-        //services.AddTransient<ICrazyReport, CrazyReport>();
-        // Make Singleton State cross circuit
-        if (_statePulseStatesRedirectionSingleton == default)
-        {
-            _statePulseStatesRedirectionSingleton = new ServiceCollection();
-            _statePulseStatesSingleton = new();
-            foreach (var d in services)
-            {
-                if (d.ServiceType.IsGenericTypeDefinition)
-                    continue;
-
-                if (d.Lifetime != ServiceLifetime.Singleton)
-                    continue;
-
-                if (!d.ServiceType.IsGenericType ||
-                    d.ServiceType.GetGenericTypeDefinition() != typeof(IStateAccessor<>))
-                    continue;
-                _statePulseStatesSingleton.Add(d);
-                _statePulseStatesRedirectionSingleton.AddSingleton(d.ServiceType, sp => _crossCircuitSingletonProvider!.GetRequiredService(d.ServiceType));
-            }
-        }
-        if (_statePulseStatesRedirectionSingleton != default)
-            foreach (var item in _statePulseStatesRedirectionSingleton)
-                services.Add(item);
     }
-    protected override void RegisterPluginSingletonServices(IServiceCollection services, CircuitIdentity circuit)
-    {
-        if (_statePulseStatesSingleton != default)
-        {
-            foreach (var d in _statePulseStatesSingleton)
-                services.Add(d);
-        }
 
-    }
 
     protected override async Task BeforeRuntimeStart(IPluginContextService pluginContext)
     {
         var sp = pluginContext.GetRequired<IServiceProvider>();
+        Console.WriteLine($"{pluginContext.CircuitId} (Master? {pluginContext.IsMasterCircuit})");
+        ICrazyReportCircuit crc = sp.GetRequiredService<ICrazyReportCircuit>();
+        Console.WriteLine($"{crc.CircuitId} (Master? {pluginContext.IsMasterCircuit})");
         IEventBus eventBus = sp.GetRequiredService<IEventBus>();
         await eventBus.PublishDatalessAsync(PluginKeys.Events.OnBeforeRuntimeInitialization);
 
