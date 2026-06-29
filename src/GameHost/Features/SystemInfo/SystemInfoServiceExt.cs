@@ -5,14 +5,14 @@ using GameHost.Features.SystemInfo.Infrastructure.Services;
 using GameHost.Features.SystemInfo.Web.Components.ViewModels;
 using GameHost.Features.SystemInfo.Web.Hooks.Events.Scheduled;
 using GameHost.Features.SystemInfo.Web.Hooks.UI.Components.ViewModels;
+using LunaticPanel.Core.Abstraction.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace GameHost.Features.SystemInfo;
 
 public static class SystemInfoServiceExt
 {
-    public static void AddSystemInfoFeatureServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddSystemInfoFeatureServices(this IPluginServiceCollection services, IConfiguration configuration)
     {
         var linuxSysInfoConfig =
         configuration.GetSection("SystemInfo").GetSection("Linux")?.Get<LinuxSystemInfoConfiguration>() ??
@@ -20,7 +20,7 @@ public static class SystemInfoServiceExt
         services.AddInfrastructureServices();
         services.AddScoped<ISystemInfoService, LinuxSystemInfoService>();
 
-        services.AddScoped<LinuxSystemInfoConfiguration>((sp) => linuxSysInfoConfig);
+        services.AddScoped((sp) => linuxSysInfoConfig);
 
         services.AddScoped<ISystemResourcesStatusViewModel, SystemResourcesStatusViewModel>();
         services.AddScoped<IWidgetSystemInfoViewModel, WidgetSystemInfoViewModel>();

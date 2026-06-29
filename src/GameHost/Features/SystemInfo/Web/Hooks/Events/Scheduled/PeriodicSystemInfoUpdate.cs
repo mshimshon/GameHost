@@ -36,7 +36,16 @@ internal sealed class PeriodicSystemInfoUpdate : IEventScheduledBusHandler
     private async Task UpdateCycle(CancellationToken ct = default)
     {
         // TODO: Handle Exceptions
-        await _dispatcher.Prepare<SystemInfoUpdateAction>().Await().DispatchAsync();
+        try
+        {
+            await _dispatcher.Prepare<SystemInfoUpdateAction>().Await().DispatchAsync();
+
+        }
+        catch (Exception ex)
+        {
+            _crazyReport.ReportErrorException(ex.Message, ex);
+            throw;
+        }
 
     }
 }

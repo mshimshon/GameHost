@@ -6,23 +6,24 @@ using GameHost.Features.SystemInfo.Application.Pulses.Effects;
 using GameHost.Features.SystemInfo.Application.Pulses.Reducers;
 using GameHost.Features.SystemInfo.Application.Pulses.Reducers.Middlewares;
 using GameHost.Features.SystemInfo.Application.Pulses.States;
+using LunaticPanel.Core.Abstraction.DependencyInjection;
 using MedihatR;
-using Microsoft.Extensions.DependencyInjection;
 using StatePulse.Net;
 
 namespace GameHost.Features.SystemInfo.Application;
 
 public static class ServiceRegistrationExt
 {
-    public static void AddApplicationServices(this IServiceCollection services)
+    public static void AddApplicationServices(this IPluginServiceCollection services)
     {
-        services.AddMedihaterRequestHandler<GetSystemInfoQuery, GetSystemInfoHandler, SystemInfoResponse?>();
-        services.AddStatePulseService<SystemInfoUpdateAction>();
-        services.AddStatePulseService<SystemInfoUpdatedAction>();
-        services.AddStatePulseService<SystemInfoUpdateEffect>();
-        services.AddStatePulseService<ServerSystemInfoUpdatedReducer>();
-        services.AddStatePulseService<SystemInfoState>();
-        services.AddStatePulseService<OnServerInfoUpdateMiddleware>();
+        services.CrossCircuitServices.AddStatePulseService<SystemInfoState>();
+
+        services.Services.AddMedihaterRequestHandler<GetSystemInfoQuery, GetSystemInfoHandler, SystemInfoResponse?>();
+        services.Services.AddStatePulseService<SystemInfoUpdateAction>();
+        services.Services.AddStatePulseService<SystemInfoUpdatedAction>();
+        services.Services.AddStatePulseService<SystemInfoUpdateEffect>();
+        services.Services.AddStatePulseService<ServerSystemInfoUpdatedReducer>();
+        services.Services.AddStatePulseService<OnServerInfoUpdateMiddleware>();
     }
 
 }

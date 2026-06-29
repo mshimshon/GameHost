@@ -7,6 +7,7 @@ using GameHost.Features.LinuxGameServer.Web.Components.ViewModels;
 using GameHost.Features.LinuxGameServer.Web.Hooks.UI.Components.ViewModels;
 using GameHost.Kernel.Abstractions.Services.ActionFileWatcher.Enums;
 using GameHost.Kernel.Extensions;
+using LunaticPanel.Core.Abstraction.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StatePulse.Net;
@@ -15,7 +16,7 @@ namespace GameHost.Features.LinuxGameServer;
 
 public static class LinuxGameServerExt
 {
-    public static void AddLinuxGameServerFeatureServices(this IServiceCollection services,
+    public static void AddLinuxGameServerFeatureServices(this IPluginServiceCollection services,
         IServiceProvider singletonCrossCircuitSp,
         IConfiguration configuration,
         bool isMaster)
@@ -33,12 +34,12 @@ public static class LinuxGameServerExt
 
         if (isMaster)
         {
-            services.AddMasterStateFileWatcherService<UpdateInstalledGameServerAction>(
+            services.Services.AddMasterStateFileWatcherService<UpdateInstalledGameServerAction>(
                 c => c.GetConfigBase(LinuxGameServerKeys.MODULE_NAME),
                 LinuxGameServerKeys.SERVER_INSTALL_STATE_FILE,
                 [FileWatchEvents.Any]);
 
-            services.AddMasterStateFileWatcherService<UpdateProgressStateFromDiskAction>(
+            services.Services.AddMasterStateFileWatcherService<UpdateProgressStateFromDiskAction>(
                 c => c.GetConfigBase(LinuxGameServerKeys.MODULE_NAME),
                 LinuxGameServerKeys.SERVER_INSTALL_PROGRESS_FILE,
                 [FileWatchEvents.Any]);

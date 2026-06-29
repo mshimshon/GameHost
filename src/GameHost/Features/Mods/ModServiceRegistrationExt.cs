@@ -12,13 +12,13 @@ using GameHost.Features.Mods.Web.Pages.ViewModels;
 using GameHost.Kernel.Abstractions.Extensions;
 using GameHost.Kernel.Abstractions.Services.ActionFileWatcher.Enums;
 using GameHost.Kernel.Extensions;
-using Microsoft.Extensions.DependencyInjection;
+using LunaticPanel.Core.Abstraction.DependencyInjection;
 
 namespace GameHost.Features.Mods;
 
 public static class ModServiceRegistrationExt
 {
-    public static void AddModFeatureServices(this IServiceCollection services, bool isMaster)
+    public static void AddModFeatureServices(this IPluginServiceCollection services, bool isMaster)
     {
         services.AddScoped<IModListSelectorViewModel, ModListSelectorViewModel>();
         services.AddScoped<IWidgetModlistSelectorViewModel, WidgetModlistSelectorViewModel>();
@@ -33,7 +33,7 @@ public static class ModServiceRegistrationExt
         services.RegisterInfrastructureServices();
         if (isMaster)
         {
-            services.AddMasterStateFileWatcherService<MonitoredModListFolderUpdateAction>(
+            services.Services.AddMasterStateFileWatcherService<MonitoredModListFolderUpdateAction>(
             c =>
             {
                 return c.GetUserConfigBase(ModListKeys.MODULE_NAME, [ModListKeys.USER_SAVED_MODLIST_FOLDER_NAME], LinuxGameServerKeys.USERNAME);

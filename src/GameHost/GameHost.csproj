@@ -14,7 +14,9 @@
 	<RepositoryUrl>https://github.com/mshimshon/LunaticPanel</RepositoryUrl>
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
+	
 
+	
   <ItemGroup>
 	<PackageReference Include="LunaticPanel.Core" PrivateAssets="false" />
 	<PackageReference Include="LunaticPanel.Core.Abstraction" PrivateAssets="false" />

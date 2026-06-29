@@ -19,6 +19,12 @@
             <MudNavLink Href="GameHost/modlist" Icon="@Icons.Material.Filled.List">ModList</MudNavLink>
         }
     }
+    else if (ViewModel.DebugEnabled)
+    {
+        <MudNavGroup Title="Advanced Lifecycle" Expanded="true">
+                <MudNavLink Href="GameHost/_debug/" Icon="@Icons.Material.Filled.BugReport">Debug</MudNavLink>
+        </MudNavGroup>
+    }
 
 
 </MudNavMenu>

@@ -9,58 +9,58 @@ using GameHost.Features.LinuxGameServer.Application.Pulses.Effects;
 using GameHost.Features.LinuxGameServer.Application.Pulses.Reducers;
 using GameHost.Features.LinuxGameServer.Application.Pulses.Reducers.Middlewares;
 using GameHost.Features.LinuxGameServer.Application.Pulses.States;
+using LunaticPanel.Core.Abstraction.DependencyInjection;
 using MedihatR;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using StatePulse.Net;
 
 namespace GameHost.Features.LinuxGameServer.Application;
 
 public static class RegistrationServiceExt
 {
-    public static void AddApplicationServices(this IServiceCollection services, IServiceProvider singletonCrossCircuitSp,
+    public static void AddApplicationServices(this IPluginServiceCollection services, IServiceProvider singletonCrossCircuitSp,
         IConfiguration configuration,
         bool isMaster)
     {
-        services.AddMedihaterRequestHandler<GetAvailableGameManifestsQuery, GetAvailableGameManifestsHandler, ICollection<GameManifestResponse>?>();
-        services.AddStatePulseService<PopulateAvailableGamesForInstallAction>();
-        services.AddStatePulseService<PopulateAvailableGamesForInstallDoneAction>();
-        services.AddStatePulseService<PopulateAvailableGamesForInstallEffect>();
-        services.AddStatePulseService<PopulateAvailableGamesForInstallReducer>();
-        services.AddStatePulseService<PopulateAvailableGamesForInstallDoneReducer>();
+        services.Services.AddMedihaterRequestHandler<GetAvailableGameManifestsQuery, GetAvailableGameManifestsHandler, ICollection<GameManifestResponse>?>();
+        services.Services.AddStatePulseService<PopulateAvailableGamesForInstallAction>();
+        services.Services.AddStatePulseService<PopulateAvailableGamesForInstallDoneAction>();
+        services.Services.AddStatePulseService<PopulateAvailableGamesForInstallEffect>();
+        services.Services.AddStatePulseService<PopulateAvailableGamesForInstallReducer>();
+        services.Services.AddStatePulseService<PopulateAvailableGamesForInstallDoneReducer>();
 
-        services.AddStatePulseService<InstallGameServerStartFailedAction>();
-        services.AddStatePulseService<InstallGameServerStartFailedReducer>();
-
-
-        services.AddStatePulseService<GameServerInstalledAction>();
-        services.AddStatePulseService<InstallGameServerAction>();
-        services.AddStatePulseService<GameServerInstallFailedAction>();
-        services.AddStatePulseService<InstallGameServerActionEffect>();
-        services.AddStatePulseService<InstallGameServerActionReducer>();
-        services.AddStatePulseService<GameServerInstalledReducer>();
-        services.AddStatePulseService<GameServerInstallFailedReducer>();
-        services.AddStatePulseService<InstallationState>();
-        services.AddStatePulseService<GameServerInstallStateLoadedAction>();
-        services.AddStatePulseService<PopulateAvailableGamesForInstallDoneReducer>();
-        services.AddStatePulseService<PopulateAvailableGamesForInstallAction>();
-        services.AddStatePulseService<GameRepositoryState>();
-        services.AddStatePulseService<RepositoryDownloadStartedAction>();
-        services.AddStatePulseService<RepositoryDownloadStartedReducer>();
-        services.AddStatePulseService<SpreadInstallationStateMiddleware>();
-        services.AddStatePulseService<UpdateProgressStateFromDiskDoneAction>();
-        services.AddStatePulseService<UpdateProgressStateFromDiskAction>();
-        services.AddStatePulseService<UpdateProgressStateFromDiskEffect>();
-        services.AddStatePulseService<UpdateProgressStateFromDiskDoneReducer>();
-
-        services.AddStatePulseService<UpdateInstalledGameServerAction>();
-        services.AddStatePulseService<UpdateInstalledGameServerDoneAction>();
-        services.AddStatePulseService<UpdateInstalledGameServerDoneReducer>();
-        services.AddStatePulseService<UpdateInstalledGameServerEffect>();
+        services.Services.AddStatePulseService<InstallGameServerStartFailedAction>();
+        services.Services.AddStatePulseService<InstallGameServerStartFailedReducer>();
+        services.CrossCircuitServices.AddStatePulseService<InstallationState>();
+        services.CrossCircuitServices.AddStatePulseService<GameRepositoryState>();
 
 
-        services.AddMedihaterRequestHandler<InstallGameServerCommand, InstallGameServerHandler>();
-        services.AddMedihaterRequestHandler<GetInstallationProgressQuery, GetInstallationProgressHandler, GameServerInstallProgressResponse?>();
-        services.AddMedihaterRequestHandler<GetInstalledGameQuery, GetInstalledGameHandler, GameServerInfoResponse?>();
+        services.Services.AddStatePulseService<GameServerInstalledAction>();
+        services.Services.AddStatePulseService<InstallGameServerAction>();
+        services.Services.AddStatePulseService<GameServerInstallFailedAction>();
+        services.Services.AddStatePulseService<InstallGameServerActionEffect>();
+        services.Services.AddStatePulseService<InstallGameServerActionReducer>();
+        services.Services.AddStatePulseService<GameServerInstalledReducer>();
+        services.Services.AddStatePulseService<GameServerInstallFailedReducer>();
+        services.Services.AddStatePulseService<GameServerInstallStateLoadedAction>();
+        services.Services.AddStatePulseService<PopulateAvailableGamesForInstallDoneReducer>();
+        services.Services.AddStatePulseService<PopulateAvailableGamesForInstallAction>();
+        services.Services.AddStatePulseService<RepositoryDownloadStartedAction>();
+        services.Services.AddStatePulseService<RepositoryDownloadStartedReducer>();
+        services.Services.AddStatePulseService<SpreadInstallationStateMiddleware>();
+        services.Services.AddStatePulseService<UpdateProgressStateFromDiskDoneAction>();
+        services.Services.AddStatePulseService<UpdateProgressStateFromDiskAction>();
+        services.Services.AddStatePulseService<UpdateProgressStateFromDiskEffect>();
+        services.Services.AddStatePulseService<UpdateProgressStateFromDiskDoneReducer>();
+
+        services.Services.AddStatePulseService<UpdateInstalledGameServerAction>();
+        services.Services.AddStatePulseService<UpdateInstalledGameServerDoneAction>();
+        services.Services.AddStatePulseService<UpdateInstalledGameServerDoneReducer>();
+        services.Services.AddStatePulseService<UpdateInstalledGameServerEffect>();
+
+
+        services.Services.AddMedihaterRequestHandler<InstallGameServerCommand, InstallGameServerHandler>();
+        services.Services.AddMedihaterRequestHandler<GetInstallationProgressQuery, GetInstallationProgressHandler, GameServerInstallProgressResponse?>();
+        services.Services.AddMedihaterRequestHandler<GetInstalledGameQuery, GetInstalledGameHandler, GameServerInfoResponse?>();
     }
 }

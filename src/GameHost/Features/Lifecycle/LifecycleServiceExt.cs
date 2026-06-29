@@ -16,6 +16,7 @@ using GameHost.Features.Lifecycle.Web.Components;
 using GameHost.Features.Lifecycle.Web.Components.ViewModels;
 using GameHost.Kernel.Abstractions.Services.ActionFileWatcher.Enums;
 using GameHost.Kernel.Extensions;
+using LunaticPanel.Core.Abstraction.DependencyInjection;
 using MedihatR;
 using Microsoft.Extensions.DependencyInjection;
 using StatePulse.Net;
@@ -26,7 +27,7 @@ public static class LifecycleServiceExt
 {
     private const string USER_DEF_STARTUP_PARAM_FILE = "user_defined_startup_params.json";
 
-    public static void AddLifecycleFeatureServices(this IServiceCollection services, bool isMaster)
+    public static void AddLifecycleFeatureServices(this IPluginServiceCollection services, bool isMaster)
     {
         services.AddScoped<IServerControlViewModel, ServerControlViewModel>();
         services.AddScoped<IStartupParameterViewModel, StartupParameterViewModel>();
@@ -37,59 +38,59 @@ public static class LifecycleServiceExt
         services.AddScoped<IGameInfoService>(sp => sp.GetRequiredService<LifecycleServices>());
         services.AddScoped<IStartupParameterService>(sp => sp.GetRequiredService<LifecycleServices>());
 
-        services.AddStatePulseService<SpreadGameInfoStateMiddleware>();
-        services.AddStatePulseService<ServerTransitionState>();
-        services.AddStatePulseService<TransitionAction>();
-        services.AddStatePulseService<TransitionEffect>();
-        services.AddStatePulseService<TransitionInstigatorSetMeUpAction>();
-        services.AddStatePulseService<TransitionInstigatorUnSetMeAction>();
-        services.AddStatePulseService<TransitionCareAddAction>();
-        services.AddStatePulseService<TransitionCareAddReducer>();
-        services.AddStatePulseService<TransitionCareRemoveAction>();
-        services.AddStatePulseService<TransitionCareRemoveReducer>();
-        services.AddStatePulseService<TransitionInstigatorSetMeUpReducer>();
-        services.AddStatePulseService<TransitionInstigatorUnSetMeReducer>();
+        services.Services.AddStatePulseService<SpreadGameInfoStateMiddleware>();
+        services.Services.AddStatePulseService<ServerTransitionState>();
+        services.Services.AddStatePulseService<TransitionAction>();
+        services.Services.AddStatePulseService<TransitionEffect>();
+        services.Services.AddStatePulseService<TransitionInstigatorSetMeUpAction>();
+        services.Services.AddStatePulseService<TransitionInstigatorUnSetMeAction>();
+        services.Services.AddStatePulseService<TransitionCareAddAction>();
+        services.Services.AddStatePulseService<TransitionCareAddReducer>();
+        services.Services.AddStatePulseService<TransitionCareRemoveAction>();
+        services.Services.AddStatePulseService<TransitionCareRemoveReducer>();
+        services.Services.AddStatePulseService<TransitionInstigatorSetMeUpReducer>();
+        services.Services.AddStatePulseService<TransitionInstigatorUnSetMeReducer>();
 
-        services.AddStatePulseService<ServerStartReducer>();
-        services.AddStatePulseService<FetchStartupParametersAction>();
-        services.AddStatePulseService<FetchStartupParametersDoneAction>();
-        services.AddStatePulseService<ServerGameInfoUpdateDoneAction>();
-        services.AddStatePulseService<ServerStartAction>();
-        services.AddStatePulseService<TransitionDoneAction>();
-        services.AddStatePulseService<ServerStatusUpdateDoneAction>();
-        services.AddStatePulseService<ServerStopAction>();
-        services.AddStatePulseService<UpdateStartupParameterAction>();
-        services.AddStatePulseService<UpdateStartupParameterDoneAction>();
-        services.AddStatePulseService<ServerGameInfoUpdateAction>();
-        services.AddStatePulseService<ServerGameInfoUpdateEffect>();
-        services.AddStatePulseService<FetchStartupParametersEffect>();
-        services.AddStatePulseService<ServerStartEffect>();
-        services.AddStatePulseService<ServerStopEffect>();
-        services.AddStatePulseService<UpdateStartupParameterEffect>();
-        services.AddStatePulseService<FetchStartupParametersDoneReducer>();
-        services.AddStatePulseService<ServerGameInfoUpdatedReducer>();
-        services.AddStatePulseService<TransitionDoneReducer>();
-        services.AddStatePulseService<ServerStatusUpdateDoneReducer>();
-        services.AddStatePulseService<ServerStopReducer>();
-        services.AddStatePulseService<GameInfoState>();
-        services.AddStatePulseService<ServerState>();
+        services.Services.AddStatePulseService<ServerStartReducer>();
+        services.Services.AddStatePulseService<FetchStartupParametersAction>();
+        services.Services.AddStatePulseService<FetchStartupParametersDoneAction>();
+        services.Services.AddStatePulseService<ServerGameInfoUpdateDoneAction>();
+        services.Services.AddStatePulseService<ServerStartAction>();
+        services.Services.AddStatePulseService<TransitionDoneAction>();
+        services.Services.AddStatePulseService<ServerStatusUpdateDoneAction>();
+        services.Services.AddStatePulseService<ServerStopAction>();
+        services.Services.AddStatePulseService<UpdateStartupParameterAction>();
+        services.Services.AddStatePulseService<UpdateStartupParameterDoneAction>();
+        services.Services.AddStatePulseService<ServerGameInfoUpdateAction>();
+        services.Services.AddStatePulseService<ServerGameInfoUpdateEffect>();
+        services.Services.AddStatePulseService<FetchStartupParametersEffect>();
+        services.Services.AddStatePulseService<ServerStartEffect>();
+        services.Services.AddStatePulseService<ServerStopEffect>();
+        services.Services.AddStatePulseService<UpdateStartupParameterEffect>();
+        services.Services.AddStatePulseService<FetchStartupParametersDoneReducer>();
+        services.Services.AddStatePulseService<ServerGameInfoUpdatedReducer>();
+        services.Services.AddStatePulseService<TransitionDoneReducer>();
+        services.Services.AddStatePulseService<ServerStatusUpdateDoneReducer>();
+        services.Services.AddStatePulseService<ServerStopReducer>();
+        services.CrossCircuitServices.AddStatePulseService<GameInfoState>();
+        services.CrossCircuitServices.AddStatePulseService<ServerState>();
 
-        services.AddStatePulseService<ServerStatusUpdateAction>();
-        services.AddStatePulseService<ServerStatusUpdateEffect>();
+        services.Services.AddStatePulseService<ServerStatusUpdateAction>();
+        services.Services.AddStatePulseService<ServerStatusUpdateEffect>();
 
-        services.AddMedihaterRequestHandler<GetServerStatusQuery, GetServerStatusHandler, ServerInfoResponse?>();
-        services.AddMedihaterRequestHandler<GetStartupParametersQuery, GetStartupParametersHandler, Dictionary<string, string>>();
-        services.AddMedihaterRequestHandler<ExecRestartServerCommand, ExecRestartServerHandler>();
-        services.AddMedihaterRequestHandler<ExecStartServerCommand, ExecStartServerHandler>();
-        services.AddMedihaterRequestHandler<ExecStopServerCommand, ExecStopServerHandler>();
-        services.AddMedihaterRequestHandler<ExecUpdateStartupParameterCommand, ExecUpdateStartupParameterHandler>();
-        services.AddMedihaterRequestHandler<GetGameInfoQuery, GetGameInfoHandler, GameInfoResponse?>();
-        services.AddMedihaterRequestHandler<GetRawGameInfoQuery, GetRawGameInfoHandler, string?>();
+        services.Services.AddMedihaterRequestHandler<GetServerStatusQuery, GetServerStatusHandler, ServerInfoResponse?>();
+        services.Services.AddMedihaterRequestHandler<GetStartupParametersQuery, GetStartupParametersHandler, Dictionary<string, string>>();
+        services.Services.AddMedihaterRequestHandler<ExecRestartServerCommand, ExecRestartServerHandler>();
+        services.Services.AddMedihaterRequestHandler<ExecStartServerCommand, ExecStartServerHandler>();
+        services.Services.AddMedihaterRequestHandler<ExecStopServerCommand, ExecStopServerHandler>();
+        services.Services.AddMedihaterRequestHandler<ExecUpdateStartupParameterCommand, ExecUpdateStartupParameterHandler>();
+        services.Services.AddMedihaterRequestHandler<GetGameInfoQuery, GetGameInfoHandler, GameInfoResponse?>();
+        services.Services.AddMedihaterRequestHandler<GetRawGameInfoQuery, GetRawGameInfoHandler, string?>();
 
 
         if (isMaster)
         {
-            services.AddMasterStateFileWatcherService<FetchStartupParametersAction>(
+            services.Services.AddMasterStateFileWatcherService<FetchStartupParametersAction>(
                 c =>
                 {
                     string path = c.GetUserConfigBase(LifecycleKeys.MODULE_NAME, LinuxGameServerKeys.USERNAME);

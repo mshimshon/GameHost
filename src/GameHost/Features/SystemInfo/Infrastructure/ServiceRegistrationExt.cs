@@ -1,11 +1,11 @@
 ﻿using GameHost.Features.SystemInfo.Application;
-using Microsoft.Extensions.DependencyInjection;
+using LunaticPanel.Core.Abstraction.DependencyInjection;
 
 namespace GameHost.Features.SystemInfo.Infrastructure;
 
 public static class ServiceRegistrationExt
 {
-    public static void AddInfrastructureServices(this IServiceCollection services)
+    public static void AddInfrastructureServices(this IPluginServiceCollection services)
     {
         services.AddApplicationServices();
     }

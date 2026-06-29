@@ -1,14 +1,14 @@
 ﻿using GameHost.Features.LinuxGameServer.Application;
 using GameHost.Features.LinuxGameServer.Application.Services;
 using GameHost.Features.LinuxGameServer.Infrastructure.Services;
+using LunaticPanel.Core.Abstraction.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace GameHost.Features.LinuxGameServer.Infrastructure;
 
 public static class ServiceRegistrationExt
 {
-    public static void AddInfrastructureServices(this IServiceCollection services, IServiceProvider singletonCrossCircuitSp,
+    public static void AddInfrastructureServices(this IPluginServiceCollection services, IServiceProvider singletonCrossCircuitSp,
         IConfiguration configuration,
         bool isMaster)
     {

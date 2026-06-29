@@ -11,6 +11,7 @@ using GameHost.Web.Pages.Hooks.UI.Components.ViewModels;
 using GameHost.Web.Pages.ViewModels;
 using LunaticPanel.Core;
 using LunaticPanel.Core.Abstraction.Circuit;
+using LunaticPanel.Core.Abstraction.DependencyInjection;
 using LunaticPanel.Core.Abstraction.Messaging.EventBus;
 using LunaticPanel.Core.Abstraction.Plugin;
 using LunaticPanel.Core.Extensions;
@@ -35,36 +36,59 @@ public class PluginEntry : PluginBase
 
     }
     private static Guid MasterId { get; set; }
-    protected override void RegisterPluginServices(IServiceCollection services, CircuitIdentity circuit)
+    protected override void RegisterPluginServices(IPluginServiceCollection services, CircuitIdentity circuit)
     {
         if (circuit.IsMaster) MasterId = circuit.CircuitId;
 
-        services.AddStatePulseService<DispatchErrorMiddleware>();
+        services.Services.AddStatePulseService<DispatchErrorMiddleware>();
         services.AddScoped<IHomeViewModel, HomeViewModel>();
         services.AddScoped<IWidgetMainPageMenuLinkViewModel, WidgetMainPageMenuLinkViewModel>();
-        services.AddKernelServices();
         //services.AddScoped(sp => new PluginConfiguration(sp.GetRequiredService<IPluginConfiguration>(), sp.GetRequiredService<ICrazyReport>()));
 
-        services.AddLogging();
-        services.AddStatePulseServices(c =>
+        services.Services.AddLogging();
+        services.Services.AddStatePulseServices(c =>
         {
             c.DispatchOrderBehavior = DispatchOrdering.ReducersFirst;
             c.PulseTrackingPerformance = PulseTrackingModel.BlazorServerSafe;
         });
 
-        services.AddMedihaterServices(c =>
+        services.Services.AddMedihaterServices(c =>
         {
             c.Performance = PipelinePerformance.DynamicMethods;
             c.NotificationFireMode = PipelineNotificationFireMode.FireAndForget;
             c.CachingMode = PipelineCachingMode.EagerCaching;
         });
 
+        services.AddKernelServices();
         services.AddLifecycleFeatureServices(circuit.IsMaster);
         services.AddModFeatureServices(circuit.IsMaster);
         services.AddNotificationFeatureServices();
         services.AddLinuxGameServerFeatureServices(_crossCircuitSingletonProvider!, _configuration, circuit.IsMaster);
         services.AddSystemInfoFeatureServices(_configuration);
         services.AddDebuggingServices();
+
+        //if (_statePulseStatesRedirectionSingleton == default)
+        //{
+        //    _statePulseStatesRedirectionSingleton = new ServiceCollection();
+        //    _statePulseStatesSingleton = new();
+        //    foreach (var d in services)
+        //    {
+        //        if (d.ServiceType.IsGenericTypeDefinition)
+        //            continue;
+
+        //        if (d.Lifetime != ServiceLifetime.Singleton)
+        //            continue;
+
+        //        if (!d.ServiceType.IsGenericType ||
+        //            d.ServiceType.GetGenericTypeDefinition() != typeof(IStateAccessor<>))
+        //            continue;
+        //        _statePulseStatesSingleton.Add(d);
+        //        _statePulseStatesRedirectionSingleton.AddSingleton(d.ServiceType, sp => _crossCircuitSingletonProvider!.GetRequiredService(d.ServiceType));
+        //    }
+        //}
+        //if (_statePulseStatesRedirectionSingleton != default)
+        //    foreach (var item in _statePulseStatesRedirectionSingleton)
+        //        services.Add(item);
     }
 
 
@@ -85,7 +109,8 @@ public class PluginEntry : PluginBase
         await eventBus.PublishDatalessAsync(PluginKeys.Events.OnAfterRuntimeInitialization);
     }
 
-    public override string[] GetMyPackageKeys() => Array.Empty<string>();
+    public override string[] GetMyPackageKeys()
+        => typeof(PluginKeys).Assembly.ScanKeyPackageForKeys();
     public override void CheckFeatureDegradation(Func<string, bool> isBusAvailable)
     {
 

@@ -7,89 +7,89 @@ using GameHost.Features.Mods.Application.Pulses.Actions;
 using GameHost.Features.Mods.Application.Pulses.Effects;
 using GameHost.Features.Mods.Application.Pulses.Reducers;
 using GameHost.Features.Mods.Application.Pulses.States;
+using LunaticPanel.Core.Abstraction.DependencyInjection;
 using MedihatR;
-using Microsoft.Extensions.DependencyInjection;
 using StatePulse.Net;
 
 namespace GameHost.Features.Mods.Application;
 
 public static class ModsApplicationServiceRegsiterExt
 {
-    public static void RegisterApplicationServices(this IServiceCollection services)
+    public static void RegisterApplicationServices(this IPluginServiceCollection services)
     {
-        services.AddStatePulseService<MonitoredModListFolderUpdateAction>();
-        services.AddStatePulseService<MonitoredModListFolderUpdateEffect>();
-        services.AddStatePulseService<CloseModListAction>();
-        services.AddStatePulseService<CloseModListReducer>();
+        services.Services.AddStatePulseService<MonitoredModListFolderUpdateAction>();
+        services.Services.AddStatePulseService<MonitoredModListFolderUpdateEffect>();
+        services.Services.AddStatePulseService<CloseModListAction>();
+        services.Services.AddStatePulseService<CloseModListReducer>();
 
-        services.AddStatePulseService<LoadModFeatureReducer>();
-        services.AddStatePulseService<LoadModFeatureDoneReducer>();
-        services.AddStatePulseService<LoadModFeatureEffect>();
-        services.AddStatePulseService<LoadModFeatureAction>();
-        services.AddStatePulseService<LoadModFeatureDoneAction>();
+        services.Services.AddStatePulseService<LoadModFeatureReducer>();
+        services.Services.AddStatePulseService<LoadModFeatureDoneReducer>();
+        services.Services.AddStatePulseService<LoadModFeatureEffect>();
+        services.Services.AddStatePulseService<LoadModFeatureAction>();
+        services.Services.AddStatePulseService<LoadModFeatureDoneAction>();
 
-        services.AddStatePulseService<UpdateCurrentModListAction>();
-        services.AddStatePulseService<UpdateCurrentModListDoneAction>();
-        services.AddStatePulseService<UpdateCurrentModListEffect>();
-        services.AddStatePulseService<UpdateCurrentModListDoneReducer>();
-        services.AddStatePulseService<UpdateCurrentModlistReducer>();
+        services.Services.AddStatePulseService<UpdateCurrentModListAction>();
+        services.Services.AddStatePulseService<UpdateCurrentModListDoneAction>();
+        services.Services.AddStatePulseService<UpdateCurrentModListEffect>();
+        services.Services.AddStatePulseService<UpdateCurrentModListDoneReducer>();
+        services.Services.AddStatePulseService<UpdateCurrentModlistReducer>();
 
-        services.AddStatePulseService<GetCurrentModListAction>();
-        services.AddStatePulseService<GetCurrentModListDoneAction>();
-        services.AddStatePulseService<GetCurrentModListEffect>();
-        services.AddStatePulseService<GetCurrentModListReducer>();
-        services.AddStatePulseService<GetCurrentModListDoneReducer>();
+        services.Services.AddStatePulseService<GetCurrentModListAction>();
+        services.Services.AddStatePulseService<GetCurrentModListDoneAction>();
+        services.Services.AddStatePulseService<GetCurrentModListEffect>();
+        services.Services.AddStatePulseService<GetCurrentModListReducer>();
+        services.Services.AddStatePulseService<GetCurrentModListDoneReducer>();
 
-        services.AddStatePulseService<GetModListAction>();
-        services.AddStatePulseService<GetModListDoneAction>();
-        services.AddStatePulseService<GetModListEffect>();
-        services.AddStatePulseService<GetModListDoneReducer>();
-        services.AddStatePulseService<GetModListReducer>();
+        services.Services.AddStatePulseService<GetModListAction>();
+        services.Services.AddStatePulseService<GetModListDoneAction>();
+        services.Services.AddStatePulseService<GetModListEffect>();
+        services.Services.AddStatePulseService<GetModListDoneReducer>();
+        services.Services.AddStatePulseService<GetModListReducer>();
 
-        services.AddStatePulseService<CreateModListAction>();
-        services.AddStatePulseService<CreateModListDoneAction>();
-        services.AddStatePulseService<CreateModListEffect>();
-        services.AddStatePulseService<CreateModListReducer>();
-        services.AddStatePulseService<CreateModListDoneReducer>();
+        services.Services.AddStatePulseService<CreateModListAction>();
+        services.Services.AddStatePulseService<CreateModListDoneAction>();
+        services.Services.AddStatePulseService<CreateModListEffect>();
+        services.Services.AddStatePulseService<CreateModListReducer>();
+        services.Services.AddStatePulseService<CreateModListDoneReducer>();
 
-        services.AddStatePulseService<GetAvailableModListAction>();
-        services.AddStatePulseService<GetAvailableModListDoneAction>();
-        services.AddStatePulseService<GetAvailableModListEffect>();
-        services.AddStatePulseService<GetAvailableModListReducer>();
-        services.AddStatePulseService<GetAvailableModListDoneReducer>();
-
-
-        services.AddStatePulseService<LoadModListSchematicAction>();
-        services.AddStatePulseService<LoadModListSchematicDoneAction>();
-        services.AddStatePulseService<LoadModListSchematicEffect>();
-        services.AddStatePulseService<LoadModListSchematicReducer>();
-        services.AddStatePulseService<LoadModListSchematicDoneReducer>();
-
-        services.AddStatePulseService<DeleteModListAction>();
-        services.AddStatePulseService<DeleteModListDoneAction>();
-        services.AddStatePulseService<DeleteModListEffect>();
-        services.AddStatePulseService<DeleteModListReducer>();
-        services.AddStatePulseService<DeleteModListDoneReducer>();
+        services.Services.AddStatePulseService<GetAvailableModListAction>();
+        services.Services.AddStatePulseService<GetAvailableModListDoneAction>();
+        services.Services.AddStatePulseService<GetAvailableModListEffect>();
+        services.Services.AddStatePulseService<GetAvailableModListReducer>();
+        services.Services.AddStatePulseService<GetAvailableModListDoneReducer>();
 
 
-        services.AddStatePulseService<SaveModListAction>();
-        services.AddStatePulseService<SaveModListDoneAction>();
-        services.AddStatePulseService<SaveModListEffect>();
-        services.AddStatePulseService<SaveModListReducer>();
-        services.AddStatePulseService<SaveModListDoneReducer>();
+        services.Services.AddStatePulseService<LoadModListSchematicAction>();
+        services.Services.AddStatePulseService<LoadModListSchematicDoneAction>();
+        services.Services.AddStatePulseService<LoadModListSchematicEffect>();
+        services.Services.AddStatePulseService<LoadModListSchematicReducer>();
+        services.Services.AddStatePulseService<LoadModListSchematicDoneReducer>();
 
-        services.AddStatePulseService<ModListState>();
-        services.AddStatePulseService<ModListLocalState>();
+        services.Services.AddStatePulseService<DeleteModListAction>();
+        services.Services.AddStatePulseService<DeleteModListDoneAction>();
+        services.Services.AddStatePulseService<DeleteModListEffect>();
+        services.Services.AddStatePulseService<DeleteModListReducer>();
+        services.Services.AddStatePulseService<DeleteModListDoneReducer>();
 
-        services.AddMedihaterRequestHandler<GetModListQuery, GetModListHandler, ModListResponse?>();
-        services.AddMedihaterRequestHandler<CreateModListCommand, CreateModListHandler>();
-        services.AddMedihaterRequestHandler<GetAllModListQuery, GetAllModListHandler, ICollection<ModListDescriptorResponse>>();
-        services.AddMedihaterRequestHandler<GetModSchematicQuery, GetModSchematicHandler, ICollection<PartSchematicResponse>?>();
-        services.AddMedihaterRequestHandler<DeleteModListCommand, DeleteModListHandler>();
-        services.AddMedihaterRequestHandler<SaveModListCommand, SaveModListHandler>();
-        services.AddMedihaterRequestHandler<UpdateCurrentModlistCommand, UpdateCurrentModListHandler>();
-        services.AddMedihaterRequestHandler<GetCurrentModListQuery, GetCurrentModListHandler, Guid?>();
-        services.AddMedihaterRequestHandler<GetModFeatureQuery, GetModFeatureHandler, ModFeatureResponse?>();
+
+        services.Services.AddStatePulseService<SaveModListAction>();
+        services.Services.AddStatePulseService<SaveModListDoneAction>();
+        services.Services.AddStatePulseService<SaveModListEffect>();
+        services.Services.AddStatePulseService<SaveModListReducer>();
+        services.Services.AddStatePulseService<SaveModListDoneReducer>();
+
+        services.CrossCircuitServices.AddStatePulseService<ModListState>();
+        services.Services.AddStatePulseService<ModListLocalState>();
+
+        services.Services.AddMedihaterRequestHandler<GetModListQuery, GetModListHandler, ModListResponse?>();
+        services.Services.AddMedihaterRequestHandler<CreateModListCommand, CreateModListHandler>();
+        services.Services.AddMedihaterRequestHandler<GetAllModListQuery, GetAllModListHandler, ICollection<ModListDescriptorResponse>>();
+        services.Services.AddMedihaterRequestHandler<GetModSchematicQuery, GetModSchematicHandler, ICollection<PartSchematicResponse>?>();
+        services.Services.AddMedihaterRequestHandler<DeleteModListCommand, DeleteModListHandler>();
+        services.Services.AddMedihaterRequestHandler<SaveModListCommand, SaveModListHandler>();
+        services.Services.AddMedihaterRequestHandler<UpdateCurrentModlistCommand, UpdateCurrentModListHandler>();
+        services.Services.AddMedihaterRequestHandler<GetCurrentModListQuery, GetCurrentModListHandler, Guid?>();
+        services.Services.AddMedihaterRequestHandler<GetModFeatureQuery, GetModFeatureHandler, ModFeatureResponse?>();
 
 
 

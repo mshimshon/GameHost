@@ -1,12 +1,12 @@
 ﻿using GameHost.Kernel.Abstractions.Services.HostStateHookService;
 using GameHost.Kernel.Services.HostStateHookService;
-using Microsoft.Extensions.DependencyInjection;
+using LunaticPanel.Core.Abstraction.DependencyInjection;
 
 namespace GameHost.Kernel;
 
 public static class KernelServiceRegistration
 {
-    public static void AddKernelServices(this IServiceCollection services)
+    public static void AddKernelServices(this IPluginServiceCollection services)
     {
         services.AddScoped<IHostStateHookRegistry, HostStateHookRegistry>();
     }

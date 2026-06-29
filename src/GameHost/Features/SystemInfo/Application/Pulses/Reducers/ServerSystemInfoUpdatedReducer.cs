@@ -7,5 +7,9 @@ namespace GameHost.Features.SystemInfo.Application.Pulses.Reducers;
 public class ServerSystemInfoUpdatedReducer : IReducer<SystemInfoState, SystemInfoUpdatedAction>
 {
     public SystemInfoState Reduce(SystemInfoState state, SystemInfoUpdatedAction action)
-    => state with { SystemInfo = action.SystemInfo, LastUpdate = DateTime.UtcNow };
+    {
+        Console.WriteLine("ServerSystemInfoUpdatedReducer OK! = " + state.ToString() + " || " + action.SystemInfo.ToString());
+        return state with { SystemInfo = action.SystemInfo, LastUpdate = DateTime.UtcNow };
+    }
+
 }
