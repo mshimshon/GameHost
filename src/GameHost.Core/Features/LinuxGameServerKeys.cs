@@ -14,13 +14,13 @@ public static class LinuxGameServerKeys
 
     public static class Queries
     {
-        public const string IS_GAME_SERVER_INSTALLED = $"{GameHostKeys.QUERY_PREFIX}.{GameHostKeys.ASSEMBLY_NAME}.{GameHostKeys.API_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Queries)}.{nameof(IS_GAME_SERVER_INSTALLED)}";
+        public const string IS_GAME_SERVER_INSTALLED = $"{GameHostKeys.QUERY_PREFIX_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Queries)}.{nameof(IS_GAME_SERVER_INSTALLED)}";
         /// <summary>
         /// Return the Game Id which correspond to the console under server_contro/GAME_ID binary.<br/>
         /// Warning: this can only return when the game server installer is initialized.
         /// </summary>
-        public const string GET_GAME_ID = $"{GameHostKeys.QUERY_PREFIX}.{GameHostKeys.ASSEMBLY_NAME}.{GameHostKeys.API_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Queries)}.{nameof(GET_GAME_ID)}";
-        public const string GET_SERVER_INSTALL_STATE = $"{GameHostKeys.QUERY_PREFIX}.{GameHostKeys.ASSEMBLY_NAME}.{GameHostKeys.API_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Queries)}.{nameof(GET_SERVER_INSTALL_STATE)}";
+        public const string GET_GAME_ID = $"{GameHostKeys.QUERY_PREFIX_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Queries)}.{nameof(GET_GAME_ID)}";
+        public const string GET_SERVER_INSTALL_STATE = $"{GameHostKeys.QUERY_PREFIX_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Queries)}.{nameof(GET_SERVER_INSTALL_STATE)}";
     }
     public static class Engine { }
     public static class Events
@@ -28,12 +28,12 @@ public static class LinuxGameServerKeys
         /// <summary>
         /// Occurs when Game Server Install State Changes, called regardless of the origin oof the installation
         /// </summary>
-        public const string ON_GAME_SERVER_INSTALL_STATE_CHANGED = $"{GameHostKeys.EVENT_PREFIX}.{GameHostKeys.ASSEMBLY_NAME}.{GameHostKeys.API_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALL_STATE_CHANGED)}";
+        public const string ON_GAME_SERVER_INSTALL_STATE_CHANGED = $"{GameHostKeys.EVENT_PREFIX_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALL_STATE_CHANGED)}";
 
         /// <summary>
         /// Raised when a game installation is initiated from the dashboard.
         /// </summary>
-        public const string ON_GAME_SERVER_INSTALL = $"{GameHostKeys.EVENT_PREFIX}.{GameHostKeys.ASSEMBLY_NAME}.{GameHostKeys.API_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALL)}";
+        public const string ON_GAME_SERVER_INSTALL = $"{GameHostKeys.EVENT_PREFIX_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALL)}";
 
         /// <summary>
         /// Event name raised when a game server installation completes.
@@ -47,7 +47,7 @@ public static class LinuxGameServerKeys
         /// use <see cref="LinuxGameServerKeys.Queries.IS_GAME_SERVER_INSTALLED"/>.
         /// </para>
         /// </summary>
-        public const string ON_GAME_SERVER_INSTALLED = $"{GameHostKeys.EVENT_PREFIX}.{GameHostKeys.ASSEMBLY_NAME}.{GameHostKeys.API_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALLED)}";
+        public const string ON_GAME_SERVER_INSTALLED = $"{GameHostKeys.EVENT_PREFIX_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALLED)}";
 
         /// <summary>
         /// Event name raised when a game server installation fails to complete.
@@ -61,7 +61,7 @@ public static class LinuxGameServerKeys
         /// use <see cref="LinuxGameServerKeys.Queries.IS_GAME_SERVER_INSTALLED"/>.
         /// </para>
         /// </summary>
-        public const string ON_GAME_SERVER_INSTALL_FAILED = $"{GameHostKeys.EVENT_PREFIX}.{GameHostKeys.ASSEMBLY_NAME}.{GameHostKeys.API_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALL_FAILED)}";
+        public const string ON_GAME_SERVER_INSTALL_FAILED = $"{GameHostKeys.EVENT_PREFIX_V1}.{nameof(LinuxGameServerKeys)}.{nameof(Events)}.{nameof(ON_GAME_SERVER_INSTALL_FAILED)}";
 
     }
 }

@@ -99,18 +99,17 @@ public class PluginEntry : PluginBase
         ICrazyReportCircuit crc = sp.GetRequiredService<ICrazyReportCircuit>();
         Console.WriteLine($"{crc.CircuitId} (Master? {pluginContext.IsMasterCircuit})");
         IEventBus eventBus = sp.GetRequiredService<IEventBus>();
-        await eventBus.PublishDatalessAsync(PluginKeys.Events.OnBeforeRuntimeInitialization);
+        await eventBus.PublishDatalessAsync(GameHostKeys.Events.ON_BEFORE_RUNTIME_INITIALIZATION);
 
         await sp.RuntimeLifecycleInitializer(MasterId == pluginContext.CircuitId);
         await sp.RuntimeModInitializer(MasterId == pluginContext.CircuitId);
         await sp.RuntimeLinuxGameServerInitializer(MasterId == pluginContext.CircuitId);
         await sp.RuntimeSystemInfoFeatureInitializer(MasterId == pluginContext.CircuitId);
 
-        await eventBus.PublishDatalessAsync(PluginKeys.Events.OnAfterRuntimeInitialization);
+        await eventBus.PublishDatalessAsync(GameHostKeys.Events.ON_AFTER_RUNTIME_INITIALIZATION);
     }
 
-    public override string[] GetMyPackageKeys()
-        => typeof(PluginKeys).Assembly.ScanKeyPackageForKeys();
+    public override string[] GetMyPackageKeys() => typeof(PluginKeys).Assembly.ScanKeyPackageForKeys();
     public override void CheckFeatureDegradation(Func<string, bool> isBusAvailable)
     {
 
