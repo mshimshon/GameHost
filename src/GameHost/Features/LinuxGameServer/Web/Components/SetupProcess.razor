@@ -9,7 +9,7 @@
         </MudItem>
         <MudItem xs=12>
             
-            @if (ViewModel.IsLoading)
+            @* @if (ViewModel.IsLoading)
             {
                     <MudAlert Severity="Severity.Info">
                     <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
@@ -58,7 +58,7 @@
                     <MudAlert Severity="Severity.Error">
                         The server is misconfigured, it seems like the available game servers file has not been properly setup. It would be best to reinstall the panel.
                     </MudAlert>
-            }
+            } *@
         </MudItem>
     </MudGrid>
 }

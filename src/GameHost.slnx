@@ -5,7 +5,9 @@
     <Project Path="Cloud/GameHostCloud.Infrastructure/GameHostCloud.Infrastructure.csproj" />
     <Project Path="Cloud/GameHostCloud.Web/GameHostCloud.Web.csproj" Id="388783dc-91d6-499c-bf6b-134debc8cfef" />
   </Folder>
-  <Folder Name="/Games/" />
+  <Folder Name="/Games/">
+    <File Path="../../GameHost.Games/lpcli-compose.yml" />
+  </Folder>
   <Folder Name="/Games/Library/">
     <Project Path="../../GameHost.Games/src/Library/Installation/Installation.csproj" />
     <Project Path="../../GameHost.Games/src/Library/LinuxGameServerManager.Extension/LinuxGameServerManager.Extension.csproj" />
@@ -25,5 +27,6 @@
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path="Directory.Packages.props" />
+    <File Path="lpcli-compose.yml" />
   </Folder>
 </Solution>

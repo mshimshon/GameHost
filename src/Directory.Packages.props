@@ -7,19 +7,19 @@
     <GlobalCopyright>Maksim Shimshon © 2026</GlobalCopyright>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="LunaticPanel.Core" Version="0.1.858" />
-    <PackageVersion Include="LunaticPanel.Core.Abstraction" Version="0.1.858" />
-    <PackageVersion Include="LunaticPanel.Core.Extensions" Version="0.1.858" />
-    <PackageVersion Include="LunaticPanel.Core.Utils" Version="0.1.858" />
-    <PackageVersion Include="LunaticPanel.Core.Utils.Abstraction" Version="0.1.858" />
-    <PackageVersion Include="LunaticPanel.Engine.Keys" Version="0.1.858" />
+    <PackageVersion Include="LunaticPanel.Core" Version="0.1.861" />
+    <PackageVersion Include="LunaticPanel.Core.Abstraction" Version="0.1.861" />
+    <PackageVersion Include="LunaticPanel.Core.Extensions" Version="0.1.861" />
+    <PackageVersion Include="LunaticPanel.Core.Utils" Version="0.1.861" />
+    <PackageVersion Include="LunaticPanel.Core.Utils.Abstraction" Version="0.1.861" />
+    <PackageVersion Include="LunaticPanel.Engine.Keys" Version="0.1.861" />
     <PackageVersion Include="Microsoft.AspNetCore.Components" Version="10.0.9" />
     <PackageVersion Include="Microsoft.Extensions.FileProviders.Physical" Version="10.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.9" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.1" />
-	<PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="10.0.9" />
-	<PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.9" />
-	<PackageVersion Include="MudBlazor" Version="9.5.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.9" />
+    <PackageVersion Include="MudBlazor" Version="9.5.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="StatePulse.Net" Version="3.0.1" />
     <PackageVersion Include="MediHater" Version="1.0.1" />

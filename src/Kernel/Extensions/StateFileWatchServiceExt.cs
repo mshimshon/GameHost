@@ -20,6 +20,5 @@ public static class StateFileWatchServiceExt
         => new StateFileWatcher<TAction>(folder, filePattern, whatToWatch, serviceProvider.GetRequiredService<IDispatcher>(), serviceProvider.GetRequiredService<ICrazyReport<TAction>>());
 
     public static IStateFileWatcher<TAction> LoadWatcher<TAction>(this IServiceProvider sp)
-        where TAction : FileWatchActionBase
-        => sp.GetRequiredService<IStateFileWatcher<TAction>>();
+        where TAction : FileWatchActionBase => sp.GetRequiredService<IStateFileWatcher<TAction>>();
 }
