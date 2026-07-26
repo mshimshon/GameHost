@@ -9,6 +9,8 @@ using LunaticPanel.Core.Utils.Abstraction.Logging;
 using LunaticPanel.Core.Utils.Abstraction.Plugin.Location;
 using LunaticPanel.Core.Utils.Abstraction.SafeFileWriter;
 using StatePulse.Net;
+using System.Formats.Tar;
+using System.IO.Compression;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -49,6 +51,38 @@ internal class LinuxGameServerService : ILinuxGameServerService
         crazyReport.SetModule(LinuxGameServerKeys.MODULE_NAME);
         _pluginUserLocation.SetUsername(LinuxGameServerKeys.USERNAME);
     }
+#if DEBUG
+    private async Task<string?> GetManifestFromArchiveAsync(string archive, string file)
+    {
+        try
+        {
+            // Open file, decompress GZip, and read Tar sequentially in memory
+            await using FileStream fs = File.OpenRead(archive);
+            await using GZipStream gzipStream = new GZipStream(fs, CompressionMode.Decompress);
+            using TarReader reader = new TarReader(gzipStream);
+            while (reader.GetNextEntry() is TarEntry entry)
+            {
+                if (entry.Name == file &&
+                    entry.EntryType is TarEntryType.RegularFile or TarEntryType.V7RegularFile)
+                {
+                    if (entry.DataStream == null) return null;
+
+                    using StreamReader streamReader = new StreamReader(entry.DataStream);
+                    // This is where the heavy I/O actually happens, so async fits perfectly here
+                    return await streamReader.ReadToEndAsync();
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+
+            _crazyReport.ReportErrorException(ex.Message, ex);
+
+        }
+        return null; // File not found inside the archive
+    }
+#endif
 
     public async Task<ICollection<GameManifestEntity>?> GetAvailableGames(CancellationToken ct = default)
     {
@@ -56,14 +90,31 @@ internal class LinuxGameServerService : ILinuxGameServerService
         var manifestDownloadTarget = _pluginUserLocation.GetUserDownloadFor(LinuxGameServerKeys.MODULE_NAME, LinuxGameServerKeys.SERVER_MANIFEST_RESPO_FILE);
 #if DEBUG
         _crazyReport.ReportWarning("Debug Detected");
-        var sourceOfManifest = _pluginUserLocation.GetUserDownloadFor(LinuxGameServerKeys.MODULE_NAME, [MOCK_FOLDER], "manifest.dev.json");
-        var manifestCommand = $"cp -f \"{sourceOfManifest}\" \"{manifestDownloadTarget}\"";
-        var manifestReuslt = await _linuxCommand.BuildCommand(manifestCommand)
-            .SetCrazyReport(_crazyReport)
-            .ExecAsync(ct);
-        if (manifestReuslt.Failed || !File.Exists(manifestDownloadTarget))
-            throw new CouldNotDownloadManifestException(_crazyReport);
+        var sourceOfManifest = _pluginUserLocation.GetUserDownloadBase(LinuxGameServerKeys.MODULE_NAME, [MOCK_FOLDER]);
+        List<GameManifestResponse> manifests = new List<GameManifestResponse>();
+        var installers = Directory.GetFiles(sourceOfManifest, "*.tar.gz", SearchOption.TopDirectoryOnly);
+        _crazyReport.Report($"{installers.Length} Game Installer Found in Debug.");
+
+        foreach (var file in installers)
+        {
+            string? json = await GetManifestFromArchiveAsync(file, "config/manifest.json");
+            if (json == default)
+            {
+                _crazyReport.ReportWarning($"'{file}' Manifest Not Found (config/manifest.json).");
+                continue;
+            }
+            GameManifestResponse? manifest = JsonSerializer.Deserialize<GameManifestResponse>(json, _jsonSerializerOptions)!;
+            if (manifest == default)
+            {
+                _crazyReport.ReportWarning($"'{file}' Manifest Invalid.");
+
+                continue;
+            }
+            manifests.Add(manifest);
+        }
+        File.WriteAllText(manifestDownloadTarget, JsonSerializer.Serialize(manifests, _jsonSerializerOptions));
 #else
+
 
 #endif
 
@@ -73,7 +124,7 @@ internal class LinuxGameServerService : ILinuxGameServerService
             _crazyReport.Report("Reading Available Game Manifest...");
             string json = File.ReadAllText(manifestDownloadTarget);
             _crazyReport.Report("Deserializing Available Game Manifest...");
-            var response = JsonSerializer.Deserialize<List<GameManifestResponse>>(json, _jsonSerializerOptions)!;
+            List<GameManifestResponse> response = JsonSerializer.Deserialize<List<GameManifestResponse>>(json, _jsonSerializerOptions)!;
             _crazyReport.Report("Mapping Available Game Manifest...");
             var entitesResponse = response!.Select(p => p.MapToDomain()).ToList();
             _crazyReport.ReportInfo("{0} Available Game Server Manifest Loaded.", response.Count);
