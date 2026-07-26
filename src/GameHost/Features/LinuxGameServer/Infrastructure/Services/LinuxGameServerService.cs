@@ -89,7 +89,8 @@ internal class LinuxGameServerService : ILinuxGameServerService
         // TODO: SUPPORT PRODUCTION VS DEV
         var manifestDownloadTarget = _pluginUserLocation.GetUserDownloadFor(LinuxGameServerKeys.MODULE_NAME, LinuxGameServerKeys.SERVER_MANIFEST_RESPO_FILE);
 #if DEBUG
-        _crazyReport.ReportWarning("Debug Detected");
+
+        _crazyReport.ReportWarning("===Debug Detected=== Generating Manifest.json");
         var sourceOfManifest = _pluginUserLocation.GetUserDownloadBase(LinuxGameServerKeys.MODULE_NAME, [MOCK_FOLDER]);
         List<GameManifestResponse> manifests = new List<GameManifestResponse>();
         var installers = Directory.GetFiles(sourceOfManifest, "*.tar.gz", SearchOption.TopDirectoryOnly);
@@ -113,6 +114,8 @@ internal class LinuxGameServerService : ILinuxGameServerService
             manifests.Add(manifest);
         }
         File.WriteAllText(manifestDownloadTarget, JsonSerializer.Serialize(manifests, _jsonSerializerOptions));
+
+
 #else
 
 
