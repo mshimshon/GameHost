@@ -1,9 +1,10 @@
-﻿using LunaticPanel.Core.Abstraction.Widgets.Enum;
-using GameHost.Features.Mods.Application.Pulses.Actions;
+﻿using GameHost.Features.Mods.Application.Pulses.Actions;
 using GameHost.Features.Mods.Application.Pulses.States;
 using GameHost.Features.Mods.Web.Components.Dialogs.ViewModels;
 using GameHost.Kernel.Abstractions.Services.Notification.Enums;
 using GameHost.Kernel.Abstractions.Services.Notification.Services;
+using LunaticPanel.Core.Abstraction.Exceptions;
+using LunaticPanel.Core.Abstraction.Widgets.Enum;
 using StatePulse.Net;
 using System.Text.RegularExpressions;
 
@@ -80,4 +81,6 @@ internal class CreateModListDialogViewModel : ICreateModListDialogViewModel
         await UpdateChanges();
 
     }
+
+    public void SetHostExceptionHandler(IHostExceptionHandler exceptionHandler) { }
 }

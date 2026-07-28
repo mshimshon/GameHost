@@ -43,7 +43,6 @@
 	  <Folder Include="Features\LinuxGameServer\Application\Payloads\Requests\" />
 	  <Folder Include="Features\LinuxGameServer\Application\Mediator\Notifications\Handlers\" />
 	  <Folder Include="Features\LinuxGameServer\Web\Hooks\Events\" />
-	  <Folder Include="Features\Mods\Application\Bash\" />
 	  <Folder Include="Features\Mods\Application\Hooks\" />
 	  <Folder Include="Features\Mods\Web\Hooks\Queries\" />
 	  <Folder Include="Features\Mods\Web\Hooks\Events\Scheduled\" />
@@ -55,12 +54,5 @@
 	  <Folder Include="wwwroot\" />
   </ItemGroup>
 
-	<Target Name="RemoveHostOwnedAssembliesAfterBuild" AfterTargets="CopyFilesToOutputDirectory" >
 
-		<ItemGroup>
-			<_DeleteDlls Include="&#xD;&#xA;				$(OutputPath)**\Microsoft.*.dll;&#xD;&#xA;				$(OutputPath)**\LunaticPanel.*.dll;&#xD;&#xA;				$(OutputPath)**\LunaticPanel.*.*.dll;&#xD;&#xA;				$(OutputPath)MudBlazor.dll&#xD;&#xA;			" />
-		</ItemGroup>
-
-		<Delete Files="@(_DeleteDlls)" />
-	</Target>
 </Project>

@@ -91,7 +91,7 @@ internal class LinuxGameServerService : ILinuxGameServerService
 #if DEBUG
 
         _crazyReport.ReportWarning("===Debug Detected=== Generating Manifest.json");
-        var sourceOfManifest = _pluginUserLocation.GetUserDownloadBase(LinuxGameServerKeys.MODULE_NAME, [MOCK_FOLDER]);
+        var sourceOfManifest = _pluginUserLocation.GetUserDownloadBase(LinuxGameServerKeys.MODULE_NAME, [MOCK_FOLDER, MOCK_INSTALLER_FOLDER]);
         List<GameManifestResponse> manifests = new List<GameManifestResponse>();
         var installers = Directory.GetFiles(sourceOfManifest, "*.tar.gz", SearchOption.TopDirectoryOnly);
         _crazyReport.Report($"{installers.Length} Game Installer Found in Debug.");
@@ -209,6 +209,7 @@ internal class LinuxGameServerService : ILinuxGameServerService
 #if DEBUG
         _crazyReport.ReportWarning("Debug Detected");
         string sourceLocation = _pluginUserLocation.GetUserDownloadFor(LinuxGameServerKeys.MODULE_NAME, [MOCK_FOLDER, MOCK_INSTALLER_FOLDER], installerName);
+        _crazyReport.Report($"Installing from '{sourceLocation}'");
         var installerCopieCommand = $"cp -f \"{sourceLocation}\" \"{targetLocation}\"";
         var installerCopieCommandResult = await _linuxCommand.BuildCommand(installerCopieCommand)
             .SetCrazyReport(_crazyReport)
