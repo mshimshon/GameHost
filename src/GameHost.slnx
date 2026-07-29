@@ -6,6 +6,7 @@
     <Project Path="Cloud/GameHostCloud.Web/GameHostCloud.Web.csproj" Id="388783dc-91d6-499c-bf6b-134debc8cfef" />
   </Folder>
   <Folder Name="/Games/">
+    <File Path="../../GameHost.Games/dep_debian_13_common.json" />
     <File Path="../../GameHost.Games/lpcli-compose.yml" />
   </Folder>
   <Folder Name="/Games/Library/">
