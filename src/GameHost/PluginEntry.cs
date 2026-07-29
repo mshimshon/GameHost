@@ -26,7 +26,7 @@ using StatePulse.Net.Configuration;
 namespace GameHost;
 
 
-public class PluginEntry : PluginBase
+public class PluginEntry : PluginBase, IPlugin
 {
     private IConfiguration _configuration = default!;
 
