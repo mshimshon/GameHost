@@ -9,7 +9,6 @@
   <ItemGroup>
     <PackageReference Include="CoreMap" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-    <PackageReference Include="WolverineFx" />
   </ItemGroup>
 
   <ItemGroup>

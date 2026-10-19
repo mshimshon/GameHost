@@ -48,38 +48,31 @@ jobs:
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
           mkdir -p "/tmp/artifacts/output"
-          KEY_PROJECTS=(
-            "src/GameHost.Keys/GameHost.Keys.csproj"
-            # add more Keys projects here
-          )
+          KEY_PROJECT="$GITHUB_WORKSPACE/src/GameHost.Keys/GameHost.Keys.csproj"
+          dotnet pack "$KEY_PROJECT" -c Release -o "/tmp/artifacts/output" /p:Version=$VERSION
 
-          for KEY in "${KEY_PROJECTS[@]}"; do
-            ABSOLUTE_CSPROJ_PATH="${{ github.workspace }}/$KEY"
-            dotnet pack "$ABSOLUTE_CSPROJ_PATH" -c Release -o "/tmp/artifacts/output" /p:Version=$VERSION
-          done
+      - name: Installing Packing Tool
+        run: |
+          PANEL_VERSION=$(grep -oP '(?<=<PanelVersion>).*?(?=</PanelVersion>)' $"$GITHUB_WORKSPACE/src/Directory.Packages.props")
+          echo "PanelVersion=$PANEL_VERSION"
+          dotnet tool install --global LunaticPanel.Package.Tool --version "$PANEL_VERSION"
 
       - name: Validate Plugins
         run: |
           mkdir -p /tmp/artifacts/build
           VERSION="${{ steps.get_version.outputs.version }}"
-          PLUGINS=(
-            "$GITHUB_WORKSPACE/plugins/PackageManager/LunaticPanel.PackageManager/LunaticPanel.PackageManager.csproj"
-          )
-
-          for KEY in "${PLUGINS[@]}"; do
-            FILE_NAME=$(basename "$KEY")
-            FILE_NAME=$(basename "$KEY")
-            PROJECT_NAME="${FILE_NAME%.csproj}"
-            TARGET_BUILD_DIR="/tmp/artifacts/plugins_build/$PROJECT_NAME"
-            mkdir -p "$TARGET_BUILD_DIR"
-            dotnet publish "$KEY" -r linux-x6 -c Release -o "$TARGET_BUILD_DIR" /p:FileVersion=$VERSION /p:InformationalVersion=$VERSION /p:Version=$VERSION /p:AssemblyVersion=$VERSION
-            /tmp/artifacts/tool/LunaticPanel.Package.Tool pack --input "$TARGET_BUILD_DIR" --output "/tmp/artifacts/output" --version $VERSION
-            EXPECTED_PKG="/tmp/artifacts/output/${PROJECT_NAME}.${VERSION}.lpkg"
-            if [ -z "$EXPECTED_PKG" ] || [ ! -s "$EXPECTED_PKG" ]; then
-               ls -R /tmp/artifacts/output
-              echo "❌ Error: Packed file for ${PROJECT_NAME} version ${VERSION} was not generated or is empty!"
-              exit 1
-            else
-              echo "✅ Verified: $(basename "$EXPECTED_PKG") exists and is valid."
-            fi
-          done
+          PLUGIN="$GITHUB_WORKSPACE/src/GameHost/GameHost.csproj"
+          FILE_NAME=$(basename "$PLUGIN")
+          PROJECT_NAME="${FILE_NAME%.csproj}"
+          TARGET_BUILD_DIR="/tmp/artifacts/plugins_build/$PROJECT_NAME"
+          mkdir -p "$TARGET_BUILD_DIR"
+          dotnet publish "$PLUGIN" -r linux-x6 -c Release -o "$TARGET_BUILD_DIR" /p:FileVersion=$VERSION /p:InformationalVersion=$VERSION /p:Version=$VERSION /p:AssemblyVersion=$VERSION
+          lpkg-cli pack --input "$TARGET_BUILD_DIR" --output "/tmp/artifacts/output" --version $VERSION
+          EXPECTED_PKG="/tmp/artifacts/output/${PROJECT_NAME}.${VERSION}.lpkg"
+          if [ -z "$EXPECTED_PKG" ] || [ ! -s "$EXPECTED_PKG" ]; then
+              ls -R /tmp/artifacts/output
+            echo "❌ Error: Packed file for ${PROJECT_NAME} version ${VERSION} was not generated or is empty!"
+            exit 1
+          else
+            echo "✅ Verified: $(basename "$EXPECTED_PKG") exists and is valid."
+          fi
