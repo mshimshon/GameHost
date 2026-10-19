@@ -5,21 +5,7 @@
     <Project Path="Cloud/GameHostCloud.Infrastructure/GameHostCloud.Infrastructure.csproj" />
     <Project Path="Cloud/GameHostCloud.Web/GameHostCloud.Web.csproj" Id="388783dc-91d6-499c-bf6b-134debc8cfef" />
   </Folder>
-  <Folder Name="/Games/">
-    <File Path="../../GameHost.Games/dep_debian_13_common.json" />
-    <File Path="../../GameHost.Games/lpcli-compose.yml" />
-  </Folder>
-  <Folder Name="/Games/Library/">
-    <Project Path="../../GameHost.Games/src/Library/Installation/Installation.csproj" />
-    <Project Path="../../GameHost.Games/src/Library/LinuxGameServerManager.Extension/LinuxGameServerManager.Extension.csproj" />
-    <Project Path="../../GameHost.Games/src/Library/LinuxGameServerManager/LinuxGameServerManager.csproj" />
-    <Project Path="../../GameHost.Games/src/Library/Steam/Steam.csproj" />
-  </Folder>
-  <Folder Name="/Games/Setup/" />
-  <Folder Name="/Games/Setup/Project Zomboid/">
-    <Project Path="../../GameHost.Games/src/Setup/ProjectZomboid/ProjectZomboid.csproj" />
-  </Folder>
-  <Folder Name="/Plugin/">
+   <Folder Name="/Plugin/">
     <Project Path="GameHost.Keys/GameHost.Keys.csproj" />
     <Project Path="GameHost/GameHost.csproj" />
     <Project Path="Kernel.Abstractions/Kernel.Abstractions.csproj" />
