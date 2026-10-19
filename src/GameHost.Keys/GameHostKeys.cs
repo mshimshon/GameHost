@@ -1,4 +1,4 @@
-﻿namespace GameHost.Core;
+﻿namespace GameHost.Keys;
 
 public static class GameHostKeys
 {

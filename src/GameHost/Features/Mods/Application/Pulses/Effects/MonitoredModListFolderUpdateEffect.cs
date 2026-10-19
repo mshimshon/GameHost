@@ -1,8 +1,8 @@
 ﻿using LunaticPanel.Core.Abstraction.Messaging.EventBus;
 using LunaticPanel.Core.Extensions;
-using GameHost.Core.Features;
 using GameHost.Features.Mods.Application.Pulses.Actions;
 using StatePulse.Net;
+using GameHost.Keys.Features;
 
 namespace GameHost.Features.Mods.Application.Pulses.Effects;
 

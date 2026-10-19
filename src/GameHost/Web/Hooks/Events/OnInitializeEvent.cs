@@ -1,4 +1,4 @@
-﻿using GameHost.Core;
+﻿using GameHost.Keys;
 using LunaticPanel.Core.Abstraction.Messaging.EventBus;
 using LunaticPanel.Core.Utils.Abstraction.LinuxCommand;
 

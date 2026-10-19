@@ -1,10 +1,10 @@
 ﻿using LunaticPanel.Core.Abstraction.Widgets;
-using GameHost.Core.Features;
 using GameHost.Features.Mods.Application.Pulses.Actions;
 using GameHost.Features.Mods.Application.Pulses.States;
 using GameHost.Features.Mods.Web.Components.ViewModels;
 using LunaticPanel.Core.Utils.Abstraction.Logging;
 using StatePulse.Net;
+using GameHost.Keys.Features;
 
 namespace GameHost.Features.Mods.Web.Components;
 

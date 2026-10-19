@@ -1,9 +1,9 @@
 ﻿using LunaticPanel.Core.Abstraction.Messaging.EventBus;
 using LunaticPanel.Core.Extensions;
-using GameHost.Core.Features;
 using GameHost.Features.SystemInfo.Application.Pulses.Actions;
 using GameHost.Features.SystemInfo.Application.Pulses.States;
 using StatePulse.Net;
+using GameHost.Keys.Features;
 
 namespace GameHost.Features.SystemInfo.Application.Pulses.Reducers.Middlewares;
 

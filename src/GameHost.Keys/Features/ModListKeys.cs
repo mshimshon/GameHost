@@ -1,4 +1,6 @@
-﻿namespace GameHost.Core.Features;
+﻿using GameHost.Keys;
+
+namespace GameHost.Keys.Features;
 
 public static class ModListKeys
 {

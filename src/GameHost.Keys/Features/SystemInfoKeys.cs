@@ -1,6 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using GameHost.Keys;
+using System.Diagnostics.CodeAnalysis;
 
-namespace GameHost.Core.Features;
+namespace GameHost.Keys.Features;
 
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
 public static class SystemInfoKeys

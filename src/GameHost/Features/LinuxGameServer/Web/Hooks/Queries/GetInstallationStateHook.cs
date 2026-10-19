@@ -1,8 +1,8 @@
 ﻿using LunaticPanel.Core.Abstraction.Messaging.QuerySystem;
 using LunaticPanel.Core.Extensions;
-using GameHost.Core.Features;
 using GameHost.Features.LinuxGameServer.Application.Pulses.States;
 using StatePulse.Net;
+using GameHost.Keys.Features;
 
 namespace GameHost.Features.LinuxGameServer.Web.Hooks.Queries;
 

@@ -1,9 +1,9 @@
-﻿using GameHost.Core.Features;
-using GameHost.Features.SystemInfo.Application.Services;
+﻿using GameHost.Features.SystemInfo.Application.Services;
 using GameHost.Features.SystemInfo.Domain.Entites;
 using GameHost.Features.SystemInfo.Infrastructure.Configurations;
 using GameHost.Features.SystemInfo.Infrastructure.Payloads.Response;
 using GameHost.Features.SystemInfo.Infrastructure.Payloads.Response.Mapping;
+using GameHost.Keys.Features;
 using LunaticPanel.Core.Utils.Abstraction.LinuxCommand;
 using LunaticPanel.Core.Utils.Abstraction.Logging;
 using LunaticPanel.Core.Utils.Abstraction.Plugin.Location;

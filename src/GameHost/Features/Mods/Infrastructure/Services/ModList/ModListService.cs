@@ -1,5 +1,4 @@
-﻿using GameHost.Core.Features;
-using GameHost.Features.Mods.Application.Services;
+﻿using GameHost.Features.Mods.Application.Services;
 using GameHost.Features.Mods.Domain.Entities;
 using GameHost.Features.Mods.Domain.ValueObjects;
 using GameHost.Features.Mods.Infrastructure.Exceptions;
@@ -8,6 +7,7 @@ using GameHost.Features.Mods.Infrastructure.Services.ModList.Payloads;
 using GameHost.Features.Mods.Infrastructure.Services.ModList.Payloads.Mapping;
 using GameHost.Kernel.Abstractions.Exceptions;
 using GameHost.Kernel.Abstractions.Mediator.Exceptions;
+using GameHost.Keys.Features;
 using LunaticPanel.Core.Abstraction.Messaging.QuerySystem;
 using LunaticPanel.Core.Extensions;
 using LunaticPanel.Core.Utils.Abstraction.LinuxCommand;

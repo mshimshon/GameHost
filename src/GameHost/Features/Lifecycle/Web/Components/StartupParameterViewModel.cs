@@ -1,8 +1,8 @@
-﻿using GameHost.Core.Features;
-using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig;
+﻿using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameConfig;
 using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameInfo;
 using GameHost.Features.Lifecycle.Application.Pulses.States;
 using GameHost.Features.Lifecycle.Web.Components.ViewModels;
+using GameHost.Keys.Features;
 using LunaticPanel.Core.Abstraction.Widgets;
 using LunaticPanel.Core.Utils.Abstraction.Logging;
 using StatePulse.Net;

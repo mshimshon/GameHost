@@ -1,10 +1,10 @@
-﻿using GameHost.Core.Features;
-using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameInfo;
+﻿using GameHost.Features.Lifecycle.Application.Payloads.Responses.GameInfo;
 using GameHost.Features.Lifecycle.Application.Payloads.Responses.ServerInfo.Enums;
 using GameHost.Features.Lifecycle.Application.Pulses.Actions;
 using GameHost.Features.Lifecycle.Application.Pulses.States;
 using GameHost.Features.Lifecycle.Web.Components.ViewModels;
 using GameHost.Features.SystemInfo.Application.Pulses.States;
+using GameHost.Keys.Features;
 using LunaticPanel.Core.Abstraction.Tools;
 using LunaticPanel.Core.Abstraction.Widgets;
 using LunaticPanel.Core.Utils.Abstraction.Logging;

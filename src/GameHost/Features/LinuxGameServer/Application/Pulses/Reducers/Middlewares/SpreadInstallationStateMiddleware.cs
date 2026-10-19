@@ -1,5 +1,5 @@
-﻿using GameHost.Core.Features;
-using GameHost.Features.LinuxGameServer.Application.Pulses.States;
+﻿using GameHost.Features.LinuxGameServer.Application.Pulses.States;
+using GameHost.Keys.Features;
 using LunaticPanel.Core.Abstraction.Messaging.EventBus;
 using LunaticPanel.Core.Extensions;
 using LunaticPanel.Core.Utils.Abstraction.Logging;

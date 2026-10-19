@@ -1,5 +1,4 @@
-﻿using GameHost.Core.Features;
-using GameHost.Features.LinuxGameServer.Application.Pulses.Actions;
+﻿using GameHost.Features.LinuxGameServer.Application.Pulses.Actions;
 using GameHost.Features.LinuxGameServer.Application.Pulses.States;
 using GameHost.Features.LinuxGameServer.Infrastructure;
 using GameHost.Features.LinuxGameServer.Infrastructure.Configuration;
@@ -7,6 +6,7 @@ using GameHost.Features.LinuxGameServer.Web.Components.ViewModels;
 using GameHost.Features.LinuxGameServer.Web.Hooks.UI.Components.ViewModels;
 using GameHost.Kernel.Abstractions.Services.ActionFileWatcher.Enums;
 using GameHost.Kernel.Extensions;
+using GameHost.Keys.Features;
 using LunaticPanel.Core.Abstraction.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

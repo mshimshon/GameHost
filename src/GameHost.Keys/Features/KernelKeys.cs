@@ -1,4 +1,4 @@
-﻿namespace GameHost.Core.Features;
+﻿namespace GameHost.Keys.Features;
 
 public static class KernelKeys
 {

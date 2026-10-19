@@ -1,5 +1,4 @@
-﻿using GameHost.Core.Features;
-using GameHost.Features.Lifecycle.Application.Mediator.Commands;
+﻿using GameHost.Features.Lifecycle.Application.Mediator.Commands;
 using GameHost.Features.Lifecycle.Application.Mediator.Commands.Handlers;
 using GameHost.Features.Lifecycle.Application.Mediator.Queries;
 using GameHost.Features.Lifecycle.Application.Mediator.Queries.Handlers;
@@ -16,6 +15,7 @@ using GameHost.Features.Lifecycle.Web.Components;
 using GameHost.Features.Lifecycle.Web.Components.ViewModels;
 using GameHost.Kernel.Abstractions.Services.ActionFileWatcher.Enums;
 using GameHost.Kernel.Extensions;
+using GameHost.Keys.Features;
 using LunaticPanel.Core.Abstraction.DependencyInjection;
 using MedihatR;
 using Microsoft.Extensions.DependencyInjection;

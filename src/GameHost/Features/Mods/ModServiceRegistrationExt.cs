@@ -1,5 +1,4 @@
-﻿using GameHost.Core.Features;
-using GameHost.Features.Mods.Application.Pulses.Actions;
+﻿using GameHost.Features.Mods.Application.Pulses.Actions;
 using GameHost.Features.Mods.Infrastructure;
 using GameHost.Features.Mods.Web.Components;
 using GameHost.Features.Mods.Web.Components.Dialogs;
@@ -12,6 +11,7 @@ using GameHost.Features.Mods.Web.Pages.ViewModels;
 using GameHost.Kernel.Abstractions.Extensions;
 using GameHost.Kernel.Abstractions.Services.ActionFileWatcher.Enums;
 using GameHost.Kernel.Extensions;
+using GameHost.Keys.Features;
 using LunaticPanel.Core.Abstraction.DependencyInjection;
 
 namespace GameHost.Features.Mods;

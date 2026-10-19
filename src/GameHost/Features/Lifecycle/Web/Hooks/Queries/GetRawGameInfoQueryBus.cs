@@ -1,8 +1,8 @@
 ﻿using LunaticPanel.Core.Abstraction.Messaging.QuerySystem;
 using LunaticPanel.Core.Extensions;
-using GameHost.Core.Features;
 using GameHost.Features.Lifecycle.Application.Mediator.Queries;
 using MedihatR;
+using GameHost.Keys.Features;
 
 namespace GameHost.Features.Lifecycle.Web.Hooks.Queries;
 

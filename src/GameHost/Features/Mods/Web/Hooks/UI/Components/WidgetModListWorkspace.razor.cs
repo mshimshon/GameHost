@@ -1,5 +1,5 @@
-﻿using GameHost.Core;
-using GameHost.Core.Features;
+﻿using GameHost.Keys;
+using GameHost.Keys.Features;
 using Microsoft.AspNetCore.Components;
 
 namespace GameHost.Features.Mods.Web.Hooks.UI.Components;

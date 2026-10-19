@@ -1,6 +1,6 @@
-﻿using GameHost.Core.Features;
-using GameHost.Features.SystemInfo.Application.Pulses.Actions;
+﻿using GameHost.Features.SystemInfo.Application.Pulses.Actions;
 using GameHost.Features.SystemInfo.Infrastructure.Configurations;
+using GameHost.Keys.Features;
 using LunaticPanel.Core.Abstraction.Messaging.EventScheduledBus;
 using LunaticPanel.Core.Abstraction.Tools.EventScheduler;
 using LunaticPanel.Core.Extensions;

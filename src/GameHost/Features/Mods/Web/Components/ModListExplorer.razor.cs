@@ -1,6 +1,6 @@
-﻿using GameHost.Core;
-using GameHost.Core.Features;
-using GameHost.Features.Mods.Web.Components.Dialogs;
+﻿using GameHost.Features.Mods.Web.Components.Dialogs;
+using GameHost.Keys;
+using GameHost.Keys.Features;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 

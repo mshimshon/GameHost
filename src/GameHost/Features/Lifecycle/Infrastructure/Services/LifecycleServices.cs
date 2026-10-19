@@ -1,5 +1,4 @@
-﻿using GameHost.Core.Features;
-using GameHost.Features.Lifecycle.Application.Services;
+﻿using GameHost.Features.Lifecycle.Application.Services;
 using GameHost.Features.Lifecycle.Infrastructure.Services.Exceptions;
 using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig;
 using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.GameConfig.Mapping;
@@ -10,6 +9,7 @@ using GameHost.Features.Lifecycle.Infrastructure.Services.Payloads.Responses.Ser
 using GameHost.Kernel.Abstractions.Dto;
 using GameHost.Kernel.Abstractions.Exceptions;
 using GameHost.Kernel.Abstractions.Extensions;
+using GameHost.Keys.Features;
 using LunaticPanel.Core.Abstraction.Messaging.QuerySystem;
 using LunaticPanel.Core.Extensions;
 using LunaticPanel.Core.Utils.Abstraction.LinuxCommand;
