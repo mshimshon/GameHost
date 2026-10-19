@@ -9,7 +9,7 @@ jobs:
   build:
     if: github.event.base_ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    
+
     env:
       DOTNET_TEST_RUNNER: Microsoft.Testing.Platform
 
@@ -20,6 +20,7 @@ jobs:
           TAG="${GITHUB_REF#refs/tags/}"
           VERSION="${TAG#v}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+
       - name: Checkout Code
         uses: actions/checkout@v4
 
@@ -35,15 +36,15 @@ jobs:
         run: dotnet build --no-restore --configuration Release
 
       - name: Run All Unit Tests
-        # Ensure 'LunaticPanel.sln' matches your exact solution file name
         run: dotnet test LunaticPanel.slnx --no-build --configuration Release --verbosity normal -p:TreatWarningsAsErrors=false
 
       - name: Publish LunaticPanel.Package.Tool (self-contained)
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
           dotnet publish $GITHUB_WORKSPACE/tools/LunaticPanel.Package.Tool/LunaticPanel.Package.Tool.csproj \
-            -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -o /tmp/artifacts/tool /p:AssemblyVersion=$VERSION /p:FileVersion=$VERSION /p:InformationalVersion=$VERSION
-      
+            -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -o /tmp/artifacts/tool \
+            /p:AssemblyVersion=$VERSION /p:FileVersion=$VERSION /p:InformationalVersion=$VERSION
+
       - name: Pack NuGet packages
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
@@ -51,30 +52,46 @@ jobs:
           KEY_PROJECT="$GITHUB_WORKSPACE/src/GameHost.Keys/GameHost.Keys.csproj"
           dotnet pack "$KEY_PROJECT" -c Release -o "/tmp/artifacts/output" /p:Version=$VERSION
 
-     - name: Install Packing Tool
-      run: |
-        PANEL_VERSION=$(grep -oP '(?<=<PanelVersion>).*?(?=</PanelVersion>)' "$GITHUB_WORKSPACE/src/Directory.Packages.props")
-        if [ -z "$PANEL_VERSION" ]; then
-          echo "ERROR: Failed to extract PanelVersion from Directory.Packages.props"
-          exit 1
-        fi
-        echo "PanelVersion=$PANEL_VERSION"
-        dotnet tool install --global LunaticPanel.Package.Tool --version "$PANEL_VERSION"
+      - name: Install Packing Tool
+        run: |
+          PANEL_VERSION=$(grep -oP '(?<=<PanelVersion>).*?(?=</PanelVersion>)' "$GITHUB_WORKSPACE/src/Directory.Packages.props")
+
+          if [ -z "$PANEL_VERSION" ]; then
+            echo "ERROR: Failed to extract PanelVersion from Directory.Packages.props"
+            exit 1
+          fi
+
+          echo "PanelVersion=$PANEL_VERSION"
+          dotnet tool install --global LunaticPanel.Package.Tool --version "$PANEL_VERSION"
 
       - name: Validate Plugins
         run: |
           mkdir -p /tmp/artifacts/build
+
           VERSION="${{ steps.get_version.outputs.version }}"
+
           PLUGIN="$GITHUB_WORKSPACE/src/GameHost/GameHost.csproj"
           FILE_NAME=$(basename "$PLUGIN")
           PROJECT_NAME="${FILE_NAME%.csproj}"
+
           TARGET_BUILD_DIR="/tmp/artifacts/plugins_build/$PROJECT_NAME"
           mkdir -p "$TARGET_BUILD_DIR"
-          dotnet publish "$PLUGIN" -r linux-x6 -c Release -o "$TARGET_BUILD_DIR" /p:FileVersion=$VERSION /p:InformationalVersion=$VERSION /p:Version=$VERSION /p:AssemblyVersion=$VERSION
-          lpkg-cli pack --input "$TARGET_BUILD_DIR" --output "/tmp/artifacts/output" --version $VERSION
+
+          dotnet publish "$PLUGIN" -r linux-x64 -c Release -o "$TARGET_BUILD_DIR" \
+            /p:FileVersion=$VERSION \
+            /p:InformationalVersion=$VERSION \
+            /p:Version=$VERSION \
+            /p:AssemblyVersion=$VERSION
+
+          lpkg-cli pack \
+            --input "$TARGET_BUILD_DIR" \
+            --output "/tmp/artifacts/output" \
+            --version "$VERSION"
+
           EXPECTED_PKG="/tmp/artifacts/output/${PROJECT_NAME}.${VERSION}.lpkg"
-          if [ -z "$EXPECTED_PKG" ] || [ ! -s "$EXPECTED_PKG" ]; then
-              ls -R /tmp/artifacts/output
+
+          if [ ! -s "$EXPECTED_PKG" ]; then
+            ls -R /tmp/artifacts/output
             echo "❌ Error: Packed file for ${PROJECT_NAME} version ${VERSION} was not generated or is empty!"
             exit 1
           else
