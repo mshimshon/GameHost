@@ -24,6 +24,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Kernel.Abstractions\Kernel.Abstractions.csproj" />
-	  <ProjectReference Include="..\GameHost.Core\GameHost.Core.csproj" />
+	  <ProjectReference Include="..\GameHost.Keys\GameHost.Keys.csproj" />
 	</ItemGroup>
 </Project>

@@ -20,7 +20,7 @@
     <Project Path="../../GameHost.Games/src/Setup/ProjectZomboid/ProjectZomboid.csproj" />
   </Folder>
   <Folder Name="/Plugin/">
-    <Project Path="GameHost.Core/GameHost.Core.csproj" />
+    <Project Path="GameHost.Keys/GameHost.Keys.csproj" />
     <Project Path="GameHost/GameHost.csproj" />
     <Project Path="Kernel.Abstractions/Kernel.Abstractions.csproj" />
     <Project Path="Kernel/Kernel.csproj" Id="7f4a6335-3f49-44ec-8d7e-c8758d8aec24" />
@@ -29,5 +29,7 @@
     <File Path=".editorconfig" />
     <File Path="Directory.Packages.props" />
     <File Path="lpcli-compose.yml" />
+    <File Path="../.github/workflows/build.yml" />
+    <File Path="../.github/workflows/deploy.yml" />
   </Folder>
 </Solution>

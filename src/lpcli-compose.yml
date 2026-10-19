@@ -2,7 +2,7 @@ services:
   - import_from: "../../LunaticPanel/src/lpcli-compose.yml"  # import all lunatic panel services.
 
 plugins:
-  - import_from: "../../LunaticPanel/src/Plugins/lpcli-compose.yml"  # Import all official panel shipped plugins  
+  - import_from: "../../LunaticPanel/plugins/lpcli-compose.yml"  # Import all official panel shipped plugins  
   - dotnet_project: "./GameHost/GameHost.csproj"
     enabled: true
   - snap: "gamehost_init_done"
@@ -12,3 +12,4 @@ post_processing:
   - import_from: "../../LunaticPanel/src/lpcli-compose.yml"  # Import Lunatic Panel PP
   - import_from: "../../GameHost.Games/lpcli-compose.yml"  # Import Setup Game Server Libs
 
+  

@@ -19,7 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\GameHost.Core\GameHost.Core.csproj" />
+	  <ProjectReference Include="..\GameHost.Keys\GameHost.Keys.csproj" />
 	</ItemGroup>
 
 </Project>

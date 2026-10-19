@@ -8,11 +8,13 @@ using LunaticPanel.Core.Utils.Abstraction.LinuxCommand;
 using LunaticPanel.Core.Utils.Abstraction.Logging;
 using LunaticPanel.Core.Utils.Abstraction.Plugin.Location;
 using LunaticPanel.Core.Utils.Abstraction.SafeFileWriter;
+using Octokit;
 using StatePulse.Net;
 using System.Formats.Tar;
 using System.IO.Compression;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace GameHost.Features.LinuxGameServer.Infrastructure.Services;
 
@@ -83,7 +85,7 @@ internal class LinuxGameServerService : ILinuxGameServerService
         return null; // File not found inside the archive
     }
 #endif
-
+    private string _regexGithubManifestTag = @"^query-v\d+\.\d+\.\d+$";
     public async Task<ICollection<GameManifestEntity>?> GetAvailableGames(CancellationToken ct = default)
     {
         // TODO: SUPPORT PRODUCTION VS DEV
@@ -117,8 +119,46 @@ internal class LinuxGameServerService : ILinuxGameServerService
 
 
 #else
+        IReadOnlyList<Release>? releases = default;
+        var client = new GitHubClient(new ProductHeaderValue("GameHost.Games"));
+        var clientResult = client.Repository.Release.GetAll("mshimshon", "GameHost.Games");
+        releases = await clientResult;
+        Console.WriteLine($"Github Release Status {clientResult.Status}");
+        Console.WriteLine($"Latest Release Result ? {releases.Count}");
+        foreach (var item in releases)
+            Console.WriteLine($"[Github] {item.Id} => {item.Name} => {item.TagName}");
+        //if (releases == default || releases.Count <= 0)
+        var latestRelease = releases
+            .Where(r => !string.IsNullOrWhiteSpace(r.TagName))
+            .Select(r =>
+            {
+                var match = Regex.Match(r.TagName, _regexGithubManifestTag, RegexOptions.IgnoreCase);
+                if (!match.Success)
+                    return null;
 
+                return new
+                {
+                    Release = r,
+                    Version = Version.Parse(match.Groups["version"].Value)
+                };
+            })
+            .Where(x => x != null)
+            .OrderByDescending(x => x!.Version)
+            .FirstOrDefault();
+        // TODO: Throw if latestRelease = null;
+        var manifestListAsset = latestRelease.Release.Assets.FirstOrDefault(a => string.Equals(a.Name, "manifests.json", StringComparison.OrdinalIgnoreCase));
+        using HttpClient http = new();
+        await using Stream remote = await http.GetStreamAsync(manifestListAsset.BrowserDownloadUrl);
+        await using FileStream local = File.Create(manifestDownloadTarget);
+        await remote.CopyToAsync(local);
 
+        //if (asset == null)
+
+        // Create Multiple Release Tags
+        // ConsoleName-v1.1.1 Each Build that specific project
+        // Fully Self Contained Dotnet Release
+        // Another Tag is required -> query-v1.1.1 which will compile all manifest.json of each projects into manifests.json and each dep_debian_X_common.json
+        // Once Release is complete this code will retrive all Manifests and dependencies for the given OS.
 #endif
 
 
@@ -217,7 +257,7 @@ internal class LinuxGameServerService : ILinuxGameServerService
         if (installerCopieCommandResult.Failed || !File.Exists(targetLocation))
             throw new CouldNotDownloadInstallerException(_crazyReport);
 #else
- // TODO: IMPLEMENT PRODUCTION BEHAVIOR
+        // TODO: IMPLEMENT PRODUCTION BEHAVIOR
 #endif
         var extractCommand = $"tar -xzf \"{targetLocation}\" -C \"{extractionLocation}\"";
         var extractCommandResult = await _linuxCommand
