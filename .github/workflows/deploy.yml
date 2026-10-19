@@ -55,17 +55,17 @@ jobs:
           KEY_PROJECTS="$GITHUB_WORKSPACE/src/GameHost.Keys/GameHost.Keys.csproj"
           dotnet pack "$KEY_PROJECTS" -c Release -o "/tmp/artifacts/output" /p:Version=$VERSION
 
-     - name: Install Packing Tool
-      run: |
-        PANEL_VERSION=$(grep -oP '(?<=<PanelVersion>).*?(?=</PanelVersion>)' "$GITHUB_WORKSPACE/src/Directory.Packages.props")
+       - name: Install Packing Tool
+        run: |
+          PANEL_VERSION=$(grep -oP '(?<=<PanelVersion>).*?(?=</PanelVersion>)' "$GITHUB_WORKSPACE/src/Directory.Packages.props")
 
-        if [ -z "$PANEL_VERSION" ]; then
-          echo "ERROR: Failed to extract PanelVersion from Directory.Packages.props"
-          exit 1
-        fi
+          if [ -z "$PANEL_VERSION" ]; then
+            echo "ERROR: Failed to extract PanelVersion from Directory.Packages.props"
+            exit 1
+          fi
 
-        echo "PanelVersion=$PANEL_VERSION"
-        dotnet tool install --global LunaticPanel.Package.Tool --version "$PANEL_VERSION"
+          echo "PanelVersion=$PANEL_VERSION"
+          dotnet tool install --global LunaticPanel.Package.Tool --version "$PANEL_VERSION"
 
       ###########################################################################
       # PACKAGE PLUGINS USING TOOL
