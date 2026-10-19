@@ -1,4 +1,5 @@
 name: Release
+
 on:
   workflow_run:
     workflows: ["Build"]
@@ -14,12 +15,14 @@ jobs:
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 360
+
     permissions:
-      id-token: write  # Crucial for OIDC token request privileges
-      contents: write  
+      id-token: write
+      contents: write
+
     if: |
-       github.event.workflow_run.conclusion == 'success' && 
-       startsWith(github.event.workflow_run.head_branch, 'v')
+      github.event.workflow_run.conclusion == 'success' &&
+      startsWith(github.event.workflow_run.head_branch, 'v')
 
     steps:
       - name: Checkout
@@ -29,20 +32,16 @@ jobs:
         id: get_version
         run: |
           mkdir -p "/tmp/artifacts/output"
-          # Grabs the short tag name (e.g., v0.0.2)
+
           TAG="${{ github.event.workflow_run.head_branch }}"
-          
-          # Strips the leading 'v' to get just the numbers (e.g., 0.0.2)
           VERSION="${TAG#v}"
-          
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Setup .NET 10
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.x'
-          
-
+          dotnet-version: "10.x"
 
       ###########################################################################
       # PACK NUGET PACKAGES IN ORDER
@@ -51,11 +50,15 @@ jobs:
       - name: Pack NuGet packages
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
-          
-          KEY_PROJECTS="$GITHUB_WORKSPACE/src/GameHost.Keys/GameHost.Keys.csproj"
-          dotnet pack "$KEY_PROJECTS" -c Release -o "/tmp/artifacts/output" /p:Version=$VERSION
 
-       - name: Install Packing Tool
+          KEY_PROJECTS="$GITHUB_WORKSPACE/src/GameHost.Keys/GameHost.Keys.csproj"
+
+          dotnet pack "$KEY_PROJECTS" \
+            -c Release \
+            -o "/tmp/artifacts/output" \
+            /p:Version=$VERSION
+
+      - name: Install Packing Tool
         run: |
           PANEL_VERSION=$(grep -oP '(?<=<PanelVersion>).*?(?=</PanelVersion>)' "$GITHUB_WORKSPACE/src/Directory.Packages.props")
 
@@ -65,31 +68,51 @@ jobs:
           fi
 
           echo "PanelVersion=$PANEL_VERSION"
+
           dotnet tool install --global LunaticPanel.Package.Tool --version "$PANEL_VERSION"
 
       ###########################################################################
       # PACKAGE PLUGINS USING TOOL
       ###########################################################################
-      - name: Pack Plugin 
+
+      - name: Pack Plugin
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
+
           PLUGINS="$GITHUB_WORKSPACE/src/GameHost/GameHost.csproj"
+
           FILE_NAME=$(basename "$PLUGINS")
           PROJECT_NAME="${FILE_NAME%.csproj}"
+
           TARGET_BUILD_DIR="/tmp/artifacts/plugins_build/$PROJECT_NAME"
+
           mkdir -p "$TARGET_BUILD_DIR"
-          dotnet publish "$PLUGINS" -r linux-x6 -c Release -o "$TARGET_BUILD_DIR" /p:FileVersion=$VERSION /p:InformationalVersion=$VERSION /p:Version=$VERSION /p:AssemblyVersion=$VERSION
-          lpkg-cli pack --input "$TARGET_BUILD_DIR" --output "/tmp/artifacts/output" --version $VERSION
+
+          dotnet publish "$PLUGINS" \
+            -r linux-x64 \
+            -c Release \
+            -o "$TARGET_BUILD_DIR" \
+            /p:FileVersion=$VERSION \
+            /p:InformationalVersion=$VERSION \
+            /p:Version=$VERSION \
+            /p:AssemblyVersion=$VERSION
+
+          lpkg-cli pack \
+            --input "$TARGET_BUILD_DIR" \
+            --output "/tmp/artifacts/output" \
+            --version "$VERSION"
+
           EXPECTED_PKG="/tmp/artifacts/output/${PROJECT_NAME}.${VERSION}.lpkg"
-          if [ -z "$EXPECTED_PKG" ] || [ ! -s "$EXPECTED_PKG" ]; then
-              ls -R /tmp/artifacts/output
+
+          if [ ! -s "$EXPECTED_PKG" ]; then
+            ls -R /tmp/artifacts/output
             echo "❌ Error: Packed file for ${PROJECT_NAME} version ${VERSION} was not generated or is empty!"
             exit 1
           else
             echo "✅ Verified: $(basename "$EXPECTED_PKG") exists and is valid."
           fi
-          ls -R /tmp/artifacts/output
 
+          ls -R /tmp/artifacts/output
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -111,10 +134,13 @@ jobs:
           max_attempts: 10
           retry_wait_seconds: 10
           command: |
-            VERSION="${{ steps.get_version.outputs.version }}"
             for PKG in /tmp/artifacts/output/*.nupkg; do
               echo "Pushing $PKG"
-              dotnet nuget push $PKG --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate  || exit 1
+
+              dotnet nuget push "$PKG" \
+                --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" \
+                --source https://api.nuget.org/v3/index.json \
+                --skip-duplicate || exit 1
             done
 
       ###########################################################################
