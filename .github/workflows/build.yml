@@ -38,12 +38,15 @@ jobs:
       - name: Run All Unit Tests
         run: dotnet test "$GITHUB_WORKSPACE/src/GameHost.slnx" --no-build --configuration Release --verbosity normal -p:TreatWarningsAsErrors=false
 
-      - name: Publish LunaticPanel.Package.Tool (self-contained)
+      - name: Install Packing Tool
         run: |
-          VERSION="${{ steps.get_version.outputs.version }}"
-          dotnet publish $GITHUB_WORKSPACE/tools/LunaticPanel.Package.Tool/LunaticPanel.Package.Tool.csproj \
-            -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -o /tmp/artifacts/tool \
-            /p:AssemblyVersion=$VERSION /p:FileVersion=$VERSION /p:InformationalVersion=$VERSION
+          PANEL_VERSION=$(grep -oP '(?<=<PanelVersion>).*?(?=</PanelVersion>)' "$GITHUB_WORKSPACE/src/Directory.Packages.props")
+          if [ -z "$PANEL_VERSION" ]; then
+            echo "ERROR: Failed to extract PanelVersion from Directory.Packages.props"
+            exit 1
+          fi
+          echo "PanelVersion=$PANEL_VERSION"
+          dotnet tool install --global LunaticPanel.Package.Tool --version "$PANEL_VERSION"
 
       - name: Pack NuGet packages
         run: |
@@ -51,18 +54,6 @@ jobs:
           mkdir -p "/tmp/artifacts/output"
           KEY_PROJECT="$GITHUB_WORKSPACE/src/GameHost.Keys/GameHost.Keys.csproj"
           dotnet pack "$KEY_PROJECT" -c Release -o "/tmp/artifacts/output" /p:Version=$VERSION
-
-      - name: Install Packing Tool
-        run: |
-          PANEL_VERSION=$(grep -oP '(?<=<PanelVersion>).*?(?=</PanelVersion>)' "$GITHUB_WORKSPACE/src/Directory.Packages.props")
-
-          if [ -z "$PANEL_VERSION" ]; then
-            echo "ERROR: Failed to extract PanelVersion from Directory.Packages.props"
-            exit 1
-          fi
-
-          echo "PanelVersion=$PANEL_VERSION"
-          dotnet tool install --global LunaticPanel.Package.Tool --version "$PANEL_VERSION"
 
       - name: Validate Plugins
         run: |
