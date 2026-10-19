@@ -30,13 +30,13 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore Dependencies
-        run: dotnet restore
+        run: dotnet restore "$GITHUB_WORKSPACE/src/GameHost.slnx"
 
       - name: Build All Projects
-        run: dotnet build --no-restore --configuration Release
+        run: dotnet build "$GITHUB_WORKSPACE/src/GameHost.slnx" --no-restore --configuration Release
 
       - name: Run All Unit Tests
-        run: dotnet test LunaticPanel.slnx --no-build --configuration Release --verbosity normal -p:TreatWarningsAsErrors=false
+        run: dotnet test "$GITHUB_WORKSPACE/src/GameHost.slnx" --no-build --configuration Release --verbosity normal -p:TreatWarningsAsErrors=false
 
       - name: Publish LunaticPanel.Package.Tool (self-contained)
         run: |
