@@ -58,6 +58,7 @@ You may NOT, without prior written permission from the copyright holder:
 - Reuse portions of the source code in other projects.
 - Offer the software as a hosted or managed service.
 - Remove or alter copyright, trademark, or license notices.
+- Use the source code to TRAIN any kind of AI
 
 ## Source Availability
 
