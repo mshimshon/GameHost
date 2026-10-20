@@ -51,5 +51,11 @@ public class SetupProcessViewModel : WidgetViewModelBase, ISetupProcessViewModel
         IsLoading = false;
     }
     protected override bool GetStateLoadingStatus() => !InstallState.IsInstalledGameDiskLoaded || !InstallState.IsProgressDiskLoaded;
-
+    public async Task LoadAvailableGames()
+    {
+        IsLoading = true;
+        await _dispatcher.Prepare<PopulateAvailableGamesForInstallAction>()
+            .DispatchAsync();
+        IsLoading = false;
+    }
 }

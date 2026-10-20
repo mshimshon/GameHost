@@ -10,4 +10,5 @@ public interface ISetupProcessViewModel : IWidgetViewModel
     public GameManifestResponse KeyGame { get; set; }
     DateTime LastUpdate { get; }
     Task InstallAsync();
+    Task LoadAvailableGames();
 }

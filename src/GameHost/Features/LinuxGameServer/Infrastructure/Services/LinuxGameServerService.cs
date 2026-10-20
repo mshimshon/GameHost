@@ -53,7 +53,6 @@ internal class LinuxGameServerService : ILinuxGameServerService
         crazyReport.SetModule(LinuxGameServerKeys.MODULE_NAME);
         _pluginUserLocation.SetUsername(LinuxGameServerKeys.USERNAME);
     }
-#if DEBUG
     private async Task<string?> GetManifestFromArchiveAsync(string archive, string file)
     {
         try
@@ -84,17 +83,14 @@ internal class LinuxGameServerService : ILinuxGameServerService
         }
         return null; // File not found inside the archive
     }
-#endif
-    private string _regexGithubManifestTag = @"^query-v\d+\.\d+\.\d+$";
+    private string _regexGithubManifestTag = @"^registry-v\d+\.\d+\.\d+$";
     public async Task<ICollection<GameManifestEntity>?> GetAvailableGames(CancellationToken ct = default)
     {
         // TODO: SUPPORT PRODUCTION VS DEV
         var manifestDownloadTarget = _pluginUserLocation.GetUserDownloadFor(LinuxGameServerKeys.MODULE_NAME, LinuxGameServerKeys.SERVER_MANIFEST_RESPO_FILE);
-#if DEBUG
-
         _crazyReport.ReportWarning("===Debug Detected=== Generating Manifest.json");
         var sourceOfManifest = _pluginUserLocation.GetUserDownloadBase(LinuxGameServerKeys.MODULE_NAME, [MOCK_FOLDER, MOCK_INSTALLER_FOLDER]);
-        List<GameManifestResponse> manifests = new List<GameManifestResponse>();
+        List<GameManifestResponse> localManifests = new List<GameManifestResponse>();
         var installers = Directory.GetFiles(sourceOfManifest, "*.tar.gz", SearchOption.TopDirectoryOnly);
         _crazyReport.Report($"{installers.Length} Game Installer Found in Debug.");
 
@@ -113,12 +109,10 @@ internal class LinuxGameServerService : ILinuxGameServerService
 
                 continue;
             }
-            manifests.Add(manifest);
+            localManifests.Add(manifest);
         }
-        File.WriteAllText(manifestDownloadTarget, JsonSerializer.Serialize(manifests, _jsonSerializerOptions));
+        // _safeFileWriter
 
-
-#else
         IReadOnlyList<Release>? releases = default;
         var client = new GitHubClient(new ProductHeaderValue("GameHost.Games"));
         var clientResult = client.Repository.Release.GetAll("mshimshon", "GameHost.Games");
@@ -139,7 +133,7 @@ internal class LinuxGameServerService : ILinuxGameServerService
                 return new
                 {
                     Release = r,
-                    Version = Version.Parse(match.Groups["version"].Value)
+                    Version = Version.Parse(r.TagName.Replace("registry-v", string.Empty))
                 };
             })
             .Where(x => x != null)
@@ -149,9 +143,11 @@ internal class LinuxGameServerService : ILinuxGameServerService
         var manifestListAsset = latestRelease.Release.Assets.FirstOrDefault(a => string.Equals(a.Name, "manifests.json", StringComparison.OrdinalIgnoreCase));
         using HttpClient http = new();
         await using Stream remote = await http.GetStreamAsync(manifestListAsset.BrowserDownloadUrl);
-        await using FileStream local = File.Create(manifestDownloadTarget);
-        await remote.CopyToAsync(local);
+        var remoteManifest = await JsonSerializer.DeserializeAsync<List<GameManifestResponse>>(remote);
+        var resultManifest = localManifests;
+        resultManifest.AddRange(resultManifest.Where(p => !localManifests.Any(x => x.Id == p.Id)));
 
+        await _safeFileWriter.WriteThenCopyFileAsync(manifestDownloadTarget, JsonSerializer.Serialize(resultManifest, _jsonSerializerOptions));
         //if (asset == null)
 
         // Create Multiple Release Tags
@@ -159,7 +155,6 @@ internal class LinuxGameServerService : ILinuxGameServerService
         // Fully Self Contained Dotnet Release
         // Another Tag is required -> query-v1.1.1 which will compile all manifest.json of each projects into manifests.json and each dep_debian_X_common.json
         // Once Release is complete this code will retrive all Manifests and dependencies for the given OS.
-#endif
 
 
         try

@@ -53,6 +53,15 @@
                         Run Install
                     </MudButton>
             }
+            else if(ViewModel.InstallState.AvailableGameServers.Count<= 0)
+            {
+                <MudAlert Severity="Severity.Error">
+                    Could not properly load the available game server to install.
+                    <MudButton OnClick=ViewModel.LoadAvailableGames Color=@Color.Warning>
+                        Try Again
+                    </MudButton>
+                </MudAlert>
+            }
             else
             {
                     <MudAlert Severity="Severity.Error">
