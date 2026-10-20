@@ -5,7 +5,6 @@ plugins:
   - import_from: "../../LunaticPanel/plugins/lpcli-compose.yml"  # Import all official panel shipped plugins  
   - dotnet_project: "./GameHost/GameHost.csproj"
     enabled: true
-  - snap: "gamehost_init_done"
 post_processing:
   
   - command: "if ! id -u lgsm >/dev/null 2>&1; then useradd -m -d /home/lgsm -s /usr/sbin/nologin lgsm; fi" # PreCreate LGSM Username 

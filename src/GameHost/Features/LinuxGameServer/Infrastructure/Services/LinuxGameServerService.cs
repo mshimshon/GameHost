@@ -28,7 +28,7 @@ internal class LinuxGameServerService : ILinuxGameServerService
     private readonly ISafeFileWriter _safeFileWriter;
     private const string MOCK_FOLDER = "mockup";
     private const string MOCK_INSTALLER_FOLDER = "installers";
-
+    private readonly HttpClient _httpClient;
     private JsonSerializerOptions _jsonSerializerOptions = new()
     {
         AllowTrailingCommas = true,
@@ -52,6 +52,8 @@ internal class LinuxGameServerService : ILinuxGameServerService
         _safeFileWriter = safeFileWriter;
         crazyReport.SetModule(LinuxGameServerKeys.MODULE_NAME);
         _pluginUserLocation.SetUsername(LinuxGameServerKeys.USERNAME);
+        _httpClient = new HttpClient();
+
     }
     private async Task<string?> GetManifestFromArchiveAsync(string archive, string file)
     {
@@ -83,7 +85,34 @@ internal class LinuxGameServerService : ILinuxGameServerService
         }
         return null; // File not found inside the archive
     }
-    private string _regexGithubManifestTag = @"^registry-v\d+\.\d+\.\d+$";
+
+    private async Task<IEnumerable<GithubReleaseVersionResponse>> GetReleasesVersions()
+    {
+        IReadOnlyList<Release>? releases = default;
+        var client = new GitHubClient(new ProductHeaderValue("GameHost.Games"));
+        var clientResult = client.Repository.Release.GetAll("mshimshon", "GameHost.Games");
+        releases = await clientResult;
+        _crazyReport.Report($"Github Release Status {clientResult.Status}");
+        _crazyReport.Report($"Latest Release Result ? {releases.Count}");
+        return releases
+            .Where(r => !string.IsNullOrWhiteSpace(r.TagName))
+            .Select(r =>
+            {
+                var match = Regex.Match(r.TagName, _regexGithubManifestTag, RegexOptions.IgnoreCase);
+                if (!match.Success)
+                    return null;
+                string version = match.Groups[0].Value;
+                return new GithubReleaseVersionResponse()
+                {
+                    Release = r,
+                    Version = Version.Parse(version)
+                };
+            })
+            .Where(x => x != null)
+            .OrderByDescending(x => x!.Version)!;
+    }
+
+    private string _regexGithubManifestTag = @"^.+-v(\d+\.\d+\.\d+)$";
     public async Task<ICollection<GameManifestEntity>?> GetAvailableGames(CancellationToken ct = default)
     {
         // TODO: SUPPORT PRODUCTION VS DEV
@@ -113,40 +142,25 @@ internal class LinuxGameServerService : ILinuxGameServerService
         }
         // _safeFileWriter
 
-        IReadOnlyList<Release>? releases = default;
-        var client = new GitHubClient(new ProductHeaderValue("GameHost.Games"));
-        var clientResult = client.Repository.Release.GetAll("mshimshon", "GameHost.Games");
-        releases = await clientResult;
-        Console.WriteLine($"Github Release Status {clientResult.Status}");
-        Console.WriteLine($"Latest Release Result ? {releases.Count}");
-        foreach (var item in releases)
-            Console.WriteLine($"[Github] {item.Id} => {item.Name} => {item.TagName}");
-        //if (releases == default || releases.Count <= 0)
-        var latestRelease = releases
-            .Where(r => !string.IsNullOrWhiteSpace(r.TagName))
-            .Select(r =>
-            {
-                var match = Regex.Match(r.TagName, _regexGithubManifestTag, RegexOptions.IgnoreCase);
-                if (!match.Success)
-                    return null;
-
-                return new
-                {
-                    Release = r,
-                    Version = Version.Parse(r.TagName.Replace("registry-v", string.Empty))
-                };
-            })
-            .Where(x => x != null)
-            .OrderByDescending(x => x!.Version)
-            .FirstOrDefault();
+        var releases = await GetReleasesVersions();
+        var latestRelease = releases.FirstOrDefault(p => p.Release.TagName.StartsWith("registry-v"));
         // TODO: Throw if latestRelease = null;
+        if (latestRelease == default)
+        {
+            _crazyReport.ReportError("Github Latest Release registry-v not found.");
+            throw new CouldNotDownloadManifestException(_crazyReport);
+        }
         var manifestListAsset = latestRelease.Release.Assets.FirstOrDefault(a => string.Equals(a.Name, "manifests.json", StringComparison.OrdinalIgnoreCase));
-        using HttpClient http = new();
-        await using Stream remote = await http.GetStreamAsync(manifestListAsset.BrowserDownloadUrl);
+        if (manifestListAsset == default)
+        {
+            _crazyReport.ReportError("Github Latest Release registry-v manifest list not found.");
+            throw new CouldNotDownloadManifestException(_crazyReport);
+        }
+
+        await using Stream remote = await _httpClient.GetStreamAsync(manifestListAsset.BrowserDownloadUrl);
         var remoteManifest = await JsonSerializer.DeserializeAsync<List<GameManifestResponse>>(remote);
         var resultManifest = localManifests;
         resultManifest.AddRange(resultManifest.Where(p => !localManifests.Any(x => x.Id == p.Id)));
-
         await _safeFileWriter.WriteThenCopyFileAsync(manifestDownloadTarget, JsonSerializer.Serialize(resultManifest, _jsonSerializerOptions));
         //if (asset == null)
 
@@ -239,21 +253,47 @@ internal class LinuxGameServerService : ILinuxGameServerService
     public async Task PerformServerInstallation(string id, string installerName, CancellationToken ct = default)
     {
         string targetLocation = _pluginUserLocation.GetUserDownloadFor(LinuxGameServerKeys.MODULE_NAME, installerName);
+        string targetLocationDownload = _pluginUserLocation.GetUserDownloadFor(LinuxGameServerKeys.MODULE_NAME, $"{installerName}.download");
         string extractionLocation = _pluginUserLocation.GetUserBashBase(LinuxGameServerKeys.MODULE_NAME, [LinuxGameServerKeys.SERVER_CONTROL_FOLDER]);
         string consoleBinaryFile = _pluginUserLocation.GetUserBashFor(LinuxGameServerKeys.MODULE_NAME, [LinuxGameServerKeys.SERVER_CONTROL_FOLDER], id);
-#if DEBUG
-        _crazyReport.ReportWarning("Debug Detected");
+
         string sourceLocation = _pluginUserLocation.GetUserDownloadFor(LinuxGameServerKeys.MODULE_NAME, [MOCK_FOLDER, MOCK_INSTALLER_FOLDER], installerName);
-        _crazyReport.Report($"Installing from '{sourceLocation}'");
-        var installerCopieCommand = $"cp -f \"{sourceLocation}\" \"{targetLocation}\"";
-        var installerCopieCommandResult = await _linuxCommand.BuildCommand(installerCopieCommand)
-            .SetCrazyReport(_crazyReport)
-            .ExecAsync(ct);
-        if (installerCopieCommandResult.Failed || !File.Exists(targetLocation))
+        if (File.Exists(sourceLocation))
+        {
+            _crazyReport.Report($"Installing from '{sourceLocation}'");
+            var installerCopieCommand = $"cp -f \"{sourceLocation}\" \"{targetLocation}\"";
+            var installerCopieCommandResult = await _linuxCommand.BuildCommand(installerCopieCommand)
+                .SetCrazyReport(_crazyReport)
+                .ExecAsync(ct);
+            if (installerCopieCommandResult.Failed)
+                throw new CouldNotDownloadInstallerException(_crazyReport);
+        }
+        else
+        {
+            var releases = await GetReleasesVersions();
+            var latestRelease = releases.FirstOrDefault(p => p.Release.TagName.StartsWith($"{installerName}-v", StringComparison.OrdinalIgnoreCase));
+            // TODO: Throw if latestRelease = null;
+            if (latestRelease == default)
+            {
+                _crazyReport.ReportError($"Github Latest Release {installerName}-v not found.");
+                throw new CouldNotDownloadInstallerException(_crazyReport);
+            }
+            var manifestListAsset = latestRelease.Release.Assets
+                .Where(p => p.Name.StartsWith(installerName, StringComparison.OrdinalIgnoreCase))
+                .FirstOrDefault(p => p.Name.EndsWith("tar.gz", StringComparison.OrdinalIgnoreCase));
+            if (manifestListAsset == default)
+            {
+                _crazyReport.ReportError($"Github Latest Release {installerName}-v manifest list not found.");
+                throw new CouldNotDownloadInstallerException(_crazyReport);
+            }
+            _crazyReport.ReportInfo($"Downloading Installer from {manifestListAsset.BrowserDownloadUrl}.");
+            await using Stream remote = await _httpClient.GetStreamAsync(manifestListAsset.BrowserDownloadUrl);
+            await using FileStream file = File.Create(targetLocationDownload);
+            await remote.CopyToAsync(file);
+            File.Move(targetLocationDownload, targetLocation, true);
+        }
+        if (!File.Exists(targetLocation))
             throw new CouldNotDownloadInstallerException(_crazyReport);
-#else
-        // TODO: IMPLEMENT PRODUCTION BEHAVIOR
-#endif
         var extractCommand = $"tar -xzf \"{targetLocation}\" -C \"{extractionLocation}\"";
         var extractCommandResult = await _linuxCommand
             .BuildCommand(extractCommand)
