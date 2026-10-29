@@ -26,7 +26,7 @@ Traditional game server management often looks like this:
 GameHost turns that into:
 
 - Enter Deploy Command
-- Select Game to Host  
+- Select Game to Host
 - Click Install
 - Change Config Values
 - Make a modlist
@@ -316,3 +316,4 @@ The objective is to balance community privacy with the minimum information neces
 [CCL](https://github.com/mshimshon/GameHost?tab=License-1-ov-file)
 
 ---
+
