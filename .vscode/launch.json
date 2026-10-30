@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "GameHost (Skip Services)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "publish_debugtool",
+            "program": "${workspaceFolder}/../LunaticPanel/tools/LunaticPanel.DebugTool/bin/Debug/net10.0/win-x64/LunaticPanel.DebugTool.dll",
+            "args": [
+                "--deploy",
+                "--debug",
+                "--auto-kill",
+                "--open-shell",
+                "--auto-kill",
+                "--no-interaction"
+            ],
+            "cwd": "${workspaceFolder}/src",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "GameHost",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "publish_debugger",
+            "program": "${workspaceFolder}/../LunaticPanel/tools/LunaticPanel.DebugTool/bin/Debug/net10.0/win-x64/LunaticPanel.DebugTool.dll",
+            "args": [
+                "--deploy",
+                "--debug",
+                "--auto-kill",
+                "--open-shell",
+                "--auto-kill",
+                "--no-interaction"
+            ],
+            "cwd": "${workspaceFolder}/src",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        }
+    ]
+}

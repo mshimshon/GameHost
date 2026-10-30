@@ -1,3 +1,8 @@
+[![Version](https://img.shields.io/nuget/v/GameHost.Keys)](https://www.nuget.org/packages/GameHost.Keys)
+[![](https://img.shields.io/nuget/dt/GameHost.Keys?label=Downloads)](https://www.nuget.org/packages/GameHost.Keys)
+[![Build](https://github.com/mshimshon/GameHost/actions/workflows/build.yml/badge.svg)](https://github.com/mshimshon/GameHost/actions/workflows/build.yml)
+[![Deploy](https://github.com/mshimshon/GameHost/actions/workflows/deploy.yml/badge.svg)](https://github.com/mshimshon/GameHost/actions/workflows/deploy.yml)
+
 # GameHost for LunaticPanel
 
 Deploy game servers in seconds. Not hours.

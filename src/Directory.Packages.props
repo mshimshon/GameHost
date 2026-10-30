@@ -5,7 +5,7 @@
 		<GlobalCompany>Maksim Shimshon</GlobalCompany>
 		<GlobalAuthors>Maksim Shimshon</GlobalAuthors>
 		<GlobalCopyright>Maksim Shimshon © 2026</GlobalCopyright>
-		<PanelVersion>0.2.101</PanelVersion>
+		<PanelVersion>0.2.111</PanelVersion>
 		<DotnetVersion>10.0.12</DotnetVersion>
 		<MudBlazor>9.11.0</MudBlazor>
 	</PropertyGroup>

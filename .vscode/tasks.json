@@ -1,0 +1,70 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "publish_debugtool",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "publish",
+                "${workspaceFolder}/../LunaticPanelaa/tools/LunaticPanel.DebugTool/LunaticPanel.DebugTool.csproj",
+                "-c",
+                "Debug",
+                "--self-contained",
+                "true",
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "install_dotnet_tool",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "tool",
+                "install",
+                "--global",
+                "LunaticPanel.DebugTool"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish_debugger",
+            "command": "lpcli",
+            "type": "shell",
+            "args": [
+                "--no-interaction",
+                "--deploy",
+                "--clean",
+                "--close-cli",
+                "--debug",
+                "--open-shell"
+            ],
+            "problemMatcher": "$msCompile",
+            "dependsOn": [
+                "install_dotnet_tool"
+            ]
+        },
+        {
+            "label": "publish_plugins_noservices",
+            "command": "lpcli",
+            "type": "shell",
+            "args": [
+                "--no-interaction",
+                "--deploy",
+                "--clean",
+                "--close-cli",
+                "--debug",
+                "--open-shell"
+            ],
+            "problemMatcher": "$msCompile",
+            "dependsOn": [
+                "install_dotnet_tool"
+            ]
+        }
+    ]
+}
+// $GITHUB_WORKSPACE/src/LunaticPanel.Hybrid/LunaticPanel.Hybrid.Web/LunaticPanel.Hybrid.Web.csproj \
+// -c Release \
+// -r linux-x64 \
+// --self-contained false \
+// -o /tmp/artifacts/web
