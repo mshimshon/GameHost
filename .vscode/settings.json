@@ -1,3 +1,8 @@
 {
-    "dotnet.defaultSolution": "DeployItSmart.slnx"
+    "dotnet.defaultSolution": "GameHost.slnx",
+    "git.showActionButton": {
+        "commit": true,
+        "publish": false,
+        "sync": false,
+    }
 }
